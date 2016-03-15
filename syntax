@@ -1,0 +1,26 @@
+PROGRAM := DECLS FUNCS
+FUNCS   := FUNC | FUNC FUNCS
+FUNC    := TYPE ID ( D_ARGS ) { DECL;* CFG }
+D_ARGS	:= DECL | DECL, D_ARGS
+DECL    := var V_TYPE ID
+CFG	:= start ID; TRAN*
+TRAN	:= trans ID -> ID { INST;* }
+INST	:= ID := EXPR | LOCK | THREAD | CALL | return TERM | ASSUM | ASSERT
+LOCK	:= lock ID | unlock ID
+ASSUM	:= assume ( COND )
+ASSERT	:= assert ( COND )
+COND	:= TERM OP_C TERM
+EXPR	:= TERM OP TERM | TERM | CALL | *
+OP	:= + | - | * | / | OP_C
+OP_C	:= < | > | >= | <= | == | !=
+TERM	:= ID | NUMBER | -NUMBER
+NUMBER	:= [0-9]+ | ([0-9]+).([0-9]+)
+CALL 	:= THREAD ID ( ARGS )
+THREAD	:= sync | async
+ARGS	:= ARG | ARG, ARGS
+ARG	:= V_TYPE ID
+TYPE	:= void | V_TYPE
+V_TYPE  := lock | thread | P_TYPE
+P_TYPE	:= ID
+
+

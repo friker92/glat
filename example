@@ -1,0 +1,43 @@
+var int a;
+var int b;
+var int c;
+var int d;
+
+void main(){
+     var int e;
+     var lock ha;
+
+     start ini;
+     trans ini -> next {
+     	   e := 0;
+	   a := 2;
+	   b := -1;
+	   a := a + a;
+	   c := 1;
+	   b := async foo2(b);
+     }
+     trans next -> end {
+     	   c := 0 - c;
+     }
+
+     trans end -> next {
+
+     } 
+}
+
+int foo(){
+    var lock hh;
+    start i1;
+    trans i1 -> i2 {
+    	  d:=b;
+	  return 0;
+    }
+
+}
+
+int foo2(var int b){
+    start i1;
+    trans i1 -> i1 {
+
+    }
+}
