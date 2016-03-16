@@ -12,8 +12,8 @@ public class Variable implements Terminal{
 	}
 	
 	@Override
-	public TermType getType() {
-		return TermType.VARIABLE;
+	public TypeTerm getType() {
+		return TypeTerm.VARIABLE;
 	}
 
 	@Override

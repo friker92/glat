@@ -6,7 +6,7 @@ import glat.program.instructions.expressions.terminals.Variable;
 public class Asignation extends Instruction {
 
 	public Asignation(Variable d, Expression e) {
-		type = InstType.ASIGNATION;
+		type = TypeInst.ASIGNATION;
 		expr = e;
 		dest = d;
 	}

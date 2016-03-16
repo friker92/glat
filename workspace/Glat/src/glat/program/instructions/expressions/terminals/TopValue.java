@@ -9,8 +9,8 @@ public class TopValue implements Terminal {
 	public TopValue(Token t){}
 	
 	@Override
-	public TermType getType() {
-		return TermType.TOP;
+	public TypeTerm getType() {
+		return TypeTerm.TOP;
 	}
 
 	@Override

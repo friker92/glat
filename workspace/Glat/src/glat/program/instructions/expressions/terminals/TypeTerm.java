@@ -1,5 +1,5 @@
 package glat.program.instructions.expressions.terminals;
 
-public enum TermType {
+public enum TypeTerm {
 	VARIABLE, NUMBER,TOP
 }

@@ -6,11 +6,11 @@ import glat.program.instructions.expressions.Terminal;
 public class Return extends Instruction {
 	public Return(){
 		super();
-		type = InstType.RETURN;
+		type = TypeInst.RETURN;
 	}
 	public Return(Terminal v){
 		var = v;
-		type = InstType.RETURN;
+		type = TypeInst.RETURN;
 	}
 
 	@Override

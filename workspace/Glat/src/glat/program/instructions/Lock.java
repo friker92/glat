@@ -7,13 +7,13 @@ import glat.program.instructions.expressions.terminals.Variable;
 public class Lock extends Instruction {
 	public Lock(){
 		super();
-		type = InstType.LOCK;
+		type = TypeInst.LOCK;
 	}
 
 	public Lock(String ty,Variable v){
 		var = v;
 		lock = (ty.equals("lock"))?true:false;
-		type = (lock)?InstType.LOCK:InstType.UNLOCK;
+		type = (lock)?TypeInst.LOCK:TypeInst.UNLOCK;
 	}
 
 	@Override

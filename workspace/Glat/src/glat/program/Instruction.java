@@ -3,7 +3,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import glat.program.instructions.InstType;
+import glat.program.instructions.TypeInst;
 
 public abstract class Instruction {
 /*
@@ -31,7 +31,7 @@ public abstract class Instruction {
 		return trans.getLabel()+"_inst:"+position;
 	}
 	
-	public InstType getType(){
+	public TypeInst getType(){
 		return type;
 	}
 	
@@ -52,6 +52,6 @@ public abstract class Instruction {
 	protected int position;
 	protected JsonObject data;
 	protected Gson gs;
-	protected InstType type;
+	protected TypeInst type;
 
 }

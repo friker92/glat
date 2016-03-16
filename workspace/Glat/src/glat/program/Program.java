@@ -3,7 +3,7 @@ import java.util.Vector;
 
 import glat.program.instructions.Asignation;
 import glat.program.instructions.Call;
-import glat.program.instructions.InstType;
+import glat.program.instructions.TypeInst;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -92,12 +92,12 @@ public class Program {
 				Transition tr = it.next();
 				Vector<Instruction> v = tr.getCode();
 				for (Instruction i : v){
-					if (i.getType() == InstType.SYNCCALL || i.getType() == InstType.ASYNCCALL){
+					if (i.getType() == TypeInst.SYNCCALL || i.getType() == TypeInst.ASYNCCALL){
 						if(  hashMethod.containsKey(((Call)i).getName())    ){
 							((Call)i).setMethod(hashMethod.get((((Call)i).getName())));
 						}else
 							throw new Error("Missing Method, please define: "+((Call)i).getName());
-					}else if(i.getType() == InstType.ASIGNATION){
+					}else if(i.getType() == TypeInst.ASIGNATION){
 						Asignation as = (Asignation)i;
 						if(as.getExpr().getType()==0){
 							Call cal = (Call)as.getExpr().getInst();

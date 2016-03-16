@@ -10,13 +10,13 @@ import glat.program.instructions.expressions.terminals.Variable;
 public class Call extends Instruction {
 	public Call(){
 		super();
-		type = InstType.ASYNCCALL;
+		type = TypeInst.ASYNCCALL;
 		args = new Vector<Variable>();
 	}
 	public Call(String name, String ty){
 		this.name = name;
 		sync = (ty.equals("sync"))?true:false;
-		type = (sync)?InstType.SYNCCALL:InstType.ASYNCCALL;
+		type = (sync)?TypeInst.SYNCCALL:TypeInst.ASYNCCALL;
 		args = new Vector<Variable>();
 	}
 	@Override

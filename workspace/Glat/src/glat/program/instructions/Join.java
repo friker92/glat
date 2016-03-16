@@ -7,11 +7,11 @@ import glat.program.instructions.expressions.terminals.Variable;
 public class Join extends Instruction {
 	public Join(){
 		super();
-		type = InstType.JOIN;
+		type = TypeInst.JOIN;
 	}
 	public Join(Variable v){
 		var = v;
-		type = InstType.JOIN;
+		type = TypeInst.JOIN;
 	}
 
 	@Override

@@ -9,8 +9,8 @@ public class Number implements Terminal{
 	}
 	
 	@Override
-	public TermType getType() {
-		return TermType.NUMBER;
+	public TypeTerm getType() {
+		return TypeTerm.NUMBER;
 	}
 
 	@Override

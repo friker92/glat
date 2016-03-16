@@ -1,8 +1,8 @@
 package glat.program.instructions.expressions;
 
-import glat.program.instructions.expressions.terminals.TermType;
+import glat.program.instructions.expressions.terminals.TypeTerm;
 
 public interface Terminal {
-	public TermType getType();
+	public TypeTerm getType();
 	public String	getValue();
 }

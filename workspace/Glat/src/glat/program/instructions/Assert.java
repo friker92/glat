@@ -6,11 +6,11 @@ import glat.program.instructions.expressions.Terminal;
 public class Assert extends Instruction {
 	public Assert(){
 		super();
-		type = InstType.ASSERT;
+		type = TypeInst.ASSERT;
 	}
 
 	public Assert(String opc, Terminal term1, Terminal term2) {
-		type = InstType.ASSERT;
+		type = TypeInst.ASSERT;
 		expr = new Expression(opc,term1,term2);
 	}
 	@Override
