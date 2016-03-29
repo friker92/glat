@@ -1,4 +1,4 @@
-package glat.example;
+package glat.example.direct;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.jgrapht.WeightedGraph;
 
+import glat.example.Analysis;
 import glat.program.Declaration;
 import glat.program.Instruction;
 import glat.program.Method;
@@ -252,4 +253,9 @@ public class PositiveNegativeAnalysis implements Analysis {
 	private HashMap<String, V> vars;
 	private HashMap<String, V> meth;
 	private V p_ret;
+	
+	@Override
+	public void title() {
+		System.out.println("Positive Negative Analysis.");
+	}
 }

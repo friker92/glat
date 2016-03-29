@@ -1,9 +1,10 @@
-package glat.example;
+package glat.example.direct;
 
 import java.util.*;
 
 import org.jgrapht.WeightedGraph;
 
+import glat.example.Analysis;
 import glat.program.*;
 
 public class ExampleAnalysis implements Analysis{
@@ -72,4 +73,9 @@ public class ExampleAnalysis implements Analysis{
 	}
 
 	private Program p;
+
+	@Override
+	public void title() {
+		System.out.println("Structure Analysis.");
+	}
 }
