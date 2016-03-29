@@ -39,6 +39,6 @@ int foo(){
 int foo2(var int b){
     start i1;
     trans i1 -> i1 {
-
+    	  return 1;
     }
 }

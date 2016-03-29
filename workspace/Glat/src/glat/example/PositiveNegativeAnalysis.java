@@ -136,17 +136,22 @@ public class PositiveNegativeAnalysis implements Analysis {
 		List<Variable> lv = cl.getArgs();
 		Iterator<Declaration>  ip = lp.iterator();
 		Iterator<Variable>  iv = lv.iterator();
+		//Variable ret = cl.getReturn();
 		while(ip.hasNext() && iv.hasNext()){
 			Declaration d = ip.next();
 			Variable v = iv.next();
 			vars.put(d.getEnv()+"_"+d.getName(), vars.get(v.getDeclaration().getEnv()+"_"+v.getDeclaration().getName()));
+			
 		}
-		return method(cl.getMethod());
+		V val =  method(cl.getMethod());
+		if(cl.getReturn()!= null){
+			Declaration rd = cl.getReturn().getDeclaration();
+			vars.put(rd.getEnv()+"_"+rd.getName(), val);
+		}
+		return val;
 	}
 	private V expr(Method m, Expression exp){
 		switch (exp.getType()){
-		case 0:
-			return inst(m,exp.getInst());
 		case 1:
 			return term(exp.getT1());
 		case 2:
@@ -162,7 +167,6 @@ public class PositiveNegativeAnalysis implements Analysis {
 		case "+":
 			return add(t1,t2);
 		case "-":
-
 			return sub(t1, t2);
 		case "*":
 			return mult(t1, t2);

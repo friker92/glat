@@ -5,10 +5,6 @@ import glat.program.instructions.expressions.Terminal;
 
 public class Expression {
 	
-	public Expression(Instruction i){
-		type = 0;
-		inst = i;
-	}
 	public Expression(Terminal e){
 		e1=e;
 		type = 1;
@@ -26,8 +22,6 @@ public class Expression {
 	}
 	public String toString(){
 		switch (type){
-		case 0:
-			return ""+inst.toString();
 		case 1:
 			return ""+e1.toString();
 		case 2:
@@ -39,9 +33,6 @@ public class Expression {
 	public int getType(){
 		return type;
 	}
-	public Instruction getInst(){
-		return inst;
-	}
 	public String getOp(){
 		return op;
 	}
@@ -52,7 +43,6 @@ public class Expression {
 		return e2;
 	}
 	private Terminal e1,e2;
-	private Instruction inst;
 	private String op;
-	private int type;//0 = inst, 1 = unary, 2 = binary 
+	private int type;//1 = unary, 2 = binary 
 }
