@@ -8,7 +8,7 @@ import glat.program.Declaration;
 import glat.program.Instruction;
 import glat.program.instructions.expressions.terminals.Variable;
 
-public class PosNegDomain implements AbstractDomain {
+public class PosNegDomain implements AbstractDomain<PosNegState> {
 	
 	public enum V {
 		TOP,
@@ -19,51 +19,51 @@ public class PosNegDomain implements AbstractDomain {
 	}
 
 	@Override
-	public AbstractState initVars(List<Declaration> vars) {
+	public PosNegState initVars(List<Declaration> vars) {
 		PosNegState p = new PosNegState();
-		// TODO Auto-generated method stub
-		return null;
+		vars.forEach((d)->p.add(d.getLabel(), V.NONE));
+		return p;
 	}
 
 	@Override
-	public AbstractState empty() {
+	public PosNegState empty() {
 		return new PosNegState();
 	}
 
 	@Override
-	public AbstractState abstractExec(Instruction i, AbstractState st) {
-		// TODO Auto-generated method stub
-		return null;
+	public PosNegState abstractExec(Instruction i, PosNegState st) {
+		st.add("s", V.CERO);
+		return st;
 	}
 
 	@Override
-	public AbstractState extend(AbstractState s0, AbstractState st) {
+	public PosNegState extend(PosNegState s0, PosNegState st) {
 		// TODO Auto-generated method stub
-		return null;
+		return s0;
 	}
 
 	@Override
-	public AbstractState project(AbstractState s0, List<Variable> lv) {
+	public PosNegState project(PosNegState s0, List<Variable> lv) {
 		// TODO Auto-generated method stub
-		return null;
+		return s0;
 	}
 
 	@Override
-	public AbstractState rename(AbstractState s0, List<Variable> actual, List<Variable> formal) {
+	public PosNegState rename(PosNegState s0, List<Variable> actual, List<Variable> formal) {
 		// TODO Auto-generated method stub
-		return null;
+		return s0;
 	}
 
 	@Override
-	public AbstractState lub(AbstractState s0, AbstractState s1) {
+	public PosNegState lub(PosNegState s0, PosNegState s1) {
 		// TODO Auto-generated method stub
-		return null;
+		return s0;
 	}
 
 	@Override
-	public boolean le(AbstractState s0, AbstractState s1) {
+	public boolean le(PosNegState s0, PosNegState s1) {
 		// TODO Auto-generated method stub
-		return true;
+		return s0.size() <= s1.size();
 	}
 
 }

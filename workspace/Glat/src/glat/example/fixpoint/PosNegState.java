@@ -16,4 +16,7 @@ public class PosNegState implements AbstractState {
 		st.put(s, v);
 	}
 	
+	public int size(){
+		return st.size();
+	}
 }

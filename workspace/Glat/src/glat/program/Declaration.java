@@ -8,9 +8,12 @@ public class Declaration {
 	public Declaration(String t,String n,String e){
 		name=n;type=t;
 		isPrimitive = !(t.equals("lock") 
-				|| t.equals("thread")
-				|| t.equals("main") );
+				|| t.equals("thread") );
 		env=e;
+	}
+	
+	public String getLabel() {
+		return env+"_"+name;
 	}
 	
 	public String getName(){
@@ -33,4 +36,5 @@ public class Declaration {
 	private String name;
 	private boolean isPrimitive;
 	private String env;
+	
 }

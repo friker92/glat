@@ -6,20 +6,20 @@ import glat.program.Declaration;
 import glat.program.Instruction;
 import glat.program.instructions.expressions.terminals.Variable;
 
-public interface AbstractDomain {
+public interface AbstractDomain<T extends AbstractState> {
 	
-	public AbstractState initVars(List<Declaration> vars);
-	public AbstractState empty();
+	public T initVars(List<Declaration> vars);
+	public T empty();
 	
-	public AbstractState abstractExec(Instruction i, AbstractState st);
+	public T abstractExec(Instruction i, T st);
 	
-	public AbstractState extend(AbstractState s0, AbstractState st);
+	public T extend(T s0, T st);
 	
-	public AbstractState project(AbstractState s0, List<Variable> lv);
+	public T project(T s0, List<Variable> lv);
 	
-	public AbstractState rename(AbstractState s0, List<Variable> actual, List<Variable> formal);
+	public T rename(T s0, List<Variable> actual, List<Variable> formal);
 	
-	public AbstractState lub(AbstractState s0,AbstractState s1);
+	public T lub(T s0,T s1);
 	
-	public boolean le(AbstractState s0,AbstractState s1);
+	public boolean le(T s0,T s1);
 }
