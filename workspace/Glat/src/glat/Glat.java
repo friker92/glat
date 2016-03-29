@@ -353,10 +353,27 @@ public class Glat implements GlatConstants {
   static final public Instruction Asig(Method m, Transition tr) throws ParseException {
   Variable v;
   Expression exp;
-    v = Var(m,tr);
+  Instruction i;
+    v = Var(m, tr);
     jj_consume_token(ASIG);
-    exp = Expr(m, tr);
-    {if (true) return new Asignation(v, exp);}
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case AST:
+    case ID:
+    case NUM:
+      exp = Expr(m, tr);
+      {if (true) return new Asignation(v, exp);}
+      break;
+    case THRE:
+    case CALL:
+      i = Call(m, tr);
+      ((Call) i).setReturn(v);
+      {if (true) return i;}
+      break;
+    default:
+      jj_la1[12] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
     throw new Error("Missing return statement in function");
   }
 
@@ -365,42 +382,27 @@ public class Glat implements GlatConstants {
   Terminal t1, t2=new TopValue();
   Instruction i;
   Token t;
+    t1 = Term(m, tr);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case SUM:
+    case MIN:
+    case DIV:
     case AST:
-    case ID:
-    case NUM:
-      t1 = Term(m, tr);
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case SUM:
-      case MIN:
-      case DIV:
-      case AST:
-      case LT:
-      case GT:
-      case LET:
-      case GET:
-      case EQ:
-      case NEQ:
-        o = Op();
-        t2 = Term(m, tr);
-        break;
-      default:
-        jj_la1[12] = jj_gen;
-        ;
-      }
-      if (o.equals("-1")) {if (true) return new Expression(t1);}
-      else {if (true) return new Expression(o, t1, t2);}
-      break;
-    case THRE:
-    case CALL:
-      i = Call(m, tr);
-      {if (true) return new Expression(i);}
+    case LT:
+    case GT:
+    case LET:
+    case GET:
+    case EQ:
+    case NEQ:
+      o = Op();
+      t2 = Term(m, tr);
       break;
     default:
       jj_la1[13] = jj_gen;
-      jj_consume_token(-1);
-      throw new ParseException();
+      ;
     }
+      if (o.equals("-1")) {if (true) return new Expression(t1);}
+      else {if (true) return new Expression(o, t1, t2);}
     throw new Error("Missing return statement in function");
   }
 
@@ -595,10 +597,10 @@ public class Glat implements GlatConstants {
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x200000,0x68000000,0x0,0x200000,0x200000,0x800000,0xde000000,0xde000000,0x8000000,0x0,0x0,0xc0000000,0x1ff800,0x8004000,0x4000,0x1f8000,0x7800,0x1ff800,0x68000000,0x48000000,};
+      jj_la1_0 = new int[] {0x200000,0x68000000,0x0,0x200000,0x200000,0x800000,0xde000000,0xde000000,0x8000000,0x0,0x0,0xc0000000,0x8004000,0x1ff800,0x4000,0x1f8000,0x7800,0x1ff800,0x68000000,0x48000000,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x0,0x4,0x80,0x0,0x0,0x0,0x7,0x7,0x2,0x80,0x4,0x0,0x0,0xe,0xc,0x0,0x0,0x0,0x4,0x4,};
+      jj_la1_1 = new int[] {0x0,0x4,0x80,0x0,0x0,0x0,0x7,0x7,0x2,0x80,0x4,0x0,0xe,0x0,0xc,0x0,0x0,0x0,0x4,0x4,};
    }
 
   /** Constructor with InputStream. */

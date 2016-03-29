@@ -97,12 +97,6 @@ public class Program {
 							((Call)i).setMethod(hashMethod.get((((Call)i).getName())));
 						}else
 							throw new Error("Missing Method, please define: "+((Call)i).getName());
-					}else if(i.getType() == TypeInst.ASIGNATION){
-						Asignation as = (Asignation)i;
-						if(as.getExpr().getType()==0){
-							Call cal = (Call)as.getExpr().getInst();
-							cal.setMethod(hashMethod.get(cal.getName()));
-						}
 					}
 				}
 			}

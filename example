@@ -15,6 +15,7 @@ void main(){
 	   a := a + a;
 	   c := 1;
 	   b := async foo2(b);
+	   async foo2(b);
      }
      trans next -> end {
      	   c := 0 - c;

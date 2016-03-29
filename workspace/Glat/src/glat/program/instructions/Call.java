@@ -18,10 +18,14 @@ public class Call extends Instruction {
 		sync = (ty.equals("sync"))?true:false;
 		type = (sync)?TypeInst.SYNCCALL:TypeInst.ASYNCCALL;
 		args = new Vector<Variable>();
+		ret = null;
 	}
 	@Override
 	public String toString() {
-		return type.name()+": "+name+" "+args.toString();
+		if(ret != null)
+			return type.name()+": "+ret.toString()+" := "+name+" "+args.toString();
+		else
+			return type.name()+": "+name+" "+args.toString();
 	}
 	public void addParameter(Variable v){
 		args.add(v);
@@ -42,9 +46,18 @@ public class Call extends Instruction {
 	public String getName(){
 		return name;
 	}
+	
+	public void setReturn(Variable v){
+		ret = v;
+	}
+	
+	public Variable getReturn(){
+		return ret;
+	}
 
 	private Vector<Variable> args;
 	private boolean sync;
 	private String name;
 	private Method meth;
+	private Variable ret;
 }

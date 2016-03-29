@@ -12,7 +12,7 @@
 hs_err_pid*
 
 # Eclipse
-Glat/.classpath
-Glat/.project
-Glat/.settings/
-Glat/bin/
+workspace/Glat/.classpath
+workspace/Glat/.project
+workspace/Glat/.settings/
+workspace/Glat/bin/

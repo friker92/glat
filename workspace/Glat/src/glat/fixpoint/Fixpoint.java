@@ -100,6 +100,7 @@ public class Fixpoint {
 		  s1 = domain.lub(s,s0);
 		  if ( !domain.le(s1,s0) ) {
 		    table.put(i.getLabel(),s1);
+		    // foreach i.next()
 		    Q.add ( new Event( TypeEvent.EXEC, i.next(), s1 ) );
 		  }
 		}
