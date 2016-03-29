@@ -35,11 +35,11 @@ public class Call extends Instruction {
 		return args;
 	}
 	
-	public Method getMethod(){
+	public Method getMethodRef(){
 		return meth;
 	}
 	
-	public void setMethod(Method m){
+	public void setMethodRef(Method m){
 		meth = m;
 	}
 	

@@ -8,7 +8,8 @@ public class Declaration {
 	public Declaration(String t,String n,String e){
 		name=n;type=t;
 		isPrimitive = !(t.equals("lock") 
-				|| t.equals("thread") );
+				|| t.equals("thread")
+				|| t.equals("main") );
 		env=e;
 	}
 	

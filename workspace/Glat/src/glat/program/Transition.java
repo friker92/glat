@@ -43,6 +43,8 @@ public class Transition  extends DefaultWeightedEdge{
 	public void addInstruction(Instruction i){
 		i.setMethod(method);
 		i.setTransition(this);
+		if(Tcode.size()>0)
+			Tcode.get(Tcode.size()-1).setNextInst(i);
 		Tcode.add(i);
 	}
 	
@@ -74,6 +76,14 @@ public class Transition  extends DefaultWeightedEdge{
 		return s;
 	}
 	
+	public Instruction getInst(int pos) {
+		return Tcode.get(pos);
+	}
+	
+	public int getNumInsts(){
+		return Tcode.size();
+	}
+	
 	private String source;
 	private String dest;
 	private Vector<Instruction> Tcode;
@@ -81,4 +91,5 @@ public class Transition  extends DefaultWeightedEdge{
 	private Method method;
 	private int position;
 	private static final long serialVersionUID = -1L;
+
 }

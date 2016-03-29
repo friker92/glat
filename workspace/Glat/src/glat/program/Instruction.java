@@ -1,8 +1,11 @@
 package glat.program;
-import com.google.gson.Gson;
+import java.util.List;
+import java.util.Vector;
+
+/*import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
+*/
 import glat.program.instructions.TypeInst;
 
 public abstract class Instruction {
@@ -11,19 +14,8 @@ public abstract class Instruction {
  Type
 */
 	public Instruction(){
-		gs = new Gson();
-		String js = "{}";
-		JsonElement e = gs.fromJson(js, JsonElement.class);
-		data = e.getAsJsonObject();
 	}
-	public Instruction(String d){
-		gs = new Gson();
-		JsonElement e = gs.fromJson(d, JsonElement.class);
-		data = e.getAsJsonObject();
-	}
-	public JsonObject getData(){
-		return data;
-	};
+
 	
 	public  abstract String toString();
 
@@ -38,6 +30,9 @@ public abstract class Instruction {
 	public void setMethod(Method m) {
 		method = m;		
 	}
+	public Method getMethod() {
+		return method;		
+	}
 	
 	public void setPosition(int p) {
 		position = p;
@@ -47,11 +42,23 @@ public abstract class Instruction {
 		trans = t;
 	}
 	
+	public List<Instruction> getNextInsts(){
+		if (next != null){
+			List<Instruction> insts = new Vector<Instruction>();
+			insts.add(next);
+			return insts;
+		}else{
+			return method.getFirstInstsFrom(trans.getDestination());
+		}
+	}
+	public void setNextInst(Instruction n){
+		next = n;
+	}
+	
 	protected Method method;
 	protected Transition trans;
 	protected int position;
-	protected JsonObject data;
-	protected Gson gs;
 	protected TypeInst type;
+	protected Instruction next;
 
 }

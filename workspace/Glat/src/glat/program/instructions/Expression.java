@@ -1,6 +1,5 @@
 package glat.program.instructions;
 
-import glat.program.Instruction;
 import glat.program.instructions.expressions.Terminal;
 
 public class Expression {

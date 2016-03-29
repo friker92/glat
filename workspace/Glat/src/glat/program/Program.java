@@ -1,7 +1,6 @@
 package glat.program;
 import java.util.Vector;
 
-import glat.program.instructions.Asignation;
 import glat.program.instructions.Call;
 import glat.program.instructions.TypeInst;
 
@@ -24,9 +23,9 @@ public class Program {
 		primitive = new HashSet<String>();
 		declarations = new Vector<Declaration>();
 		hashMethod = new HashMap<String,Method>();
+		entry = "main";
 	}
 	public List<Method> getMethods(){
-		
 		return methods;
 	}
 	
@@ -40,7 +39,11 @@ public class Program {
 	}
 	
 	public Method getEntryMethod(){
-		return methods.get(0);
+		if(hashMethod.containsKey(entry))
+			return hashMethod.get(entry);
+		throw new Error("Main is undefine.");
+
+		
 	}
 	
 	public Declaration getVariable(String v){
@@ -85,7 +88,13 @@ public class Program {
 	HashMap<String,Method> hashMethod;
 	private Set<String> primitive;
 	private Vector<Declaration> declarations;
+	private String entry;
+	
 	public void checkCalls() {
+		if(  !hashMethod.containsKey(entry) ){
+			System.out.println(hashMethod);
+			throw new Error("Missing Method, please define: "+entry);
+		}
 		for(Method m : methods){
 			Iterator<Transition> it = m.getCFG().edgeSet().iterator();
 			while(it.hasNext()){
@@ -93,10 +102,13 @@ public class Program {
 				Vector<Instruction> v = tr.getCode();
 				for (Instruction i : v){
 					if (i.getType() == TypeInst.SYNCCALL || i.getType() == TypeInst.ASYNCCALL){
-						if(  hashMethod.containsKey(((Call)i).getName())    ){
-							((Call)i).setMethod(hashMethod.get((((Call)i).getName())));
-						}else
+						if(  hashMethod.containsKey(((Call)i).getName()) ){
+							Method tmp = hashMethod.get((((Call)i).getName()));
+							tmp.addCallPoint((Call)i);
+							((Call)i).setMethodRef(tmp);
+						}else{
 							throw new Error("Missing Method, please define: "+((Call)i).getName());
+						}
 					}
 				}
 			}

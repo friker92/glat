@@ -6,9 +6,18 @@ import glat.program.instructions.expressions.Terminal;
 
 public class Variable implements Terminal{
 
+	public Variable(Declaration d){
+		decl = d;
+		value = d.getName();
+	}
+	
 	public Variable(Declaration d, Token s){
 		decl = d;
 		value = s.image;
+	}
+	public Variable(Declaration d, String s){
+		decl = d;
+		value = s;
 	}
 	
 	@Override

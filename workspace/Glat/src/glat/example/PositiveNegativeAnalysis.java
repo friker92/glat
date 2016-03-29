@@ -21,16 +21,11 @@ import glat.program.instructions.expressions.terminals.Variable;
 public class PositiveNegativeAnalysis implements Analysis {
 	public int MAX_LOOP = 5;
 	public enum V {
-		POS(1),
-		CERO(0),
-		NEG(-1),
-		TOP(1),
-		BOT(1);
-		private int val;
-	   V(int numVal) {
-	        this.val = numVal;
-	    }
-
+		POS,
+		CERO,
+		NEG,
+		TOP,
+		BOT
 	}
 
 	public PositiveNegativeAnalysis(Program p){
@@ -42,7 +37,7 @@ public class PositiveNegativeAnalysis implements Analysis {
 	public void print() {
 		System.out.println("This Analysis has NO guarantee");
 		vars.forEach((s,v)-> System.out.println(""+s+" "+v));
-		
+		System.out.println("The program returns: "+p_ret);
 	}
 
 	@Override
@@ -59,7 +54,7 @@ public class PositiveNegativeAnalysis implements Analysis {
 			meth.put(itm.next().getLabel(), V.BOT);
 		}
 		Method m = p.getEntryMethod();
-		method(m);
+		p_ret = method(m);
 		
 		return true;
 	}
@@ -141,9 +136,8 @@ public class PositiveNegativeAnalysis implements Analysis {
 			Declaration d = ip.next();
 			Variable v = iv.next();
 			vars.put(d.getEnv()+"_"+d.getName(), vars.get(v.getDeclaration().getEnv()+"_"+v.getDeclaration().getName()));
-			
 		}
-		V val =  method(cl.getMethod());
+		V val =  method(cl.getMethodRef());
 		if(cl.getReturn()!= null){
 			Declaration rd = cl.getReturn().getDeclaration();
 			vars.put(rd.getEnv()+"_"+rd.getName(), val);
@@ -257,4 +251,5 @@ public class PositiveNegativeAnalysis implements Analysis {
 	private Program p;
 	private HashMap<String, V> vars;
 	private HashMap<String, V> meth;
+	private V p_ret;
 }

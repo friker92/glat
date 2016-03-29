@@ -4,6 +4,7 @@ import java.util.List;
 
 import glat.program.Declaration;
 import glat.program.Instruction;
+import glat.program.instructions.expressions.terminals.Variable;
 
 public interface AbstractDomain {
 	
@@ -14,9 +15,9 @@ public interface AbstractDomain {
 	
 	public AbstractState extend(AbstractState s0, AbstractState st);
 	
-	public AbstractState project(AbstractState s0, AbstractState st);
+	public AbstractState project(AbstractState s0, List<Variable> lv);
 	
-	public AbstractState rename(AbstractState s0, AbstractState st,AbstractState st1);
+	public AbstractState rename(AbstractState s0, List<Variable> actual, List<Variable> formal);
 	
 	public AbstractState lub(AbstractState s0,AbstractState s1);
 	
