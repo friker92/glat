@@ -17,15 +17,26 @@ public class FixPoint {
     private Queue<Event> Q;
     private HashMap<String, AbstractState> table;
     private Program program;
+    private boolean done;
     
     public FixPoint(AbstractDomain d, Program pr) {
     	domain = d;
     	program = pr;
+    	done = false;
     }
-
+    public String print(){
+    	String str = "";
+    	if(done){
+    		str += table.toString();
+    	}else{
+    		str += "Please run first: fixPoint()";
+    	}
+    	return str;
+    }
     public void fixPoint(){
 		//T = new Table();
     	table = new HashMap<String,AbstractState>();
+    	Q = new LinkedList<Event>();
     	Method m = program.getEntryMethod();
     	Call c = new Call(m.getName(),"sync");
     	c.setMethodRef(m);
@@ -35,6 +46,7 @@ public class FixPoint {
 		    Event x = Q.poll();
 		    execute(x);
 		}
+		done = true;
     }
 	
     public void execute(Event x){
@@ -94,11 +106,12 @@ public class FixPoint {
     }
 
     public void storeInTable(Instruction i, AbstractState s) {
-		AbstractState s0,s1;
+		AbstractState s0,s1,smid;
 		List<Instruction> li;
 		s0 = table.get(i.getLabel());
-		s1 = domain.lub(s,s0);
-		if ( !domain.le(s1,s0) ) {
+		smid = (s0!=null)?s0:domain.empty();
+		s1 = domain.lub(s,smid);
+		if ( !domain.le(s1,smid) ) {
 		    table.put(i.getLabel(),s1);
 		    li = i.getNextInsts();
 		    li.forEach((inst)->Q.add( new Event(TypeEvent.EXEC,inst, s1) ));
@@ -106,7 +119,7 @@ public class FixPoint {
     }
 
     public void decideHandleRet(Call cl, Return r, AbstractState s) {
-		AbstractState s0, s1,s2;
+		AbstractState s0, s1,s2,smid;
 		List<Variable> lv,lv2;
 		Variable retPoint;
 		Method m;
@@ -121,19 +134,21 @@ public class FixPoint {
 		}
 		s0 = domain.rename(s, lv,lv2);//m.formalParam()+m.retvar(), m.actualParam()+m.retPoint());
 		s1 = table.get(m.getLabel());
-		s2 = domain.extend(s1, s0);
-		if ( !domain.le(s2,s1) ) {
+		smid = (s1!=null)?s1:domain.empty();
+		s2 = domain.extend(smid, s0);
+		if ( !domain.le(s2,smid) ) {
 		    table.put( m.getLabel(), s2 );
 		    Q.add ( new Event( TypeEvent.EXEC, cl, s2 ) );
 		}
     }
 
     public void decideStoreCall(Call c, AbstractState s) {
-		AbstractState s0, s1;
+		AbstractState s0, s1,smid;
 		Method m = c.getMethodRef();
 		s0 = table.get(m.getLabel());
-		s1 = domain.lub(s,s0);
-		if ( !domain.le(s1,s0) ) {
+		smid = (s0!=null)?s0:domain.empty();
+		s1 = domain.lub(s,smid);
+		if ( !domain.le(s1,smid) ) {
 		    table.put(m.getLabel(),s1);
 		    Q.add ( new Event( TypeEvent.CALL, c, s1 ) );
 		}
