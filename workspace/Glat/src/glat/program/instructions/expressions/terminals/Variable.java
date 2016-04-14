@@ -1,6 +1,6 @@
 package glat.program.instructions.expressions.terminals;
 
-import glat.Token;
+import glat.parser.Token;
 import glat.program.Declaration;
 import glat.program.instructions.expressions.Terminal;
 

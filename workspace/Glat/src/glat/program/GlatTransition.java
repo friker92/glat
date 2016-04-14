@@ -1,10 +1,11 @@
 package glat.program;
 
+import java.util.List;
 import java.util.Vector;
 
 import org.jgrapht.graph.*;
 
-public class GlatTransition  extends DefaultWeightedEdge{
+public class GlatTransition extends DefaultWeightedEdge implements Transition {
 /*
  get code
  get origin
@@ -91,5 +92,40 @@ public class GlatTransition  extends DefaultWeightedEdge{
 	private Method method;
 	private int position;
 	private static final long serialVersionUID = -1L;
+	@Override
+	public Object getPropValue(Object name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Object setPropValue(Object name, Object value) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Object> getPropNames() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Node getSrcNode() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Node getTargetNode() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Instruction> getInstructions() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }
