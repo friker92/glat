@@ -42,7 +42,7 @@ public class Glat implements GlatConstants {
   MainMethod main = new MainMethod();
   ThreadLaunch T;
   Method mm = new Method("void","main");
-  Transition tr = new Transition(mm,0,"begin","end");
+  GlatTransition tr = new GlatTransition(mm,0,"begin","end");
   Instruction i;
     jj_consume_token(GLOBAL);
     jj_consume_token(LBRA);
@@ -115,7 +115,7 @@ public class Glat implements GlatConstants {
   }
 
 //-------------------------------------------------/* Threads */
-  static final public ThreadLaunch Threads(Method m, Transition tr) throws ParseException {
+  static final public ThreadLaunch Threads(Method m, GlatTransition tr) throws ParseException {
   Token t,t2= null;
   String s;
   Instruction cl;
@@ -155,7 +155,7 @@ public class Glat implements GlatConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public Instruction InitDecl(Method m, Transition tr) throws ParseException {
+  static final public Instruction InitDecl(Method m, GlatTransition tr) throws ParseException {
 Instruction i;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case ASSU:
@@ -233,7 +233,7 @@ Instruction i;
 /* CFG */
   static final public void Cfg(Method m) throws ParseException {
   Token t;
-  Transition tr;
+  GlatTransition tr;
   int j = 0;
     jj_consume_token(START);
     t = jj_consume_token(ID);
@@ -254,15 +254,15 @@ Instruction i;
     }
   }
 
-  static final public Transition Tran(Method m, int j) throws ParseException {
-  Transition tr;
+  static final public GlatTransition Tran(Method m, int j) throws ParseException {
+  GlatTransition tr;
   Token t1, t2;
   Instruction i;
     jj_consume_token(TRAN);
     t1 = jj_consume_token(ID);
     jj_consume_token(TO);
     t2 = jj_consume_token(ID);
-    tr = new Transition(m, j, t1.image, t2.image);
+    tr = new GlatTransition(m, j, t1.image, t2.image);
     jj_consume_token(LBRA);
     label_8:
     while (true) {
@@ -289,7 +289,7 @@ Instruction i;
     throw new Error("Missing return statement in function");
   }
 
-  static final public Instruction Inst(Method m, Transition tr) throws ParseException {
+  static final public Instruction Inst(Method m, GlatTransition tr) throws ParseException {
   Instruction i;
   Token t;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -326,7 +326,7 @@ Instruction i;
     throw new Error("Missing return statement in function");
   }
 
-  static final public Instruction Call(Method m, Transition tr) throws ParseException {
+  static final public Instruction Call(Method m, GlatTransition tr) throws ParseException {
         Token t,n;
         Call c;
         Variable v;
@@ -371,7 +371,7 @@ Instruction i;
     throw new Error("Missing return statement in function");
   }
 
-  static final public Instruction Lock(Method m, Transition tr) throws ParseException {
+  static final public Instruction Lock(Method m, GlatTransition tr) throws ParseException {
         Token t;
         Variable v;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -391,7 +391,7 @@ Instruction i;
     throw new Error("Missing return statement in function");
   }
 
-  static final public Instruction Return(Method m, Transition tr) throws ParseException {
+  static final public Instruction Return(Method m, GlatTransition tr) throws ParseException {
   Terminal t;
     jj_consume_token(RETU);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -409,7 +409,7 @@ Instruction i;
     throw new Error("Missing return statement in function");
   }
 
-  static final public Instruction Join(Method m, Transition tr) throws ParseException {
+  static final public Instruction Join(Method m, GlatTransition tr) throws ParseException {
         Variable v;
     jj_consume_token(JOIN);
     v = Var(m,tr);
@@ -417,7 +417,7 @@ Instruction i;
     throw new Error("Missing return statement in function");
   }
 
-  static final public Instruction Assert(Method m, Transition tr) throws ParseException {
+  static final public Instruction Assert(Method m, GlatTransition tr) throws ParseException {
   String o;
   Terminal t1, t2;
     jj_consume_token(ASSE);
@@ -430,7 +430,7 @@ Instruction i;
     throw new Error("Missing return statement in function");
   }
 
-  static final public Instruction Assume(Method m, Transition tr) throws ParseException {
+  static final public Instruction Assume(Method m, GlatTransition tr) throws ParseException {
   String o;
   Terminal t1, t2;
     jj_consume_token(ASSU);
@@ -443,7 +443,7 @@ Instruction i;
     throw new Error("Missing return statement in function");
   }
 
-  static final public Instruction Asig(Method m, Transition tr) throws ParseException {
+  static final public Instruction Asig(Method m, GlatTransition tr) throws ParseException {
   Variable v;
   Expression exp;
   Instruction i;
@@ -469,7 +469,7 @@ Instruction i;
     throw new Error("Missing return statement in function");
   }
 
-  static final public Expression Expr(Method m, Transition tr) throws ParseException {
+  static final public Expression Expr(Method m, GlatTransition tr) throws ParseException {
   String o = "-1";
   Terminal t1, t2=new TopValue();
   Instruction i;
@@ -499,7 +499,7 @@ Instruction i;
   }
 
 /*	Terminal Tokens...*/
-  static final public Terminal Term(Method m, Transition tr) throws ParseException {
+  static final public Terminal Term(Method m, GlatTransition tr) throws ParseException {
   Token t;
   Terminal ter;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -523,7 +523,7 @@ Instruction i;
     throw new Error("Missing return statement in function");
   }
 
-  static final public Variable Var(Method m, Transition tr) throws ParseException {
+  static final public Variable Var(Method m, GlatTransition tr) throws ParseException {
         Token t;
     t = jj_consume_token(ID);
       Declaration d = m.getVariable(t.image);

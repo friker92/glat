@@ -39,7 +39,7 @@ public abstract class Instruction {
 		position_c = c;
 	}
 	
-	public void setTransition(Transition t){
+	public void setTransition(GlatTransition t){
 		trans = t;
 	}
 	
@@ -57,7 +57,7 @@ public abstract class Instruction {
 	}
 	
 	protected Method method;
-	protected Transition trans;
+	protected GlatTransition trans;
 	protected int position_l;
 	protected int position_c;
 	protected TypeInst type;

@@ -105,9 +105,9 @@ public class Program {
 	
 	public void checkCalls() {
 		for(Method m : methods){
-			Iterator<Transition> it = m.getCFG().edgeSet().iterator();
+			Iterator<GlatTransition> it = m.getCFG().edgeSet().iterator();
 			while(it.hasNext()){
-				Transition tr = it.next();
+				GlatTransition tr = it.next();
 				Vector<Instruction> v = tr.getCode();
 				for (Instruction i : v){
 					if (i.getType() == TypeInst.SYNCCALL || i.getType() == TypeInst.ASYNCCALL){

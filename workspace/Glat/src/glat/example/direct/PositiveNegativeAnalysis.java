@@ -11,7 +11,7 @@ import glat.program.Declaration;
 import glat.program.Instruction;
 import glat.program.Method;
 import glat.program.Program;
-import glat.program.Transition;
+import glat.program.GlatTransition;
 import glat.program.instructions.Asignation;
 import glat.program.instructions.Call;
 import glat.program.instructions.Expression;
@@ -72,8 +72,8 @@ public class PositiveNegativeAnalysis implements Analysis {
 		}
 		String entry = m.getEntryPoint();
 		HashMap<String, Integer> edges = new HashMap<String, Integer>();
-		WeightedGraph<String, Transition> cfg = m.getCFG();
-		Iterator<Transition> itvs = cfg.edgeSet().iterator();
+		WeightedGraph<String, GlatTransition> cfg = m.getCFG();
+		Iterator<GlatTransition> itvs = cfg.edgeSet().iterator();
 		while(itvs.hasNext()){
 			edges.put(itvs.next().getLabel(), 0);
 		}
@@ -84,10 +84,10 @@ public class PositiveNegativeAnalysis implements Analysis {
 		return meth.get(m.getLabel());
 	}
 	
-	private void cfg(Method m,WeightedGraph<String, Transition> cfg,String vertex,HashMap<String, Integer> edges){
-		Iterator<Transition> its = cfg.edgesOf(vertex).iterator();
+	private void cfg(Method m,WeightedGraph<String, GlatTransition> cfg,String vertex,HashMap<String, Integer> edges){
+		Iterator<GlatTransition> its = cfg.edgesOf(vertex).iterator();
 		while(its.hasNext()){
-			Transition tr = its.next();
+			GlatTransition tr = its.next();
 			String label = tr.getLabel();
 			int nloop = edges.get(label);
 			if(!tr.getSource().equals(vertex) || nloop >= MAX_LOOP)

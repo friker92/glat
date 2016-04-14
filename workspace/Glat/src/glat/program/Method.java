@@ -23,8 +23,8 @@ public class Method {
 		this.vars = new Vector<Declaration>();
 		this.args = new Vector<Declaration>();
 		this.callpoints = new Vector<Call>();
-		cfg = new DefaultDirectedWeightedGraph<String, Transition>(
-			    Transition.class);
+		cfg = new DefaultDirectedWeightedGraph<String, GlatTransition>(
+			    GlatTransition.class);
 	}
 	public String getLabel(){
 		return type+"_"+name;
@@ -44,7 +44,7 @@ public class Method {
 		callpoints.add(i);
 	}
 	
-	public void addTransition(Transition t){
+	public void addTransition(GlatTransition t){
 		cfg.addVertex(t.getSource());
 		cfg.addVertex(t.getDestination());
 		cfg.addEdge(t.getSource(), t.getDestination(),t);
@@ -82,8 +82,8 @@ public class Method {
 	}
 	public List<Instruction> getFirstInstsFrom(String node){
 		List<Instruction> insts = new Vector<Instruction>();
-		Iterator<Transition> it = cfg.edgesOf(node).iterator();
-		Transition tr;
+		Iterator<GlatTransition> it = cfg.edgesOf(node).iterator();
+		GlatTransition tr;
 		while(it.hasNext()){
 			tr = it.next();
 			if(tr.getSource().equals(node) && tr.getNumInsts() > 0)
@@ -109,7 +109,7 @@ public class Method {
 		return null;
 	}
 	
-	public WeightedGraph<String, Transition> getCFG(){
+	public WeightedGraph<String, GlatTransition> getCFG(){
 		return cfg;
 	}
 	
@@ -122,5 +122,5 @@ public class Method {
 	private String type;
 	private String name;
 	private String entry;
-	private WeightedGraph<String, Transition> cfg;
+	private WeightedGraph<String, GlatTransition> cfg;
 }

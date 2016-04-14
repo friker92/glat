@@ -1,0 +1,25 @@
+global {
+var int f;
+}
+
+init {}
+main {}
+
+void m(){
+     var int x;
+
+     start n0;
+
+     trans n0 -> n1 {
+     	   x := 100;
+     }
+
+     trans n1 -> n1 {
+           assume(f<x);
+     	   f := f + 1;
+     }
+
+     trans n1 -> n2 {
+           assume(f>=x);
+     } 
+}

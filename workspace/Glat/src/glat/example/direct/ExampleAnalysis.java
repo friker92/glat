@@ -30,17 +30,17 @@ public class ExampleAnalysis implements Analysis{
 	private void print(Method m){
 		List<Declaration> args = m.getParameters();
 		List<Declaration> vars = m.getVariables();
-		WeightedGraph<String, Transition> cfg = m.getCFG();
+		WeightedGraph<String, GlatTransition> cfg = m.getCFG();
 		System.out.println("\t Method "+m.getLabel()+ "");
 		System.out.println("\t\t Parameters:");
 		args.forEach((v)->System.out.println("\t\t\t"+v.getType()+":"+v.getName()));
 		System.out.println("\t\t Variables:");
 		vars.forEach((v)->System.out.println("\t\t\t"+v.getType()+":"+v.getName()));
 		System.out.println("\t\t Control Flow Graph:");
-		Set<Transition> st = cfg.edgeSet();
+		Set<GlatTransition> st = cfg.edgeSet();
 		st.forEach((t)->print(t));
 	}
-	private void print(Transition tr){
+	private void print(GlatTransition tr){
 		List<Instruction> Tcode = tr.getCode();
 		String source = tr.getSource();
 		String dest = tr.getDestination();
