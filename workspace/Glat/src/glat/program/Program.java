@@ -104,10 +104,6 @@ public class Program {
 	private Vector<Instruction> initInstr;
 	
 	public void checkCalls() {
-		if(  !hashMethod.containsKey(entry) ){
-			System.out.println(hashMethod);
-			throw new Error("Missing Method, please define: "+entry);
-		}
 		for(Method m : methods){
 			Iterator<Transition> it = m.getCFG().edgeSet().iterator();
 			while(it.hasNext()){

@@ -65,8 +65,6 @@ public class Glat implements GlatConstants {
     jj_consume_token(LBRA);
     label_2:
     while (true) {
-      i = InitDecl(mm,tr);
-        p.addInitInstr(i);
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case ASSU:
       case ID:
@@ -76,14 +74,14 @@ public class Glat implements GlatConstants {
         jj_la1[1] = jj_gen;
         break label_2;
       }
+      i = InitDecl(mm,tr);
+        p.addInitInstr(i);
     }
     jj_consume_token(RBRA);
     jj_consume_token(MAIN);
     jj_consume_token(LBRA);
     label_3:
     while (true) {
-      T = Threads(mm,tr);
-     main.addThread(T);
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case THRE:
         ;
@@ -92,6 +90,8 @@ public class Glat implements GlatConstants {
         jj_la1[2] = jj_gen;
         break label_3;
       }
+      T = Threads(mm,tr);
+     main.addThread(T);
     }
     jj_consume_token(RBRA);
     label_4:

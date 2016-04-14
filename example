@@ -1,9 +1,17 @@
+global {
 var int a;
 var int b;
 var int c;
 var int d;
+}
+init {
 
-void main(){
+}
+main{
+
+}
+
+void m2(){
      var int e;
      var lock ha;
 
@@ -15,8 +23,8 @@ void main(){
 	   a := a + a;
 	   c := 1;
 	   b := a;
-	   sync foo2(a);
-	   b := async foo2(b);
+	   call foo2(a);
+	   b := call foo2(b);
 	   a := a + a;
      }
      trans next -> end {
