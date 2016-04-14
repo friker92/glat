@@ -45,41 +45,47 @@ public interface GlatConstants {
   /** RegularExpression Id. */
   int VAR = 21;
   /** RegularExpression Id. */
-  int START = 22;
+  int GLOBAL = 22;
   /** RegularExpression Id. */
-  int TRAN = 23;
+  int INIT = 23;
   /** RegularExpression Id. */
-  int TO = 24;
+  int MAIN = 24;
   /** RegularExpression Id. */
-  int ASSU = 25;
+  int START = 25;
   /** RegularExpression Id. */
-  int ASSE = 26;
+  int TRAN = 26;
   /** RegularExpression Id. */
-  int THRE = 27;
+  int TO = 27;
   /** RegularExpression Id. */
-  int JOIN = 28;
+  int ASSU = 28;
   /** RegularExpression Id. */
-  int VOID = 29;
+  int ASSE = 29;
   /** RegularExpression Id. */
-  int LOCK = 30;
+  int THRE = 30;
   /** RegularExpression Id. */
-  int UNLOCK = 31;
+  int JOIN = 31;
   /** RegularExpression Id. */
-  int RETU = 32;
+  int VOID = 32;
   /** RegularExpression Id. */
-  int CALL = 33;
+  int LOCK = 33;
   /** RegularExpression Id. */
-  int ID = 34;
+  int UNLOCK = 34;
   /** RegularExpression Id. */
-  int NUM = 35;
+  int RETU = 35;
   /** RegularExpression Id. */
-  int DIGIT = 36;
+  int CALL = 36;
   /** RegularExpression Id. */
-  int CHAR = 37;
+  int ID = 37;
   /** RegularExpression Id. */
-  int DOT = 38;
+  int NUM = 38;
   /** RegularExpression Id. */
-  int COMA = 39;
+  int DIGIT = 39;
+  /** RegularExpression Id. */
+  int CHAR = 40;
+  /** RegularExpression Id. */
+  int DOT = 41;
+  /** RegularExpression Id. */
+  int COMA = 42;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -108,18 +114,21 @@ public interface GlatConstants {
     "\"==\"",
     "\"!=\"",
     "\"var\"",
+    "\"global\"",
+    "\"init\"",
+    "\"main\"",
     "\"start\"",
     "\"trans\"",
     "\"->\"",
     "\"assume\"",
     "\"assert\"",
-    "\"async\"",
+    "\"thread\"",
     "\"join\"",
     "\"void\"",
     "\"lock\"",
     "\"unlock\"",
     "\"return\"",
-    "\"sync\"",
+    "\"call\"",
     "<ID>",
     "<NUM>",
     "<DIGIT>",

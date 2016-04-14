@@ -27,7 +27,12 @@ public class FixPoint {
     public String print(){
     	String str = "";
     	if(done){
-    		str += table.toString();
+    		Set<String> k = table.keySet();
+    		for(String s : k){
+    			str += s+ " \n";
+    			str += table.get(s);
+    			str +="\n";
+    		}	
     	}else{
     		str += "Please run first: fixPoint()";
     	}
@@ -41,8 +46,10 @@ public class FixPoint {
     	Call c = new Call(m.getName(),"sync");
     	c.setMethodRef(m);
 		//Q = { call( main, {} ) }
-		Q.add( new Event( TypeEvent.CALL, c, domain.empty() ) );
+		Q.add( new Event( TypeEvent.CALL, c, domain.initVars(program.getGlobalVariables()) ) );
 		while ( !Q.isEmpty() ) {
+
+	    	System.out.println(Q.toString());
 		    Event x = Q.poll();
 		    execute(x);
 		}
@@ -77,10 +84,18 @@ public class FixPoint {
 				if (t != null && t.getType() == TypeTerm.VARIABLE)
 					lv.add((Variable)t);
 				s0 = domain.project(s, lv);//m.retvar()+m.formalParm());
+				
+				
+				
+				
 				for(Call cl : m.getCallPoints()){
-				    //the follows a call to m do:
-				    decideHandleRet(cl,(Return)i,s0);
-				}
+
+					Iterator<Instruction> ii= cl.getNextInsts().iterator();
+				    while(ii.hasNext())
+				    	decideHandleRet(ii.next(),cl,(Return)i,s0);//Q.add( new Event(TypeEvent.EXEC,inst, s2) ));
+						
+					//the follows a call to m do:
+				    }
 				break;
 		    case ASYNCCALL:
 		    case SYNCCALL: //exec(i, s) // i is a call
@@ -118,16 +133,17 @@ public class FixPoint {
 		}
     }
 
-    public void decideHandleRet(Call cl, Return r, AbstractState s) {
+    public void decideHandleRet(Instruction inst,Call cl, Return r, AbstractState s) {
 		AbstractState s0, s1,s2,smid;
-		List<Variable> lv,lv2;
+		Vector<Variable> lv,lv2;
 		Variable retPoint;
 		Method m;
 		m = cl.getMethodRef();
-		lv = m.getParametersAsVar();
-		lv2 = cl.getArgs();
+		lv = (Vector)m.getParametersAsVar();
+		lv2 = (Vector)cl.getArgs();
 		retPoint = cl.getReturn();
 		Terminal t = r.getVar();
+		
 		if (t != null && t.getType() == TypeTerm.VARIABLE && retPoint != null){
 			lv.add((Variable)t);
 			lv2.add(retPoint);
@@ -136,9 +152,11 @@ public class FixPoint {
 		s1 = table.get(m.getLabel());
 		smid = (s1!=null)?s1:domain.empty();
 		s2 = domain.extend(smid, s0);
+		List<Instruction> li = cl.getNextInsts();
 		if ( !domain.le(s2,smid) ) {
 		    table.put( m.getLabel(), s2 );
-		    Q.add ( new Event( TypeEvent.EXEC, cl, s2 ) );
+			Q.add( new Event(TypeEvent.EXEC,inst, s2) );
+		    //Q.add ( new Event( TypeEvent.EXEC, cl, s2 ) );
 		}
     }
 
@@ -148,9 +166,13 @@ public class FixPoint {
 		s0 = table.get(m.getLabel());
 		smid = (s0!=null)?s0:domain.empty();
 		s1 = domain.lub(s,smid);
+		
 		if ( !domain.le(s1,smid) ) {
 		    table.put(m.getLabel(),s1);
 		    Q.add ( new Event( TypeEvent.CALL, c, s1 ) );
+		    
 		}
+	
+		
     }
 }

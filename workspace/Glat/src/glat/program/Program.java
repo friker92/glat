@@ -3,6 +3,7 @@ import java.util.Vector;
 
 import glat.program.instructions.Call;
 import glat.program.instructions.TypeInst;
+import glat.program.instructions.expressions.terminals.Variable;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -23,6 +24,7 @@ public class Program {
 		primitive = new HashSet<String>();
 		declarations = new Vector<Declaration>();
 		hashMethod = new HashMap<String,Method>();
+		initInstr = new Vector<Instruction>();
 		entry = "main";
 	}
 	public List<Method> getMethods(){
@@ -36,6 +38,13 @@ public class Program {
 	
 	public List<Declaration> getGlobalVariables(){
 		return declarations;
+	}
+	public List<Variable> getGlobalVariablesAsVar() {
+		Vector<Variable> p = new Vector<Variable>(declarations.size());
+		for (Declaration d : declarations){
+			p.add(new Variable(d));
+		}
+		return p;
 	}
 	
 	public Method getEntryMethod(){
@@ -78,6 +87,9 @@ public class Program {
 		addPrimitive(v.getType());
 		declarations.add(v);
 	}
+	public void addInitInstr(Instruction i){
+		initInstr.add(i);
+	}
 	
 	private void addPrimitive(String s){
 		if(!(s.equals("thread")||s.equals("lock")||s.equals("void")))
@@ -89,6 +101,7 @@ public class Program {
 	private Set<String> primitive;
 	private Vector<Declaration> declarations;
 	private String entry;
+	private Vector<Instruction> initInstr;
 	
 	public void checkCalls() {
 		if(  !hashMethod.containsKey(entry) ){
@@ -115,4 +128,5 @@ public class Program {
 		}
 		
 	}
+
 }

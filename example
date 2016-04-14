@@ -14,15 +14,17 @@ void main(){
 	   b := -1;
 	   a := a + a;
 	   c := 1;
+	   b := a;
+	   sync foo2(a);
 	   b := async foo2(b);
-	   async foo2(b);
+	   a := a + a;
      }
      trans next -> end {
      	   c := 0 - c;
      }
 
      trans end -> next {
-
+     	   a := 0 - a;
      } 
 }
 
@@ -37,8 +39,10 @@ int foo(){
 }
 
 int foo2(var int b){
+    var int m;
     start i1;
     trans i1 -> i1 {
-    	  return 1;
+    	  m := 2;
+    	  return -1;
     }
 }

@@ -20,7 +20,7 @@ public abstract class Instruction {
 	public  abstract String toString();
 
 	public String getLabel(){
-		return trans.getLabel()+"_inst:"+position;
+		return "inst:("+position_l+","+position_c+") "+type;//+"_"+trans.getLabel();
 	}
 	
 	public TypeInst getType(){
@@ -34,8 +34,9 @@ public abstract class Instruction {
 		return method;		
 	}
 	
-	public void setPosition(int p) {
-		position = p;
+	public void setPosition(int l,int c) {
+		position_l = l;
+		position_c = c;
 	}
 	
 	public void setTransition(Transition t){
@@ -57,7 +58,8 @@ public abstract class Instruction {
 	
 	protected Method method;
 	protected Transition trans;
-	protected int position;
+	protected int position_l;
+	protected int position_c;
 	protected TypeInst type;
 	protected Instruction next;
 

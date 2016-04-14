@@ -31,6 +31,10 @@ public class Event {
 	public AbstractState getState(){return st;}
 
 	public TypeEvent getType() {return type;}
+	
+	public String toString(){
+		return "Event: "+type+" - "+inst+" <<>> "+st;
+	}
 
 	private TypeEvent type;
 	private Instruction inst;

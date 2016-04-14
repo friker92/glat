@@ -40,5 +40,8 @@ public class Variable implements Terminal{
 	
 	private Declaration decl;
 	private String value;
+	public String getLabel() {
+		return decl.getLabel();
+	}
 
 }

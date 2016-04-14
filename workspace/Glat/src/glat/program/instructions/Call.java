@@ -15,7 +15,7 @@ public class Call extends Instruction {
 	}
 	public Call(String name, String ty){
 		this.name = name;
-		sync = (ty.equals("sync"))?true:false;
+		sync = (ty.equals("sync")||ty.equals("call"))?true:false;
 		type = (sync)?TypeInst.SYNCCALL:TypeInst.ASYNCCALL;
 		args = new Vector<Variable>();
 		ret = null;

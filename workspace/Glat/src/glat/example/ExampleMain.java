@@ -19,7 +19,7 @@ public class ExampleMain {
 			Vector <Analysis> va = new Vector<Analysis>();
 			va.add(new ExampleAnalysis(p));
 			va.add(new PosNegFixPoint(p));		
-			//va.add(new PositiveNegativeAnalysis(p));
+			va.add(new PositiveNegativeAnalysis(p));
 			for (Analysis a : va){
 				System.out.println("\n\n\n*******************************************\n\n\n");
 				a.title();
