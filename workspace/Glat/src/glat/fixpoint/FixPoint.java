@@ -42,7 +42,7 @@ public class FixPoint {
 		//T = new Table();
     	table = new HashMap<String,AbstractState>();
     	Q = new LinkedList<Event>();
-    	GlatMethod m = program.getMethods().get(0);//program.getEntryMethod();
+    	GlatMethod m = (GlatMethod) program.getMethods().get(0);//program.getEntryMethod();
     	Call c = new Call(m.getName(),"sync");
     	c.setMethodRef(m);
 		//Q = { call( main, {} ) }
