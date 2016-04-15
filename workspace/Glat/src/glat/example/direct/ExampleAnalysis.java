@@ -23,35 +23,35 @@ public class ExampleAnalysis implements Analysis{
 		System.out.println("\tThere are a few global variables:");
 		List<Declaration> lv = p.getGlobalVariables();
 		lv.forEach((v)->System.out.println("\t\t"+v.getType()+":"+v.getName()));
-		List<GlatMethod> lm = p.getMethods();
+		List<Method> lm = p.getMethods();
 		lm.forEach((m)->print(m));
 	}
 
-	private void print(GlatMethod m){
+	private void print(Method m){
 		List<Declaration> args = m.getParameters();
 		List<Declaration> vars = m.getVariables();
-		WeightedGraph<String, GlatTransition> cfg = m.getCFG();
+		ControlFlowGraph cfg = m.getControlFlowGraph();
 		System.out.println("\t GlatMethod "+m.getLabel()+ "");
 		System.out.println("\t\t Parameters:");
 		args.forEach((v)->System.out.println("\t\t\t"+v.getType()+":"+v.getName()));
 		System.out.println("\t\t Variables:");
 		vars.forEach((v)->System.out.println("\t\t\t"+v.getType()+":"+v.getName()));
 		System.out.println("\t\t Control Flow Graph:");
-		Set<GlatTransition> st = cfg.edgeSet();
+		List<Transition> st = cfg.getTransitions();
 		st.forEach((t)->print(t));
 	}
-	private void print(GlatTransition tr){
-		List<GlatInstruction> Tcode = tr.getCode();
-		String source = tr.getSource();
-		String dest = tr.getDestination();
+	private void print(Transition tr){
+		List<Instruction> Tcode = tr.getInstructions();
+		Node source = tr.getSrcNode();
+		Node dest = tr.getTargetNode();
 		System.out.println("\t\t\t"+source+" -> "+dest+" : {");
-		for (GlatInstruction i : Tcode){
+		for (Instruction i : Tcode){
 			print(i);
 		}
 		System.out.println("\t\t\t}");
 	}
 	
-	private void print(GlatInstruction i){
+	private void print(Instruction i){
 		switch (i.getType()){
 		case ASIGNATION:
 		case ASSERT:
