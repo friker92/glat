@@ -6,14 +6,13 @@ import java.util.Properties;
 
 public abstract class GlatClass implements BasicInterface {
 	private Properties prop;
-	
-	
+		
 	/*###################################
 	 *        PropTable Methods
 	 ###################################*/
 	
 	/**
-	 * 
+	 * Get a property value
 	 */
 	@Override
 	public Object getPropValue(Object name) {
@@ -21,7 +20,8 @@ public abstract class GlatClass implements BasicInterface {
 	}
 
 	/**
-	 * 
+	 * Set a property
+	 * @return the previous value of the specified property or null
 	 */
 	@Override
 	public Object setPropValue(Object name, Object value) {
@@ -29,7 +29,7 @@ public abstract class GlatClass implements BasicInterface {
 	}
 
 	/**
-	 * 
+	 * @return a List of the Properties contained
 	 */
 	@Override
 	public List<Object> getPropNames() {

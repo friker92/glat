@@ -6,7 +6,6 @@ import java.util.Vector;
 import glat.parser.Glat;
 import glat.parser.ParseException;
 import glat.example.direct.ExampleAnalysis;
-import glat.example.direct.PositiveNegativeAnalysis;
 import glat.example.fixpoint.PosNegFixPoint;
 import glat.program.GlatProgram;
 

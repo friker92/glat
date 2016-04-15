@@ -1,15 +1,16 @@
 package glat.program;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-import org.jgrapht.graph.SimpleDirectedGraph;//.DefaultDirectedWeightedGraph;
+import org.jgrapht.graph.DefaultDirectedGraph;//.DefaultDirectedWeightedGraph;
 
 public class GlatCFG extends GlatClass implements ControlFlowGraph {
 
-	public GlatCFG(Node n){
-		gh = new SimpleDirectedGraph<GlatNode, GlatTransition>(GlatTransition.class);
-		entry = n;
+	public GlatCFG(String n){
+		gh = new DefaultDirectedGraph<GlatNode, GlatTransition>(GlatTransition.class);
+		entry = new GlatNode(n);
 	}
 
 	/*##############################
@@ -26,6 +27,17 @@ public class GlatCFG extends GlatClass implements ControlFlowGraph {
 		return new ArrayList<Node>(gh.vertexSet());
 	}
 
+	@Override
+	public Node getNode(String name) {
+		for(Iterator<GlatNode> it = gh.vertexSet().iterator();it.hasNext();){
+			GlatNode n = it.next();
+			if(n.getName().equals(name))
+				return n;
+		}
+		// TODO : return GlatNode or null?
+		return new GlatNode(name);
+	}
+	
 	@Override
 	public List<Transition> getTransitions() {
 		return new ArrayList<Transition>(gh.edgeSet());
@@ -46,8 +58,24 @@ public class GlatCFG extends GlatClass implements ControlFlowGraph {
 		return new ArrayList<Transition>(gh.incomingEdgesOf((GlatNode)target));
 	}
 	
+	/*##############################
+	 *        Build Methods        *
+	 ##############################*/
+	
+	public void addTransition(GlatTransition tr){
+		GlatNode src = (GlatNode)tr.getSrcNode();
+		GlatNode trg = (GlatNode)tr.getTargetNode();
+		gh.addVertex(src);
+		gh.addVertex(trg);
+		gh.addEdge(src,trg , tr);
+	}
+
+	/*##############################
+	 *     Internal Attributes     *
+	 ##############################*/
+	
 	private Node entry;
-	private SimpleDirectedGraph<GlatNode, GlatTransition> gh;
+	private DefaultDirectedGraph<GlatNode, GlatTransition> gh;
 
 
 }

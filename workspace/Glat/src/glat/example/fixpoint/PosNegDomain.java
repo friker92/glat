@@ -181,7 +181,6 @@ public class PosNegDomain implements AbstractDomain {
 
 	@Override
 	public boolean le(AbstractState s0, AbstractState s1) {
-		// TODO Auto-generated method stub
 		return c(s0).size() <= c(s1).size();
 	}
 

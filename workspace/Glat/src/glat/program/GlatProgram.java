@@ -43,7 +43,6 @@ public class GlatProgram extends GlatClass implements Program{
 	 *        Access Methods       *
 	 ##############################*/
 	
-	
 	public List<Method> getMethods(){
 		return new ArrayList<Method>(methods.values());
 	}
@@ -83,11 +82,10 @@ public class GlatProgram extends GlatClass implements Program{
 		return "Glat_Program";
 	}
 	
-	
-	
 	/*##############################
 	 *        Build Methods        *
 	 ##############################*/
+	
 	public void addMainMethod(MainMethod mm){
 		if(mainmethod != null)
 			throw new Error("Error: Main already exits");
@@ -129,28 +127,23 @@ public class GlatProgram extends GlatClass implements Program{
 	}
 	
 	public void checkCalls() {
-		//TODO: when CFG is done
 		for(GlatMethod m : methods.values()){
-/*			Iterator<GlatTransition> it = m.getControlFlowGraph().edgeSet().iterator();
-			while(it.hasNext()){
-				GlatTransition tr = it.next();
-				Vector<GlatInstruction> v = tr.getCode();
-				for (GlatInstruction i : v){
+			m.getControlFlowGraph().getTransitions().forEach((tr)->{
+				((GlatTransition) tr).getInstructions().forEach((i)-> {
 					if (i.getType() == TypeInst.SYNCCALL || i.getType() == TypeInst.ASYNCCALL){
 						if(  methods.containsKey(((Call)i).getName()) ){
 							GlatMethod tmp = methods.get((((Call)i).getName()));
 							tmp.addCallPoint((Call)i);
 							((Call)i).setMethodRef(tmp);
 						}else{
-							throw new Error("Missing GlatMethod, please define: "+((Call)i).getName());
+							throw new Error("Missing Method, please define: "+((Call)i).getName());
 						}
 					}
-				}
-			}*/
+				});
+				
+			});
 		}
 	}
-	
-
 	
 	/*##############################
 	 *     Internal Attributes     *
@@ -161,7 +154,5 @@ public class GlatProgram extends GlatClass implements Program{
 	private Set<String> primitive;
 	private Vector<Declaration> globDecl;
 	private Vector<GlatInstruction> initInstr;
-
-
 
 }

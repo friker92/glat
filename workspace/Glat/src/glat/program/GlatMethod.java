@@ -4,19 +4,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
-import org.jgrapht.WeightedGraph;
-import org.jgrapht.graph.DefaultDirectedWeightedGraph;
-
 import glat.program.instructions.Call;
 import glat.program.instructions.expressions.terminals.Variable;
 
 public class GlatMethod extends GlatClass implements Method{
-/*
- Get name
- Get list of parameters
- Get return type
- Get CFG
-*/
+
 	public GlatMethod(String type, String name){
 		this.type = type;
 		this.name = name;
@@ -94,17 +86,14 @@ public class GlatMethod extends GlatClass implements Method{
 	
 	
 	public List<GlatInstruction> getFirstInsts(){
-		return getFirstInstsFrom(entry);
+		return getFirstInstsFrom(cfg.getInitNode());
 	}
-	public List<GlatInstruction> getFirstInstsFrom(String node){
+	public List<GlatInstruction> getFirstInstsFrom(Node node){
 		List<GlatInstruction> insts = new Vector<GlatInstruction>();
-		/*Iterator<GlatTransition> it = cfg.edgesOf(node).iterator();
-		GlatTransition tr;
-		while(it.hasNext()){
-			tr = it.next();
-			if(tr.getSource().equals(node) && tr.getNumInsts() > 0)
-				insts.add(tr.getInst(0));
-		}*/
+		cfg.getOutTransitions(node).forEach((tr)-> {
+			if(tr.getNumInstructions()>0)
+				insts.add((GlatInstruction) tr.getInstruction(0));
+		});
 		return insts;
 	}
 	
@@ -120,19 +109,11 @@ public class GlatMethod extends GlatClass implements Method{
 		vars.add(v);
 	}
 	
-	public void addEntryPoint(String s){
-		cfg = new GlatCFG(new GlatNode(entry));
-		entry = s;
+	public void addCFG(GlatCFG c){
+		cfg = c;
 	}
 	public void addCallPoint(Call i){
 		callpoints.add(i);
-	}
-	
-	public void addTransition(GlatTransition t){
-		//TODO: when CFG is done
-	//	cfg.addVertex(t.getSource());
-	//	cfg.addVertex(t.getDestination());
-	//	cfg.addEdge(t.getSource(), t.getDestination(),t);
 	}
 	
 	/*##############################
@@ -144,7 +125,6 @@ public class GlatMethod extends GlatClass implements Method{
 	private Vector<Call> callpoints;
 	private String type;
 	private String name;
-	private String entry;
 	private GlatCFG cfg;
 
 }

@@ -1,10 +1,7 @@
 package glat.program;
 
 public class Declaration {
-/*
- Get name
- Get type
-*/
+
 	public Declaration(String t,String n,String e){
 		name=n;type=t;
 		isPrimitive = !(t.equals("lock") 

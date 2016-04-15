@@ -20,6 +20,11 @@ public class GlatNode extends GlatClass implements Node {
 		return name;
 	}
 	
+	@Override
+	public String toString(){
+		return getLabel();
+	}
+	
 	/*##############################
 	 *        Build Methods        *
 	 ##############################*/

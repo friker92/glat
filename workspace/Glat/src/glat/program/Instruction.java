@@ -1,5 +1,7 @@
 package glat.program;
 
-public interface Instruction extends BasicInterface {
+import glat.program.instructions.TypeInst;
 
+public interface Instruction extends BasicInterface {
+	public TypeInst getType();
 }
