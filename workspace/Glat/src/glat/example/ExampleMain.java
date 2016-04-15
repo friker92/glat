@@ -3,8 +3,8 @@ package glat.example;
 import java.io.FileNotFoundException;
 import java.util.Vector;
 
-import glat.Glat;
-import glat.ParseException;
+import glat.parser.Glat;
+import glat.parser.ParseException;
 import glat.example.direct.ExampleAnalysis;
 import glat.example.direct.PositiveNegativeAnalysis;
 import glat.example.fixpoint.PosNegFixPoint;
@@ -18,8 +18,8 @@ public class ExampleMain {
 			Program p = g.parse(args);
 			Vector <Analysis> va = new Vector<Analysis>();
 			va.add(new ExampleAnalysis(p));
-			va.add(new PosNegFixPoint(p));		
-			va.add(new PositiveNegativeAnalysis(p));
+			//va.add(new PosNegFixPoint(p));		
+			//va.add(new PositiveNegativeAnalysis(p));
 			for (Analysis a : va){
 				System.out.println("\n\n\n*******************************************\n\n\n");
 				a.title();

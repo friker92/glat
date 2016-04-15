@@ -5,6 +5,7 @@ import glat.program.instructions.Call;
 import glat.program.instructions.TypeInst;
 import glat.program.instructions.expressions.terminals.Variable;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -12,52 +13,65 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-public class Program {
-	/*
-	 Get the list of methods
-	 List of global variables
-	 Get the entry method
-	 Get list of used primitive types
-	*/
+
+/**
+ * Program does not need any thing to be builded. 
+ * A program has properties like each element of this structure.
+ * You can set this properties or ask for it.
+ * You can add:
+ * - Global Variables.
+ * - Initialization instructions of global variables.
+ * - Main "method", which is especial.
+ * - Methods.
+ * You can ask for:
+ * - Global Variables.
+ * - Initialization instructions of global variables.
+ * - Main "method".
+ * - Other Methods.
+ * - Non-Primitive Types
+ */
+public class Program extends GlatClass{
+
+	
 	public Program(){
-		methods = new Vector<Method>();
 		primitive = new HashSet<String>();
-		declarations = new Vector<Declaration>();
-		hashMethod = new HashMap<String,Method>();
+		globDecl = new Vector<Declaration>();
+		methods = new HashMap<String,Method>();
 		initInstr = new Vector<Instruction>();
-		entry = "main";
-	}
-	public List<Method> getMethods(){
-		return methods;
 	}
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	/*##############################
+	 *        Access Methods       *
+	 ##############################*/
+	
+	
+	public List<Method> getMethods(){
+		return new ArrayList<Method>(methods.values());
+	}
+
 	public List<String> getPrimitiveTypes(){
-		return new Vector(Arrays.asList(primitive.toArray()));
+		return new ArrayList<String>(primitive);
 	}
 	
 	public List<Declaration> getGlobalVariables(){
-		return declarations;
+		return globDecl;
 	}
 	public List<Variable> getGlobalVariablesAsVar() {
-		Vector<Variable> p = new Vector<Variable>(declarations.size());
-		for (Declaration d : declarations){
+		Vector<Variable> p = new Vector<Variable>(globDecl.size());
+		for (Declaration d : globDecl){
 			p.add(new Variable(d));
 		}
 		return p;
 	}
 	
-	public Method getEntryMethod(){
-		if(hashMethod.containsKey(entry))
-			return hashMethod.get(entry);
-		throw new Error("Main is undefine.");
-
-		
+	public MainMethod getEntryMethod(){
+		return mainmethod;
+		//throw new Error("Main is undefine.");
 	}
 	
 	public Declaration getVariable(String v){
 		Declaration d;
-		Iterator<Declaration> it = declarations.iterator();
+		Iterator<Declaration> it = globDecl.iterator();
 		while(it.hasNext()){
 			d = it.next();
 			if (d.getName().equals(v))
@@ -65,9 +79,20 @@ public class Program {
 		}
 		return null;
 	}
-
+	
+	
+	
+	/*##############################
+	 *        Build Methods        *
+	 ##############################*/
+	public void addMainMethod(MainMethod mm){
+		if(mainmethod != null)
+			throw new Error("Error: Main already exits");
+		mainmethod = mm;
+	}
 	public void addMethod(Method m){
-		methods.add(m);
+		if(methods.containsKey(m.getName()))
+			throw new Error("Error: "+m.getName()+" method already exits");
 		addPrimitive(m.getReturnType());
 		Declaration v;
 		Iterator<Declaration> it = m.getParameters().iterator();
@@ -80,12 +105,12 @@ public class Program {
 			v = it.next();
 			addPrimitive(v.getType());
 		}
-		hashMethod.put(m.getName(), m);
+		methods.put(m.getName(), m);
 	}
 	
 	public void addDeclaration(Declaration v){
 		addPrimitive(v.getType());
-		declarations.add(v);
+		globDecl.add(v);
 	}
 	public void addInitInstr(Instruction i){
 		initInstr.add(i);
@@ -96,23 +121,19 @@ public class Program {
 			primitive.add(s);
 	}
 	
-	private Vector<Method> methods;
-	HashMap<String,Method> hashMethod;
-	private Set<String> primitive;
-	private Vector<Declaration> declarations;
-	private String entry;
-	private Vector<Instruction> initInstr;
-	
+	public void checkProgram(){
+		checkCalls();
+	}
 	public void checkCalls() {
-		for(Method m : methods){
+		for(Method m : methods.values()){
 			Iterator<GlatTransition> it = m.getCFG().edgeSet().iterator();
 			while(it.hasNext()){
 				GlatTransition tr = it.next();
 				Vector<Instruction> v = tr.getCode();
 				for (Instruction i : v){
 					if (i.getType() == TypeInst.SYNCCALL || i.getType() == TypeInst.ASYNCCALL){
-						if(  hashMethod.containsKey(((Call)i).getName()) ){
-							Method tmp = hashMethod.get((((Call)i).getName()));
+						if(  methods.containsKey(((Call)i).getName()) ){
+							Method tmp = methods.get((((Call)i).getName()));
 							tmp.addCallPoint((Call)i);
 							((Call)i).setMethodRef(tmp);
 						}else{
@@ -122,7 +143,22 @@ public class Program {
 				}
 			}
 		}
-		
 	}
+	
+	
+
+
+	
+	/*##############################
+	 *     Internal Attributes     *
+	 ##############################*/
+	
+	private MainMethod mainmethod;
+	private HashMap<String,Method> methods;
+	private Set<String> primitive;
+	private Vector<Declaration> globDecl;
+	private Vector<Instruction> initInstr;
+	
+
 
 }

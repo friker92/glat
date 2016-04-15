@@ -62,5 +62,10 @@ public abstract class Instruction {
 	protected int position_c;
 	protected TypeInst type;
 	protected Instruction next;
+	public void setUbication(Method m, GlatTransition tr) {
+		setMethod(m);
+		setTransition(tr);
+	}
+
 
 }

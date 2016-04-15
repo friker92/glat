@@ -6,20 +6,15 @@ import glat.program.instructions.expressions.Terminal;
 
 public class Variable implements Terminal{
 
+	public Variable(Token s){
+		name = s.image;
+	}
+	
 	public Variable(Declaration d){
 		decl = d;
-		value = d.getName();
+		name = d.getName();
 	}
-	
-	public Variable(Declaration d, Token s){
-		decl = d;
-		value = s.image;
-	}
-	public Variable(Declaration d, String s){
-		decl = d;
-		value = s;
-	}
-	
+
 	@Override
 	public TypeTerm getType() {
 		return TypeTerm.VARIABLE;
@@ -27,19 +22,22 @@ public class Variable implements Terminal{
 
 	@Override
 	public String getValue() {
-		return value;
+		return name;
 	}
 	
 	public Declaration getDeclaration(){
 		return decl;
 	}
+	public void setDeclaration(Declaration d){
+		decl = d;
+	}
 	
 	public String toString(){
-		return value;
+		return name;
 	}
 	
 	private Declaration decl;
-	private String value;
+	private String name;
 	public String getLabel() {
 		return decl.getLabel();
 	}

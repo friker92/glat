@@ -54,7 +54,7 @@ public class PositiveNegativeAnalysis implements Analysis {
 		while(itm.hasNext()){
 			meth.put(itm.next().getLabel(), V.BOT);
 		}
-		Method m = p.getEntryMethod();
+		Method m = p.getMethods().get(0);//p.getEntryMethod();
 		p_ret = method(m);
 		
 		return true;

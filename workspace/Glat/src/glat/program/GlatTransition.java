@@ -92,6 +92,9 @@ public class GlatTransition extends DefaultWeightedEdge implements Transition {
 	private Method method;
 	private int position;
 	private static final long serialVersionUID = -1L;
+	
+	
+	
 	@Override
 	public Object getPropValue(Object name) {
 		// TODO Auto-generated method stub
