@@ -1,8 +1,8 @@
 global {
-var int a;
-var int b;
-var int c;
-var int d;
+  var int a;
+  var int b;
+  var int c;
+  var int d;
 }
 init {
 
