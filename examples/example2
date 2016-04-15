@@ -1,5 +1,5 @@
 global {
-var int f;
+ var int f;
 }
 
 init {}
