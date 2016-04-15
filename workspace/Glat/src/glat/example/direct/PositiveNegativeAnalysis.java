@@ -8,9 +8,9 @@ import org.jgrapht.WeightedGraph;
 
 import glat.example.Analysis;
 import glat.program.Declaration;
-import glat.program.Instruction;
-import glat.program.Method;
-import glat.program.Program;
+import glat.program.GlatInstruction;
+import glat.program.GlatMethod;
+import glat.program.GlatProgram;
 import glat.program.GlatTransition;
 import glat.program.instructions.Asignation;
 import glat.program.instructions.Call;
@@ -29,7 +29,7 @@ public class PositiveNegativeAnalysis implements Analysis {
 		BOT
 	}
 
-	public PositiveNegativeAnalysis(Program p){
+	public PositiveNegativeAnalysis(GlatProgram p){
 		this.p = p;
 		vars = new HashMap<String, V>();
 		meth = new HashMap<String, V>();
@@ -50,17 +50,17 @@ public class PositiveNegativeAnalysis implements Analysis {
 			if(d.getType().equals("int") || d.getType().equals("float"))
 				vars.put(d.getEnv()+"_"+d.getName(), V.BOT);
 		}
-		Iterator<Method> itm = p.getMethods().iterator();
+		Iterator<GlatMethod> itm = p.getMethods().iterator();
 		while(itm.hasNext()){
 			meth.put(itm.next().getLabel(), V.BOT);
 		}
-		Method m = p.getMethods().get(0);//p.getEntryMethod();
+		GlatMethod m = p.getMethods().get(0);//p.getEntryMethod();
 		p_ret = method(m);
 		
 		return true;
 	}
 	
-	private V method(Method m){
+	private V method(GlatMethod m){
 		if(meth.get(m.getLabel())!= V.BOT){ //already visit...
 			return meth.get(m.getLabel()); // I know it is wrong!
 		}
@@ -84,7 +84,7 @@ public class PositiveNegativeAnalysis implements Analysis {
 		return meth.get(m.getLabel());
 	}
 	
-	private void cfg(Method m,WeightedGraph<String, GlatTransition> cfg,String vertex,HashMap<String, Integer> edges){
+	private void cfg(GlatMethod m,WeightedGraph<String, GlatTransition> cfg,String vertex,HashMap<String, Integer> edges){
 		Iterator<GlatTransition> its = cfg.edgesOf(vertex).iterator();
 		while(its.hasNext()){
 			GlatTransition tr = its.next();
@@ -93,7 +93,7 @@ public class PositiveNegativeAnalysis implements Analysis {
 			if(!tr.getSource().equals(vertex) || nloop >= MAX_LOOP)
 				continue;
 			edges.put(label, nloop+1);
-			Iterator<Instruction> itv = tr.getCode().iterator();
+			Iterator<GlatInstruction> itv = tr.getCode().iterator();
 			while(itv.hasNext()){
 				inst(m,itv.next());
 			}
@@ -101,7 +101,7 @@ public class PositiveNegativeAnalysis implements Analysis {
 		}
 	}
 	
-	private V inst(Method m,Instruction i){
+	private V inst(GlatMethod m,GlatInstruction i){
 		switch (i.getType()){
 		case ASIGNATION:
 			Asignation as = (Asignation) i;
@@ -127,7 +127,7 @@ public class PositiveNegativeAnalysis implements Analysis {
 		return V.BOT;
 	}
 	
-	private V call(Method m,Call cl){
+	private V call(GlatMethod m,Call cl){
 		List<Declaration> lp = m.getParameters();
 		List<Variable> lv = cl.getArgs();
 		Iterator<Declaration>  ip = lp.iterator();
@@ -145,7 +145,7 @@ public class PositiveNegativeAnalysis implements Analysis {
 		}
 		return val;
 	}
-	private V expr(Method m, Expression exp){
+	private V expr(GlatMethod m, Expression exp){
 		switch (exp.getType()){
 		case 1:
 			return term(exp.getT1());
@@ -249,7 +249,7 @@ public class PositiveNegativeAnalysis implements Analysis {
 		else 
 			return V.NEG;
 	}
-	private Program p;
+	private GlatProgram p;
 	private HashMap<String, V> vars;
 	private HashMap<String, V> meth;
 	private V p_ret;

@@ -2,11 +2,11 @@ package glat.example.fixpoint;
 
 import glat.example.Analysis;
 import glat.fixpoint.FixPoint;
-import glat.program.Program;
+import glat.program.GlatProgram;
 
 public class PosNegFixPoint implements Analysis{
 
-	public PosNegFixPoint(Program p) {
+	public PosNegFixPoint(GlatProgram p) {
 		this.p = p;
 	}
 	
@@ -26,5 +26,5 @@ public class PosNegFixPoint implements Analysis{
 		System.out.println("FIXPOINT use example: Positive Negative Analysis.");
 	}
 	private FixPoint fxp;
-	private Program p;
+	private GlatProgram p;
 }

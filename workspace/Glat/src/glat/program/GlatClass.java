@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-public class GlatClass implements PropTable{
+public abstract class GlatClass implements BasicInterface {
 	private Properties prop;
 	
 	

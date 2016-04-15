@@ -8,12 +8,12 @@ import com.google.gson.JsonObject;
 */
 import glat.program.instructions.TypeInst;
 
-public abstract class Instruction {
+public abstract class GlatInstruction {
 /*
  method - transition - location
  Type
 */
-	public Instruction(){
+	public GlatInstruction(){
 	}
 
 	
@@ -27,10 +27,10 @@ public abstract class Instruction {
 		return type;
 	}
 	
-	public void setMethod(Method m) {
+	public void setMethod(GlatMethod m) {
 		method = m;		
 	}
-	public Method getMethod() {
+	public GlatMethod getMethod() {
 		return method;		
 	}
 	
@@ -43,26 +43,26 @@ public abstract class Instruction {
 		trans = t;
 	}
 	
-	public List<Instruction> getNextInsts(){
+	public List<GlatInstruction> getNextInsts(){
 		if (next != null){
-			List<Instruction> insts = new Vector<Instruction>();
+			List<GlatInstruction> insts = new Vector<GlatInstruction>();
 			insts.add(next);
 			return insts;
 		}else{
 			return method.getFirstInstsFrom(trans.getDestination());
 		}
 	}
-	public void setNextInst(Instruction n){
+	public void setNextInst(GlatInstruction n){
 		next = n;
 	}
 	
-	protected Method method;
+	protected GlatMethod method;
 	protected GlatTransition trans;
 	protected int position_l;
 	protected int position_c;
 	protected TypeInst type;
-	protected Instruction next;
-	public void setUbication(Method m, GlatTransition tr) {
+	protected GlatInstruction next;
+	public void setUbication(GlatMethod m, GlatTransition tr) {
 		setMethod(m);
 		setTransition(tr);
 	}

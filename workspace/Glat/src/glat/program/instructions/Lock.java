@@ -1,10 +1,10 @@
 package glat.program.instructions;
 
-import glat.program.Instruction;
+import glat.program.GlatInstruction;
 import glat.program.instructions.expressions.Terminal;
 import glat.program.instructions.expressions.terminals.Variable;
 
-public class Lock extends Instruction {
+public class Lock extends GlatInstruction {
 	public Lock(){
 		super();
 		type = TypeInst.LOCK;

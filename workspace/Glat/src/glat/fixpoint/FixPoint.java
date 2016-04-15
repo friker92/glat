@@ -2,9 +2,9 @@ package glat.fixpoint;
 
 import java.util.*;
 
-import glat.program.Instruction;
-import glat.program.Method;
-import glat.program.Program;
+import glat.program.GlatInstruction;
+import glat.program.GlatMethod;
+import glat.program.GlatProgram;
 import glat.program.instructions.Call;
 import glat.program.instructions.Return;
 import glat.program.instructions.expressions.Terminal;
@@ -16,10 +16,10 @@ public class FixPoint {
     private AbstractDomain domain;
     private Queue<Event> Q;
     private HashMap<String, AbstractState> table;
-    private Program program;
+    private GlatProgram program;
     private boolean done;
     
-    public FixPoint(AbstractDomain d, Program pr) {
+    public FixPoint(AbstractDomain d, GlatProgram pr) {
     	domain = d;
     	program = pr;
     	done = false;
@@ -42,7 +42,7 @@ public class FixPoint {
 		//T = new Table();
     	table = new HashMap<String,AbstractState>();
     	Q = new LinkedList<Event>();
-    	Method m = program.getMethods().get(0);//program.getEntryMethod();
+    	GlatMethod m = program.getMethods().get(0);//program.getEntryMethod();
     	Call c = new Call(m.getName(),"sync");
     	c.setMethodRef(m);
 		//Q = { call( main, {} ) }
@@ -58,9 +58,9 @@ public class FixPoint {
 	
     public void execute(Event x){
 		AbstractState s0,s1,s;
-		Instruction i;
-		Method m;
-		List<Instruction> li;
+		GlatInstruction i;
+		GlatMethod m;
+		List<GlatInstruction> li;
 		List<Variable> lv,lv2;
 		switch (x.getType()) {
 	
@@ -90,7 +90,7 @@ public class FixPoint {
 				
 				for(Call cl : m.getCallPoints()){
 
-					Iterator<Instruction> ii= cl.getNextInsts().iterator();
+					Iterator<GlatInstruction> ii= cl.getNextInsts().iterator();
 				    while(ii.hasNext())
 				    	decideHandleRet(ii.next(),cl,(Return)i,s0);//Q.add( new Event(TypeEvent.EXEC,inst, s2) ));
 						
@@ -120,9 +120,9 @@ public class FixPoint {
 		}
     }
 
-    public void storeInTable(Instruction i, AbstractState s) {
+    public void storeInTable(GlatInstruction i, AbstractState s) {
 		AbstractState s0,s1,smid;
-		List<Instruction> li;
+		List<GlatInstruction> li;
 		s0 = table.get(i.getLabel());
 		smid = (s0!=null)?s0:domain.empty();
 		s1 = domain.lub(s,smid);
@@ -133,11 +133,11 @@ public class FixPoint {
 		}
     }
 
-    public void decideHandleRet(Instruction inst,Call cl, Return r, AbstractState s) {
+    public void decideHandleRet(GlatInstruction inst,Call cl, Return r, AbstractState s) {
 		AbstractState s0, s1,s2,smid;
 		Vector<Variable> lv,lv2;
 		Variable retPoint;
-		Method m;
+		GlatMethod m;
 		m = cl.getMethodRef();
 		lv = (Vector)m.getParametersAsVar();
 		lv2 = (Vector)cl.getArgs();
@@ -152,7 +152,7 @@ public class FixPoint {
 		s1 = table.get(m.getLabel());
 		smid = (s1!=null)?s1:domain.empty();
 		s2 = domain.extend(smid, s0);
-		List<Instruction> li = cl.getNextInsts();
+		List<GlatInstruction> li = cl.getNextInsts();
 		if ( !domain.le(s2,smid) ) {
 		    table.put( m.getLabel(), s2 );
 			Q.add( new Event(TypeEvent.EXEC,inst, s2) );
@@ -162,7 +162,7 @@ public class FixPoint {
 
     public void decideStoreCall(Call c, AbstractState s) {
 		AbstractState s0, s1,smid;
-		Method m = c.getMethodRef();
+		GlatMethod m = c.getMethodRef();
 		s0 = table.get(m.getLabel());
 		smid = (s0!=null)?s0:domain.empty();
 		s1 = domain.lub(s,smid);

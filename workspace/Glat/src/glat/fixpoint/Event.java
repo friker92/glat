@@ -1,30 +1,30 @@
 package glat.fixpoint;
 
-import glat.program.Instruction;
-//import glat.program.Method;
+import glat.program.GlatInstruction;
+//import glat.program.GlatMethod;
 
 public class Event {
-	public Event(TypeEvent ty, Instruction i, AbstractState s) {
-		//if (ty != TypeEvent.EXEC) throw new Error ("With Instruction, Events have to be of type EXEC");
+	public Event(TypeEvent ty, GlatInstruction i, AbstractState s) {
+		//if (ty != TypeEvent.EXEC) throw new Error ("With GlatInstruction, Events have to be of type EXEC");
 		type = ty;
 		inst = i;
 		st = s;
 	}
 
-	/*public Event(TypeEvent ty, Method m, AbstractState s) {
-		if (ty != TypeEvent.CALL) throw new Error ("With Method, Events have to be of type CALL");
+	/*public Event(TypeEvent ty, GlatMethod m, AbstractState s) {
+		if (ty != TypeEvent.CALL) throw new Error ("With GlatMethod, Events have to be of type CALL");
 		type = ty;
 		meth = m;
 		st = s;
 	}*/
 
-	/*public Method getMethod() {
-		if (meth==null) throw new Error ("With Method, Events have to be of type CALL");
+	/*public GlatMethod getMethod() {
+		if (meth==null) throw new Error ("With GlatMethod, Events have to be of type CALL");
 		return meth;
 	}*/
 
-	public Instruction getInst() {
-		if (inst==null) throw new Error ("With Instruction, Events have to be of type EXEC");
+	public GlatInstruction getInst() {
+		if (inst==null) throw new Error ("With GlatInstruction, Events have to be of type EXEC");
 		return inst;
 	}
 	
@@ -37,7 +37,7 @@ public class Event {
 	}
 
 	private TypeEvent type;
-	private Instruction inst;
-	//private Method meth;
+	private GlatInstruction inst;
+	//private GlatMethod meth;
 	private AbstractState st;
 }

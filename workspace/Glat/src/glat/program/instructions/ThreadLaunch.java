@@ -1,6 +1,5 @@
-package glat.program;
+package glat.program.instructions;
 
-import glat.program.instructions.Call;
 import glat.program.instructions.expressions.terminals.*;
 import glat.program.instructions.expressions.terminals.Number;
 

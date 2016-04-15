@@ -1,9 +1,9 @@
 package glat.program.instructions;
 
-import glat.program.Instruction;
+import glat.program.GlatInstruction;
 import glat.program.instructions.expressions.Terminal;
 
-public class Assume extends Instruction {
+public class Assume extends GlatInstruction {
 	public Assume(){
 		super();
 		type = TypeInst.ASSUME;

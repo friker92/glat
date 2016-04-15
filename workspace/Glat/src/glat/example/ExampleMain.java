@@ -8,14 +8,14 @@ import glat.parser.ParseException;
 import glat.example.direct.ExampleAnalysis;
 import glat.example.direct.PositiveNegativeAnalysis;
 import glat.example.fixpoint.PosNegFixPoint;
-import glat.program.Program;
+import glat.program.GlatProgram;
 
 public class ExampleMain {
 	public static void main(String[] args) {
 		Glat g = new Glat();
 
 		try {
-			Program p = g.parse(args);
+			GlatProgram p = g.parse(args);
 			Vector <Analysis> va = new Vector<Analysis>();
 			va.add(new ExampleAnalysis(p));
 			//va.add(new PosNegFixPoint(p));		

@@ -1,10 +1,10 @@
 package glat.program.instructions;
 
-import glat.program.Instruction;
+import glat.program.GlatInstruction;
 import glat.program.instructions.expressions.Terminal;
 import glat.program.instructions.expressions.terminals.Variable;
 
-public class Join extends Instruction {
+public class Join extends GlatInstruction {
 	public Join(){
 		super();
 		type = TypeInst.JOIN;

@@ -1,9 +1,9 @@
 package glat.program.instructions;
 
-import glat.program.Instruction;
+import glat.program.GlatInstruction;
 import glat.program.instructions.expressions.terminals.Variable;
 
-public class Asignation extends Instruction {
+public class Asignation extends GlatInstruction {
 
 	public Asignation(Variable d, Expression e) {
 		type = TypeInst.ASIGNATION;

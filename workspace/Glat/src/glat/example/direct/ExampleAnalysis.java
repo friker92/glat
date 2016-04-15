@@ -10,7 +10,7 @@ import glat.program.*;
 public class ExampleAnalysis implements Analysis{
 	
 	
-	public ExampleAnalysis(Program p) {
+	public ExampleAnalysis(GlatProgram p) {
 		this.p = p;
 	}
 
@@ -23,15 +23,15 @@ public class ExampleAnalysis implements Analysis{
 		System.out.println("\tThere are a few global variables:");
 		List<Declaration> lv = p.getGlobalVariables();
 		lv.forEach((v)->System.out.println("\t\t"+v.getType()+":"+v.getName()));
-		List<Method> lm = p.getMethods();
+		List<GlatMethod> lm = p.getMethods();
 		lm.forEach((m)->print(m));
 	}
 
-	private void print(Method m){
+	private void print(GlatMethod m){
 		List<Declaration> args = m.getParameters();
 		List<Declaration> vars = m.getVariables();
 		WeightedGraph<String, GlatTransition> cfg = m.getCFG();
-		System.out.println("\t Method "+m.getLabel()+ "");
+		System.out.println("\t GlatMethod "+m.getLabel()+ "");
 		System.out.println("\t\t Parameters:");
 		args.forEach((v)->System.out.println("\t\t\t"+v.getType()+":"+v.getName()));
 		System.out.println("\t\t Variables:");
@@ -41,17 +41,17 @@ public class ExampleAnalysis implements Analysis{
 		st.forEach((t)->print(t));
 	}
 	private void print(GlatTransition tr){
-		List<Instruction> Tcode = tr.getCode();
+		List<GlatInstruction> Tcode = tr.getCode();
 		String source = tr.getSource();
 		String dest = tr.getDestination();
 		System.out.println("\t\t\t"+source+" -> "+dest+" : {");
-		for (Instruction i : Tcode){
+		for (GlatInstruction i : Tcode){
 			print(i);
 		}
 		System.out.println("\t\t\t}");
 	}
 	
-	private void print(Instruction i){
+	private void print(GlatInstruction i){
 		switch (i.getType()){
 		case ASIGNATION:
 		case ASSERT:
@@ -72,7 +72,7 @@ public class ExampleAnalysis implements Analysis{
 		return !(p==null);
 	}
 
-	private Program p;
+	private GlatProgram p;
 
 	@Override
 	public void title() {

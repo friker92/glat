@@ -1,9 +1,9 @@
 package glat.program.instructions;
 
-import glat.program.Instruction;
+import glat.program.GlatInstruction;
 import glat.program.instructions.expressions.Terminal;
 
-public class Return extends Instruction {
+public class Return extends GlatInstruction {
 	public Return(){
 		super();
 		type = TypeInst.RETURN;

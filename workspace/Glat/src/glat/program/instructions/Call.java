@@ -3,11 +3,11 @@ package glat.program.instructions;
 import java.util.List;
 import java.util.Vector;
 
-import glat.program.Instruction;
-import glat.program.Method;
+import glat.program.GlatInstruction;
+import glat.program.GlatMethod;
 import glat.program.instructions.expressions.terminals.Variable;
 
-public class Call extends Instruction {
+public class Call extends GlatInstruction {
 	public Call(){
 		super();
 		type = TypeInst.ASYNCCALL;
@@ -35,11 +35,11 @@ public class Call extends Instruction {
 		return args;
 	}
 	
-	public Method getMethodRef(){
+	public GlatMethod getMethodRef(){
 		return meth;
 	}
 	
-	public void setMethodRef(Method m){
+	public void setMethodRef(GlatMethod m){
 		meth = m;
 	}
 	
@@ -58,6 +58,6 @@ public class Call extends Instruction {
 	private Vector<Variable> args;
 	private boolean sync;
 	private String name;
-	private Method meth;
+	private GlatMethod meth;
 	private Variable ret;
 }

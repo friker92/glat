@@ -6,7 +6,7 @@ import java.util.List;
 import glat.fixpoint.AbstractDomain;
 import glat.fixpoint.AbstractState;
 import glat.program.Declaration;
-import glat.program.Instruction;
+import glat.program.GlatInstruction;
 import glat.program.instructions.Asignation;
 import glat.program.instructions.Expression;
 import glat.program.instructions.expressions.Terminal;
@@ -52,7 +52,7 @@ public class PosNegDomain implements AbstractDomain {
 	}
 	
 	@Override
-	public AbstractState abstractExec(Instruction i, AbstractState st) {
+	public AbstractState abstractExec(GlatInstruction i, AbstractState st) {
 		PosNegState pt = new PosNegState();
 		pt.extend(c(st));
 		switch(i.getType()){
