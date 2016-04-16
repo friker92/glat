@@ -3,7 +3,9 @@ global {
 }
 
 init {}
-main {}
+main {
+ thread t1 1 call m();
+}
 
 void m(){
      var int x;

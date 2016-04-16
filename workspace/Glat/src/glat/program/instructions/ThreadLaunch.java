@@ -1,5 +1,6 @@
 package glat.program.instructions;
 
+import glat.program.GlatMethod;
 import glat.program.instructions.expressions.terminals.*;
 import glat.program.instructions.expressions.terminals.Number;
 
@@ -21,6 +22,14 @@ public class ThreadLaunch {
 	
 	public String getLabel(){
 		return "thread "+name+" "+((inf)?"*":num)+" "+c.getLabel();
+	}
+	
+	public GlatMethod getMethod(){
+		return c.getMethod();
+	}
+	
+	public Call getCall(){
+		return c;
 	}
 	
 	private String name;

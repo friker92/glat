@@ -2,6 +2,7 @@ package glat.program;
 import java.util.Vector;
 
 import glat.program.instructions.Call;
+import glat.program.instructions.ThreadLaunch;
 import glat.program.instructions.TypeInst;
 import glat.program.instructions.expressions.terminals.Variable;
 
@@ -123,7 +124,22 @@ public class GlatProgram extends GlatClass implements Program{
 	}
 	
 	public void checkProgram(){
+		checkThreads();
 		checkCalls();
+	}
+	
+	public void checkThreads(){
+		List<ThreadLaunch> Ts = mainmethod.getThreads();
+		Ts.forEach((t)->{
+			Call c = t.getCall();
+			if(  methods.containsKey(c.getName()) ){
+				GlatMethod tmp = methods.get((c.getName()));
+				tmp.addCallPoint(c);
+				c.setMethodRef(tmp);
+			}else{
+				throw new Error("Missing Method, please define: "+c.getName());
+			}
+		});
 	}
 	
 	public void checkCalls() {
