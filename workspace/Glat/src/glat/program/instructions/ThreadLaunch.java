@@ -25,7 +25,7 @@ public class ThreadLaunch {
 	}
 	
 	public GlatMethod getMethod(){
-		return c.getMethod();
+		return c.getMethodRef();
 	}
 	
 	public Call getCall(){

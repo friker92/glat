@@ -50,12 +50,22 @@ public class GlatCFG extends GlatClass implements ControlFlowGraph {
 
 	@Override
 	public List<Transition> getOutTransitions(Node src) {
-		return new ArrayList<Transition>(gh.outgoingEdgesOf((GlatNode)src));
+		List<Transition> l = new ArrayList<Transition>();
+		gh.edgeSet().forEach((tr)->{
+			if(tr.getSrcNode().equals(src))
+				l.add(tr);
+		});
+		return l;//new ArrayList<Transition>(gh.outgoingEdgesOf((GlatNode)src));
 	}
 
 	@Override
 	public List<Transition> getInTransitions(Node target) {
-		return new ArrayList<Transition>(gh.incomingEdgesOf((GlatNode)target));
+		List<Transition> l = new ArrayList<Transition>();
+		gh.edgeSet().forEach((tr)->{
+			if(tr.getTargetNode().equals(target))
+				l.add(tr);
+		});
+		return l;//new ArrayList<Transition>(gh.incomingEdgesOf((GlatNode)target));
 	}
 	
 	/*##############################

@@ -16,6 +16,7 @@ public abstract class GlatClass implements BasicInterface {
 	 */
 	@Override
 	public Object getPropValue(Object name) {
+		if(prop==null) prop = new Properties();
 		return prop.get(name);
 	}
 
@@ -25,6 +26,7 @@ public abstract class GlatClass implements BasicInterface {
 	 */
 	@Override
 	public Object setPropValue(Object name, Object value) {
+		if(prop==null) prop = new Properties();
 		return prop.put(name, value);
 	}
 
@@ -33,6 +35,7 @@ public abstract class GlatClass implements BasicInterface {
 	 */
 	@Override
 	public List<Object> getPropNames() {
+		if(prop==null) prop = new Properties();
 		return new ArrayList<Object>(prop.keySet());
 	}
 

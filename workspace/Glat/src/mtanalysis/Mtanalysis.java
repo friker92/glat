@@ -7,11 +7,15 @@ import java.util.Queue;
 
 import glat.parser.Glat;
 import glat.program.GlatMethod;
+import glat.program.GlatNode;
 import glat.program.GlatTransition;
+import glat.program.Instruction;
 import glat.program.Node;
 import glat.program.Program;
 import glat.program.Transition;
-import glat.program.instructions.ThreadLaunch;
+import glat.program.instructions.*;
+import glat.program.instructions.expressions.Terminal;
+import glat.program.instructions.expressions.terminals.Variable;
 
 public class Mtanalysis {
 
@@ -25,9 +29,65 @@ public class Mtanalysis {
 		Mtanalysis mt = new Mtanalysis();
 		try{
 			Program p = g.parse(args);
+			mt.prepare(p);
 			mt.analyse(p);
 		}catch (Exception e){
 			e.printStackTrace();
+		}
+	}
+	private void prepare(Program p) {
+		p.getMethods().forEach((m)->{
+			m.getControlFlowGraph().getTransitions().forEach((tr)->{
+				if(tr.getInstructions().size() == 1 && isGlobalRead(tr.getInstruction(0))){
+					tr.setPropValue("GlobalRead", true);
+				}else{
+					tr.setPropValue("GlobalRead", false);
+				}
+			});
+		});
+		
+	}
+	
+	private boolean isGlobalRead(Instruction i) {
+		switch(i.getType()){
+		case ASIGNATION:
+			return isGlobalRead(((Asignation)i).getExpr());
+		case ASSERT:
+			return isGlobalRead(((Assert)i).getExpr());
+		case ASSUME:
+			return isGlobalRead(((Assume)i).getExpr());
+		case JOIN:
+			return isGlobalRead(((Join)i).getVar());
+		case LOCK:
+		case UNLOCK:
+			return isGlobalRead(((Lock)i).getVar());
+		case RETURN:
+			return isGlobalRead(((Return)i).getVar());
+		case ASYNCCALL:
+		case SYNCCALL:
+		default:
+			return false;
+		}
+		
+	}
+	private boolean isGlobalRead(Expression expr) {
+		int t = expr.getType();
+		boolean b = false;
+		if(t==2)
+			b = isGlobalRead(expr.getT2());
+		b |= isGlobalRead(expr.getT1());
+		return b;
+	}
+	private boolean isGlobalRead(Terminal t) {
+		switch(t.getType()){
+		case NUMBER:
+			return false;
+		case TOP:
+			return false;
+		case VARIABLE:
+			return ((Variable)t).getDeclaration().getEnv().equals("global");
+		default:
+			return false;
 		}
 	}
 	private HashMap<AbsState,Interference> outInter;
@@ -39,7 +99,7 @@ public class Mtanalysis {
 			inInter = outInter;
 			Ts.forEach((t)->{
 				String label = t.getLabel();
-				Node pc = t.getMethod().getControlFlowGraph().getInitNode();
+				GlatNode pc = (GlatNode) t.getMethod().getInitNode();
 				HashMap<Node, AbsState> states = hashstates.get(label); 
 				
 				if(states == null)
@@ -48,24 +108,26 @@ public class Mtanalysis {
 			});		
 		}
 	}
-	public void AnalyseThread(String t, GlatMethod m, Node pc, HashMap<Node, AbsState> states){
+	public void AnalyseThread(String t, GlatMethod m, GlatNode pc, HashMap<Node, AbsState> states){
 		List<Transition> Trs = m.getControlFlowGraph().getOutTransitions(pc);
 		Queue<GlatTransition> Q = new PriorityQueue<GlatTransition>();
 		Trs.forEach((tr)-> Q.add((GlatTransition) tr));
 		
 		while(!Q.isEmpty()){
+			
 			GlatTransition tau = Q.poll();
+			System.out.println(""+tau);
 			AbsState sigma2=null,sigma = states.get(tau.getSrcNode());
-			boolean b;
+			boolean b = false;
 			Interference I;
 			if((boolean) tau.getPropValue("GlobalRead")){
 				//?????? sigma2 = inInter.get(/*t,*/sigma);
-				b = storeState(states,tau.getSrcNode(),sigma2);
+				//b = storeState(states,tau.getSrcNode(),sigma2);
 				sigma = states.get(tau.getSrcNode());
 			}
 			//<sigma2,I> = exec(tau,sigma);
 			//??outInter.put(/*t,*/sigma, I);
-			b = storeState(states,tau.getTargetNode(),sigma2);
+			//b = storeState(states,tau.getTargetNode(),sigma2);
 			if(b){
 				m.getControlFlowGraph().getOutTransitions(tau.getTargetNode()).forEach((tr)-> Q.add((GlatTransition) tr));
 			}

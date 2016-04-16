@@ -17,5 +17,8 @@ public class Assert extends GlatInstruction {
 	public String toString(){
 		return type.name()+": "+expr.toString();
 	}
+	public Expression getExpr(){
+		return expr;
+	}
 	private Expression expr;
 }

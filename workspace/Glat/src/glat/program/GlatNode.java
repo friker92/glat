@@ -9,7 +9,15 @@ public class GlatNode extends GlatClass implements Node {
 	/*##############################
 	 *        Access Methods       *
 	 ##############################*/
-	
+	public String hash(){
+		return name;
+	}
+	public boolean equals(Object object) {
+	    if (object == null || !(object instanceof GlatNode)) {
+	        return false;
+	    }       
+	    return (this.name.equals(((GlatNode) object).name));
+	}   
 	@Override
 	public String getLabel() {
 		return "node:"+name;
@@ -22,7 +30,7 @@ public class GlatNode extends GlatClass implements Node {
 	
 	@Override
 	public String toString(){
-		return getLabel();
+		return getName();
 	}
 	
 	/*##############################
