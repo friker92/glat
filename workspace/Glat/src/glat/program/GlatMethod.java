@@ -93,6 +93,7 @@ public class GlatMethod extends GlatClass implements Method{
 		cfg.getOutTransitions(node).forEach((tr)-> {
 			if(tr.getNumInstructions()>0)
 				insts.add((GlatInstruction) tr.getInstruction(0));
+			
 		});
 		return insts;
 	}
