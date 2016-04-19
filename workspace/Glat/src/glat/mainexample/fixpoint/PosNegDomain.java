@@ -1,15 +1,15 @@
-package glat.example.fixpoint;
+package glat.mainexample.fixpoint;
 
 import java.util.Iterator;
 import java.util.List;
 
 import glat.fixpoint.AbstractDomain;
 import glat.fixpoint.AbstractState;
-import glat.program.Declaration;
 import glat.program.GlatInstruction;
-import glat.program.instructions.Asignation;
+import glat.program.instructions.Assignment;
 import glat.program.instructions.Expression;
 import glat.program.instructions.expressions.Terminal;
+import glat.program.instructions.expressions.terminals.Values;
 import glat.program.instructions.expressions.terminals.Variable;
 
 public class PosNegDomain implements AbstractDomain {
@@ -19,7 +19,7 @@ public class PosNegDomain implements AbstractDomain {
 	private PosNegState c(AbstractState s){return (PosNegState)s;}
 
 	@Override
-	public AbstractState initVars(List<Declaration> vars) {
+	public AbstractState initVars(List<Variable> vars) {
 		PosNegState p = new PosNegState();
 		vars.forEach((d)->p.init(d.getLabel()));
 		return p;
@@ -31,24 +31,22 @@ public class PosNegDomain implements AbstractDomain {
 	}
 	
 	public PosNegValues getV(PosNegState pt, Terminal t){
-		switch(t.getType()){
-		case NUMBER:
-			float f = Float.parseFloat(t.getValue());
-			if(f == 0)
-				return PosNegValues.CERO;
-			else if (f>0)
-				return PosNegValues.POS;
-			else
-				return PosNegValues.NEG;
-		case TOP:
-			return PosNegValues.TOP;
-		case VARIABLE:
-			return pt.get(((Variable)t).getDeclaration().getLabel());
-		default:
-			break;
-		
+		if(t.isVar())
+			return pt.get(((Variable)t).getLabel());
+		else{
+			Values v = (Values)t;
+			if(v.getType().equals("nondeterministic"))
+				return PosNegValues.TOP;
+			else{
+				float f = v.getFloatNumber();
+				if(f == 0)
+					return PosNegValues.CERO;
+				else if (f>0)
+					return PosNegValues.POS;
+				else
+					return PosNegValues.NEG;
+			}
 		}
-		return PosNegValues.NONE;
 	}
 	
 	@Override
@@ -56,8 +54,8 @@ public class PosNegDomain implements AbstractDomain {
 		PosNegState pt = new PosNegState();
 		pt.extend(c(st));
 		switch(i.getType()){
-		case ASIGNATION:
-			Asignation a = (Asignation)i;
+		case ASSIGNMENT:
+			Assignment a = (Assignment)i;
 			Expression exp = a.getExpr();
 			switch(exp.getType()){
 			case 1:

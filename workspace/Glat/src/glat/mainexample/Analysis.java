@@ -1,4 +1,4 @@
-package glat.example;
+package glat.mainexample;
 
 public interface Analysis {
 	public boolean run();

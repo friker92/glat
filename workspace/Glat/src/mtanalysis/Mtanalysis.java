@@ -50,8 +50,8 @@ public class Mtanalysis {
 	
 	private boolean isGlobalRead(Instruction i) {
 		switch(i.getType()){
-		case ASIGNATION:
-			return isGlobalRead(((Asignation)i).getExpr());
+		case ASSIGNMENT:
+			return isGlobalRead(((Assignment)i).getExpr());
 		case ASSERT:
 			return isGlobalRead(((Assert)i).getExpr());
 		case ASSUME:
@@ -79,16 +79,10 @@ public class Mtanalysis {
 		return b;
 	}
 	private boolean isGlobalRead(Terminal t) {
-		switch(t.getType()){
-		case NUMBER:
+		if(t.isVar())
+			return ((Variable)t).getPropValue("scope").equals("global");
+		else
 			return false;
-		case TOP:
-			return false;
-		case VARIABLE:
-			return ((Variable)t).getDeclaration().getEnv().equals("global");
-		default:
-			return false;
-		}
 	}
 	private HashMap<AbsState,Interference> outInter;
 	private HashMap<AbsState,Interference> inInter;

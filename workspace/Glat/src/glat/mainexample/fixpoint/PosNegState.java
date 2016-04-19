@@ -1,4 +1,4 @@
-package glat.example.fixpoint;
+package glat.mainexample.fixpoint;
 
 import java.util.HashMap;
 

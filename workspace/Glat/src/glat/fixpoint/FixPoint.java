@@ -79,9 +79,9 @@ public class FixPoint {
 		    case RETURN: // exec(i, s) // i is a return
 				//suppose i is a return from m
 				m = i.getMethod();
-				lv = m.getParametersAsVar();
+				lv = m.getParameters();
 				Terminal t = ((Return)i).getVar();
-				if (t != null && t.getType() == TypeTerm.VARIABLE)
+				if (t != null && t.isVar())
 					lv.add((Variable)t);
 				s0 = domain.project(s, lv);//m.retvar()+m.formalParm());
 				
@@ -103,7 +103,7 @@ public class FixPoint {
 				s = x.getState();
 				// suppose i is a call to m
 				m = ((Call)i).getMethodRef();
-				lv = m.getParametersAsVar();
+				lv = m.getParameters();
 				lv2 = ((Call)i).getArgs();
 				s0 = domain.project( s, lv2);//m.actualParams() );
 				s1 = domain.rename( s0, lv2, lv );// m.actualParams, m.formalParams);
@@ -139,12 +139,12 @@ public class FixPoint {
 		Variable retPoint;
 		GlatMethod m;
 		m = cl.getMethodRef();
-		lv = (Vector)m.getParametersAsVar();
+		lv = (Vector)m.getParameters();
 		lv2 = (Vector)cl.getArgs();
 		retPoint = cl.getReturn();
 		Terminal t = r.getVar();
 		
-		if (t != null && t.getType() == TypeTerm.VARIABLE && retPoint != null){
+		if (t != null && t.isVar() && retPoint != null){
 			lv.add((Variable)t);
 			lv2.add(retPoint);
 		}

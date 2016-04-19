@@ -5,6 +5,7 @@ import java.util.Vector;
 
 import glat.program.instructions.Call;
 import glat.program.instructions.ThreadLaunch;
+import glat.program.instructions.expressions.terminals.Variable;
 
 public class MainMethod extends GlatClass{
 
@@ -20,7 +21,7 @@ public class MainMethod extends GlatClass{
 		return lth;
 	}
 	
-	public List<Declaration> getVariables(){
+	public List<Variable> getVariables(){
 		return vars;
 	}
 	
@@ -41,7 +42,7 @@ public class MainMethod extends GlatClass{
 		lth.add(t);
 	}
 	
-	public void addDeclaration(Declaration dl) {
+	public void addVar(Variable dl) {
 		vars.add(dl);
 		
 	}
@@ -55,6 +56,6 @@ public class MainMethod extends GlatClass{
 	 ##############################*/
 	
 	private Vector<ThreadLaunch> lth;
-	private Vector<Declaration> vars;
+	private Vector<Variable> vars;
 	private Vector<GlatInstruction> instr;
 }

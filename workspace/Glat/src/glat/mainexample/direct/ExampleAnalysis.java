@@ -1,11 +1,10 @@
-package glat.example.direct;
+package glat.mainexample.direct;
 
 import java.util.*;
 
-import org.jgrapht.WeightedGraph;
-
-import glat.example.Analysis;
+import glat.mainexample.Analysis;
 import glat.program.*;
+import glat.program.instructions.expressions.terminals.Variable;
 
 public class ExampleAnalysis implements Analysis{
 	
@@ -21,15 +20,15 @@ public class ExampleAnalysis implements Analysis{
 		List<String> prim = p.getPrimitiveTypes();
 		prim.forEach((s)->System.out.println("\t\t- "+s));
 		System.out.println("\tThere are a few global variables:");
-		List<Declaration> lv = p.getGlobalVariables();
+		List<Variable> lv = p.getGlobalVariables();
 		lv.forEach((v)->System.out.println("\t\t"+v.getType()+":"+v.getName()));
 		List<Method> lm = p.getMethods();
 		lm.forEach((m)->print(m));
 	}
 
 	private void print(Method m){
-		List<Declaration> args = m.getParameters();
-		List<Declaration> vars = m.getVariables();
+		List<Variable> args = m.getParameters();
+		List<Variable> vars = m.getVariables();
 		ControlFlowGraph cfg = m.getControlFlowGraph();
 		System.out.println("\t GlatMethod "+m.getLabel()+ "");
 		System.out.println("\t\t Parameters:");
@@ -53,7 +52,7 @@ public class ExampleAnalysis implements Analysis{
 	
 	private void print(Instruction i){
 		switch (i.getType()){
-		case ASIGNATION:
+		case ASSIGNMENT:
 		case ASSERT:
 		case ASSUME:
 		case SYNCCALL:

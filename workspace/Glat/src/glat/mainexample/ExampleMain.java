@@ -1,12 +1,12 @@
-package glat.example;
+package glat.mainexample;
 
 import java.io.FileNotFoundException;
 import java.util.Vector;
 
+import glat.mainexample.direct.ExampleAnalysis;
+import glat.mainexample.fixpoint.PosNegFixPoint;
 import glat.parser.Glat;
 import glat.parser.ParseException;
-import glat.example.direct.ExampleAnalysis;
-import glat.example.fixpoint.PosNegFixPoint;
 import glat.program.GlatProgram;
 
 public class ExampleMain {

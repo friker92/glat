@@ -2,11 +2,11 @@ package glat.program.instructions;
 
 import glat.program.GlatMethod;
 import glat.program.instructions.expressions.terminals.*;
-import glat.program.instructions.expressions.terminals.Number;
+import glat.program.instructions.expressions.terminals.values.IntNumber;
 
 public class ThreadLaunch {
 
-	public ThreadLaunch(String id, Number n, Call cl){
+	public ThreadLaunch(String id, IntNumber n, Call cl){
 		name = id;
 			inf = false;
 			num = n;
@@ -34,7 +34,7 @@ public class ThreadLaunch {
 	
 	private String name;
 	private boolean inf;
-	private Number num;
+	private IntNumber num;
 	private Call c;
 	
 }

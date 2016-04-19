@@ -2,13 +2,12 @@ package glat.fixpoint;
 
 import java.util.List;
 
-import glat.program.Declaration;
 import glat.program.GlatInstruction;
 import glat.program.instructions.expressions.terminals.Variable;
 
 public interface AbstractDomain {
 	
-	public AbstractState initVars(List<Declaration> vars);
+	public AbstractState initVars(List<Variable> vars);
 	public AbstractState empty();
 	
 	public AbstractState abstractExec(GlatInstruction i, AbstractState st);

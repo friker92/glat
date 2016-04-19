@@ -12,8 +12,8 @@ public class GlatMethod extends GlatClass implements Method{
 	public GlatMethod(String type, String name){
 		this.type = type;
 		this.name = name;
-		this.vars = new Vector<Declaration>();
-		this.args = new Vector<Declaration>();
+		this.vars = new Vector<Variable>();
+		this.args = new Vector<Variable>();
 		this.callpoints = new Vector<Call>();
 		
 	}
@@ -43,11 +43,11 @@ public class GlatMethod extends GlatClass implements Method{
 		return type;
 	}
 	@Override
-	public List<Declaration> getParameters(){
+	public List<Variable> getParameters(){
 		return args;
 	}
 	@Override
-	public List<Declaration> getVariables() {
+	public List<Variable> getVariables() {
 		return vars;
 	}
 	@Override
@@ -59,9 +59,9 @@ public class GlatMethod extends GlatClass implements Method{
 		return name;
 	}
 	
-	public Declaration getVariable(String v){
-		Declaration d;
-		Iterator<Declaration> it = args.iterator();
+	public Variable getVariable(String v){
+		Variable d;
+		Iterator<Variable> it = args.iterator();
 		while(it.hasNext()){
 			d = it.next();
 			if (d.getName().equals(v))
@@ -74,20 +74,12 @@ public class GlatMethod extends GlatClass implements Method{
 				return d;
 		}
 		return null;
-	}
-	
-	public List<Variable> getParametersAsVar(){
-		Vector<Variable> p = new Vector<Variable>(args.size());
-		for (Declaration d : args){
-			p.add(new Variable(d));
-		}
-		return p;
-	}
-	
+	}	
 	
 	public List<GlatInstruction> getFirstInsts(){
 		return getFirstInstsFrom(cfg.getInitNode());
 	}
+	
 	public List<GlatInstruction> getFirstInstsFrom(Node node){
 		List<GlatInstruction> insts = new Vector<GlatInstruction>();
 		cfg.getOutTransitions(node).forEach((tr)-> {
@@ -102,11 +94,11 @@ public class GlatMethod extends GlatClass implements Method{
 	 *        Build Methods        *
 	 ##############################*/
 	
-	public void addParameter(Declaration v){
+	public void addParameter(Variable v){
 		args.add(v);
 	}
 	
-	public void addDeclaration(Declaration v){
+	public void addVar(Variable v){
 		vars.add(v);
 	}
 	
@@ -121,8 +113,8 @@ public class GlatMethod extends GlatClass implements Method{
 	 *     Internal Attributes     *
 	 ##############################*/
 	
-	private Vector<Declaration> vars;
-	private Vector<Declaration> args;
+	private Vector<Variable> vars;
+	private Vector<Variable> args;
 	private Vector<Call> callpoints;
 	private String type;
 	private String name;

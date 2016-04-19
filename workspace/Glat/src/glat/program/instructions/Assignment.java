@@ -3,10 +3,10 @@ package glat.program.instructions;
 import glat.program.GlatInstruction;
 import glat.program.instructions.expressions.terminals.Variable;
 
-public class Asignation extends GlatInstruction {
+public class Assignment extends GlatInstruction {
 
-	public Asignation(Variable d, Expression e) {
-		type = TypeInst.ASIGNATION;
+	public Assignment(Variable d, Expression e) {
+		type = TypeInst.ASSIGNMENT;
 		expr = e;
 		dest = d;
 	}

@@ -35,7 +35,7 @@ public class GlatProgram extends GlatClass implements Program{
 	
 	public GlatProgram(){
 		primitive = new HashSet<String>();
-		globDecl = new Vector<Declaration>();
+		globDecl = new Vector<Variable>();
 		methods = new HashMap<String,GlatMethod>();
 		initInstr = new Vector<GlatInstruction>();
 	}
@@ -52,24 +52,18 @@ public class GlatProgram extends GlatClass implements Program{
 		return new ArrayList<String>(primitive);
 	}
 	
-	public List<Declaration> getGlobalVariables(){
+	public List<Variable> getGlobalVariables(){
 		return globDecl;
-	}
-	public List<Variable> getGlobalVariablesAsVar() {
-		Vector<Variable> p = new Vector<Variable>(globDecl.size());
-		for (Declaration d : globDecl){
-			p.add(new Variable(d));
-		}
-		return p;
 	}
 	
 	public MainMethod getEntryMethod(){
 		return mainmethod;
 	}
 	
-	public Declaration getGlobalVariable(String v){
-		Declaration d;
-		Iterator<Declaration> it = globDecl.iterator();
+	@Override
+	public Variable getGlobalVariable(String v) {
+		Variable d;
+		Iterator<Variable> it = globDecl.iterator();
 		while(it.hasNext()){
 			d = it.next();
 			if (d.getName().equals(v))
@@ -96,8 +90,8 @@ public class GlatProgram extends GlatClass implements Program{
 		if(methods.containsKey(m.getName()))
 			throw new Error("Error: "+m.getName()+" method already exits");
 		addPrimitive(m.getReturnType());
-		Declaration v;
-		Iterator<Declaration> it = m.getParameters().iterator();
+		Variable v;
+		Iterator<Variable> it = m.getParameters().iterator();
 		while (it.hasNext()){
 			v = it.next();
 			addPrimitive(v.getType());
@@ -110,7 +104,7 @@ public class GlatProgram extends GlatClass implements Program{
 		methods.put(m.getName(), m);
 	}
 	
-	public void addDeclaration(Declaration v){
+	public void addVar(Variable v){
 		addPrimitive(v.getType());
 		globDecl.add(v);
 	}
@@ -168,7 +162,8 @@ public class GlatProgram extends GlatClass implements Program{
 	private MainMethod mainmethod;
 	private HashMap<String,GlatMethod> methods;
 	private Set<String> primitive;
-	private Vector<Declaration> globDecl;
+	private Vector<Variable> globDecl;
 	private Vector<GlatInstruction> initInstr;
+
 
 }

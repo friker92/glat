@@ -1,7 +1,7 @@
-package glat.example.fixpoint;
+package glat.mainexample.fixpoint;
 
-import glat.example.Analysis;
 import glat.fixpoint.FixPoint;
+import glat.mainexample.Analysis;
 import glat.program.GlatProgram;
 
 public class PosNegFixPoint implements Analysis{

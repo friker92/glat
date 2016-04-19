@@ -1,45 +1,41 @@
 package glat.program.instructions.expressions.terminals;
 
 import glat.parser.Token;
-import glat.program.Declaration;
+import glat.program.GlatClass;
+import glat.program.Method;
 import glat.program.instructions.expressions.Terminal;
 
-public class Variable implements Terminal{
+public class Variable extends GlatClass implements Terminal {
 
-	public Variable(Token s){
+	public Variable(String type, Token s){
 		name = s.image;
+		this.type = type;
 	}
 	
-	public Variable(Declaration d){
-		decl = d;
-		name = d.getName();
-	}
-
-	@Override
-	public TypeTerm getType() {
-		return TypeTerm.VARIABLE;
-	}
-
-	@Override
-	public String getValue() {
+	public String getName(){
 		return name;
-	}
-	
-	public Declaration getDeclaration(){
-		return decl;
-	}
-	public void setDeclaration(Declaration d){
-		decl = d;
 	}
 	
 	public String toString(){
 		return name;
 	}
 	
-	private Declaration decl;
-	private String name;
+	@Override
 	public String getLabel() {
-		return decl.getLabel();
+		return name;
 	}
+	
+	@Override
+	public String getType(){
+		return type;
+	}
+	
+	@Override
+	public boolean isVar() {return true;}
 
+	private String name;
+	private String type;
+
+	
+	
 }
