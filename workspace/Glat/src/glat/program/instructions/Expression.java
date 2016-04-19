@@ -1,47 +1,42 @@
 package glat.program.instructions;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import glat.program.instructions.expressions.Terminal;
 
 public class Expression {
 	
-	public Expression(Terminal e){
-		e1=e;
-		type = 1;
+	public Expression(){
+		operator = "";
+		operands = new ArrayList<Terminal>();
 	}
-	public Expression(String o,Terminal e,Terminal f){
-		if (o.equals("-1")){
-			e1=e;
-			type=1;
-		}else{
-			e1 = e;
-			op = o;
-			e2 = f;
-			type = 2;
-		}
-	}
+
 	public String toString(){
-		switch (type){
-		case 1:
-			return ""+e1.toString();
-		case 2:
-			return ""+e1.toString()+" "+op+" "+e2.toString();
-		}
-		return "";
+		return "$op("+operator+","+operands+")";
 	}
 	
-	public int getType(){
-		return type;
+	public String getOperator(){
+		return operator;
 	}
-	public String getOp(){
-		return op;
+	
+	public List<Terminal> getOperands(){
+		return operands;
 	}
-	public Terminal getT1(){
-		return e1;
+	
+	public Terminal getOperand(int pos){
+		return operands.get(pos);
 	}
-	public Terminal getT2(){
-		return e2;
+	
+	public void setOperator(String op){
+		operator = op;
 	}
-	private Terminal e1,e2;
-	private String op;
-	private int type;//1 = unary, 2 = binary 
+	
+	public void addOperand(Terminal t){
+		operands.add(t);
+	}
+	
+	private List<Terminal> operands;
+	private String operator;
+	 
 }

@@ -118,7 +118,7 @@ public class GlatProgram extends GlatClass implements Program{
 	}
 	
 	public void checkProgram(){
-		checkThreads();
+		//checkThreads();
 		checkCalls();
 	}
 	

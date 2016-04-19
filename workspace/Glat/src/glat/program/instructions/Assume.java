@@ -8,9 +8,9 @@ public class Assume extends GlatInstruction {
 		super();
 		type = TypeInst.ASSUME;
 	}
-	public Assume(String opc, Terminal term1, Terminal term2) {
+	public Assume(Expression e) {
 		type = TypeInst.ASSUME;
-		expr = new Expression(opc,term1,term2);
+		expr = e;
 	}
 	@Override
 	public String toString(){

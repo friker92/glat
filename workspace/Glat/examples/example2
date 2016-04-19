@@ -1,10 +1,18 @@
 global {
  var int f;
+ var bool g;
+ var string h;
 }
 
 init {}
-main {
- thread t1 1 call m();
+void main() {
+
+start n2;
+trans n0 -> n1 {
+}
+trans n2-> n0{
+}
+ /*thread t1 1 call m();*/
 }
 
 void m(){
@@ -14,14 +22,17 @@ void m(){
 
      trans n0 -> n1 {
      	   x := 100;
+     	   h := "hello world, 'you'";
      }
 
      trans n1 -> n1 {
            assume(f<x);
      	   f := f + 1;
+     	   g := true;
      }
 
      trans n1 -> n2 {
            assume(f>=x);
+           f := $op("+",f,1,1,1,3);
      } 
 }

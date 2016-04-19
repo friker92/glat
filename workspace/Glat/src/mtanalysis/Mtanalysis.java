@@ -71,11 +71,11 @@ public class Mtanalysis {
 		
 	}
 	private boolean isGlobalRead(Expression expr) {
-		int t = expr.getType();
 		boolean b = false;
-		if(t==2)
-			b = isGlobalRead(expr.getT2());
-		b |= isGlobalRead(expr.getT1());
+		List<Terminal> ops = expr.getOperands();
+		for (Terminal T : ops){
+			b |= isGlobalRead(T);
+		}
 		return b;
 	}
 	private boolean isGlobalRead(Terminal t) {

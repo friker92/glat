@@ -57,16 +57,10 @@ public class PosNegDomain implements AbstractDomain {
 		case ASSIGNMENT:
 			Assignment a = (Assignment)i;
 			Expression exp = a.getExpr();
-			switch(exp.getType()){
-			case 1:
-				pt.add(a.getDest().getLabel(), getV(pt,exp.getT1()));
-				break;
-			case 2:
-				pt.add(a.getDest().getLabel(), op(pt,exp.getOp(),exp.getT1(),exp.getT2()));
-				break;
-			default:
-				break;
-			}
+			if(exp.getOperands().size() == 1)
+				pt.add(a.getDest().getLabel(), getV(pt,exp.getOperand(0)));
+			else
+				pt.add(a.getDest().getLabel(), op(pt,exp.getOperator(),exp.getOperand(0),exp.getOperand(1)));
 			break;
 		case ASSERT:
 		case ASSUME:

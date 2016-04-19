@@ -9,9 +9,9 @@ public class Assert extends GlatInstruction {
 		type = TypeInst.ASSERT;
 	}
 
-	public Assert(String opc, Terminal term1, Terminal term2) {
+	public Assert(Expression e) {
 		type = TypeInst.ASSERT;
-		expr = new Expression(opc,term1,term2);
+		expr = e;
 	}
 	@Override
 	public String toString(){
