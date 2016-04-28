@@ -2,6 +2,7 @@ package glat.mainexample.fixpoint;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import glat.fixpoint.AbstractDomain;
 import glat.fixpoint.AbstractState;
@@ -13,15 +14,15 @@ import glat.program.instructions.expressions.terminals.Values;
 import glat.program.instructions.expressions.terminals.Variable;
 
 public class PosNegDomain implements AbstractDomain {
-	
 
-	
-	private PosNegState c(AbstractState s){return (PosNegState)s;}
+	private PosNegState c(AbstractState s) {
+		return (PosNegState) s;
+	}
 
 	@Override
-	public AbstractState initVars(List<Variable> vars) {
+	public AbstractState bottom(List<Variable> vars) {
 		PosNegState p = new PosNegState();
-		vars.forEach((d)->p.init(d.getLabel()));
+		vars.forEach((d) -> p.init(d));
 		return p;
 	}
 
@@ -29,38 +30,38 @@ public class PosNegDomain implements AbstractDomain {
 	public AbstractState empty() {
 		return new PosNegState();
 	}
-	
-	public PosNegValues getV(PosNegState pt, Terminal t){
-		if(t.isVar())
-			return pt.get(((Variable)t).getLabel());
-		else{
-			Values v = (Values)t;
-			if(v.getType().equals("nondeterministic"))
+
+	public PosNegValues getV(PosNegState pt, Terminal t) {
+		if (t.isVar())
+			return pt.get((Variable) t);
+		else {
+			Values v = (Values) t;
+			if (v.getType().equals("nondeterministic"))
 				return PosNegValues.TOP;
-			else{
+			else {
 				float f = v.getFloatNumber();
-				if(f == 0)
-					return PosNegValues.CERO;
-				else if (f>0)
+				if (f == 0)
+					return PosNegValues.ZERO;
+				else if (f > 0)
 					return PosNegValues.POS;
 				else
 					return PosNegValues.NEG;
 			}
 		}
 	}
-	
+
 	@Override
 	public AbstractState abstractExec(GlatInstruction i, AbstractState st) {
 		PosNegState pt = new PosNegState();
 		pt.extend(c(st));
-		switch(i.getType()){
+		switch (i.getType()) {
 		case ASSIGNMENT:
-			Assignment a = (Assignment)i;
+			Assignment a = (Assignment) i;
 			Expression exp = a.getExpr();
-			if(exp.getOperands().size() == 1)
-				pt.add(a.getDest().getLabel(), getV(pt,exp.getOperand(0)));
+			if (exp.getOperands().size() == 1)
+				pt.add(a.getDest(), getV(pt, exp.getOperand(0)));
 			else
-				pt.add(a.getDest().getLabel(), op(pt,exp.getOperator(),exp.getOperand(0),exp.getOperand(1)));
+				pt.add(a.getDest(), op(pt, exp.getOperator(), exp.getOperand(0), exp.getOperand(1)));
 			break;
 		case ASSERT:
 		case ASSUME:
@@ -82,17 +83,17 @@ public class PosNegDomain implements AbstractDomain {
 	}
 
 	private PosNegValues op(PosNegState pt, String op, Terminal t1, Terminal t2) {
-		PosNegValues v1 = getV(pt,t1);
-		PosNegValues v2 = getV(pt,t2);
+		PosNegValues v1 = getV(pt, t1);
+		PosNegValues v2 = getV(pt, t2);
 		if (v1 == PosNegValues.NONE || v2 == PosNegValues.NONE)
 			return PosNegValues.NONE;
-		switch(op){
+		switch (op) {
 		case "+":
 			if (v1 == PosNegValues.TOP || v2 == PosNegValues.TOP)
 				return PosNegValues.TOP;
-			else if(v1 == PosNegValues.CERO)
+			else if (v1 == PosNegValues.ZERO)
 				return v2;
-			else if(v2 == PosNegValues.CERO)
+			else if (v2 == PosNegValues.ZERO)
 				return v1;
 			else if (v1 != v2)
 				return PosNegValues.TOP;
@@ -101,19 +102,19 @@ public class PosNegDomain implements AbstractDomain {
 		case "-":
 			if (v1 == PosNegValues.TOP || v2 == PosNegValues.TOP)
 				return PosNegValues.TOP;
-			else if(v2 == PosNegValues.CERO)
+			else if (v2 == PosNegValues.ZERO)
 				return v1;
-			else if(v1 == PosNegValues.CERO)
-				return (v2==PosNegValues.POS)?PosNegValues.NEG:PosNegValues.POS;
+			else if (v1 == PosNegValues.ZERO)
+				return (v2 == PosNegValues.POS) ? PosNegValues.NEG : PosNegValues.POS;
 			else if (v1 != v2)
 				return v1;
 			else
 				return PosNegValues.TOP;
 		case "/":
-			if(v2 == PosNegValues.CERO)
+			if (v2 == PosNegValues.ZERO)
 				return PosNegValues.NONE;
-			else if (v1 == PosNegValues.CERO)
-				return PosNegValues.CERO;
+			else if (v1 == PosNegValues.ZERO)
+				return PosNegValues.ZERO;
 			else if (v1 == PosNegValues.TOP || v2 == PosNegValues.TOP)
 				return PosNegValues.TOP;
 			else if (v1 == v2)
@@ -123,8 +124,8 @@ public class PosNegDomain implements AbstractDomain {
 		case "*":
 			if (v1 == PosNegValues.TOP || v2 == PosNegValues.TOP)
 				return PosNegValues.TOP;
-			else if (v1 == PosNegValues.CERO || v2 == PosNegValues.CERO)
-				return PosNegValues.CERO;
+			else if (v1 == PosNegValues.ZERO || v2 == PosNegValues.ZERO)
+				return PosNegValues.ZERO;
 			else if (v1 == v2)
 				return PosNegValues.POS;
 			else
@@ -137,7 +138,7 @@ public class PosNegDomain implements AbstractDomain {
 
 	@Override
 	public AbstractState extend(AbstractState s0, AbstractState st) {
-		PosNegState p0 = new PosNegState(),p1=c(st);
+		PosNegState p0 = new PosNegState(), p1 = c(st);
 		p0.extend(c(s0));
 		p0.extend(p1);
 		return p0;
@@ -147,7 +148,7 @@ public class PosNegDomain implements AbstractDomain {
 	public AbstractState project(AbstractState s0, List<Variable> lv) {
 		PosNegState s = c(s0);
 		PosNegState s1 = new PosNegState();
-		lv.forEach((var)->s1.add(var.getLabel(), s.get(var.getLabel())));
+		lv.forEach((var) -> s1.add(var, s.get(var)));
 		return s1;
 	}
 
@@ -155,25 +156,34 @@ public class PosNegDomain implements AbstractDomain {
 	public AbstractState rename(AbstractState s0, List<Variable> actual, List<Variable> formal) {
 		PosNegState p0 = new PosNegState();
 		p0.extend(c(s0));
-		String v1,v2;
+
 		Iterator<Variable> iA = actual.iterator(), iF = formal.iterator();
-		while(iA.hasNext() && iF.hasNext()){
-			v1 = iA.next().getLabel();
-			v2 = iF.next().getLabel();
-			p0.rename(v1, v2);
+		while (iA.hasNext() && iF.hasNext()) {
+			p0.rename(iA.next(),  iF.next());
 		}
 		return p0;
 	}
 
 	@Override
 	public AbstractState lub(AbstractState s0, AbstractState s1) {
-		PosNegState p0 = new PosNegState(c(s0)),p1 = new PosNegState(c(s1));
+		PosNegState p0 = new PosNegState(c(s0)), p1 = new PosNegState(c(s1));
 		return p0.lub(p1);
 	}
 
 	@Override
 	public boolean le(AbstractState s0, AbstractState s1) {
-		return c(s0).size() <= c(s1).size();
+		Set<Variable> vs = c(s0).getVariables();
+		for ( Variable v : vs ) {
+			PosNegValues v1 = c(s0).get(v);
+			PosNegValues v2 = c(s1).get(v);
+			if ( v1 == PosNegValues.TOP && v2 != PosNegValues.TOP) return false;
+			if ( v1 == PosNegValues.NEG && !(v2 == PosNegValues.TOP || v2 == PosNegValues.NEG )) return false;
+			if ( v1 == PosNegValues.POS && !(v2 == PosNegValues.TOP || v2 == PosNegValues.POS )) return false;
+			if ( v1 == PosNegValues.ZERO && !(v2 == PosNegValues.TOP || v2 == PosNegValues.ZERO )) return false;
+		}
+		
+		return true;
+	//	return c(s0).size() <= c(s1).size();
 	}
 
 }

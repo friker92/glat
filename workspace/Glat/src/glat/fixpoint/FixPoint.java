@@ -46,7 +46,7 @@ public class FixPoint {
     	Call c = new Call(m.getName(),"sync");
     	c.setMethodRef(m);
 		//Q = { call( main, {} ) }
-		Q.add( new Event( TypeEvent.CALL, c, domain.initVars(program.getGlobalVariables()) ) );
+		Q.add( new Event( TypeEvent.CALL, c, domain.bottom(program.getGlobalVariables()) ) );
 		while ( !Q.isEmpty() ) {
 
 	    	System.out.println(Q.toString());
@@ -68,7 +68,7 @@ public class FixPoint {
 		    i = x.getInst();
 		    s = x.getState();
 		    m = ((Call)i).getMethodRef();
-		    s0 = domain.extend( s, domain.initVars( m.getVariables() ) ); // add local vars
+		    s0 = domain.extend( s, domain.bottom( m.getVariables() ) ); // add local vars
 		    li = m.getFirstInsts();
 		    li.forEach((inst)->Q.add( new Event(TypeEvent.EXEC,inst, s0) ));
 		    break;

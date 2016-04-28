@@ -4,7 +4,7 @@ public enum PosNegValues {
 
 		TOP,
 		POS,
-		CERO,
+		ZERO,
 		NEG,
 		NONE //BOT
 

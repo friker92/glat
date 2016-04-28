@@ -1,38 +1,45 @@
 global {
- var int f;
- var bool g;
- var string h;
+  var int f;
+  var bool g;
+  var string h;
 }
 
-init {}
+init {
+}
+
 void main() {
+  start n2;
+  
+  trans n0 -> n1 {
+  }
 
-start n2;
-trans n0 -> n1 {
-}
-trans n2-> n0{
-}
- /*thread t1 1 call m();*/
+  trans n2-> n0{
+  }
+ 
 }
 
 void m(){
-     var int x;
+   var int x;
 
-     start n0;
+   start n0;
 
-     trans n0 -> n1 {
-     	   x := 100;
-     	   h := "hello world, 'you'";
-     }
+   trans n0 -> n1 {
+     x := 0-1;
+   }
+   
+   
+   trans n0 -> n2 {
+     x := 0+1;
+   }
 
-     trans n1 -> n1 {
-           assume(f<x);
-     	   f := f + 1;
-     	   g := true;
-     }
+   trans n1 -> n3 {
+     x:=x*x;
+   }
 
-     trans n1 -> n2 {
-           assume(f>=x);
-           f := $op("+",f,1,1,1,3);
-     } 
+   trans n2 -> n3 {
+   }
+   
+   trans n3 -> n3 {
+        x := x-*;
+   }
 }

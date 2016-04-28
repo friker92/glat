@@ -7,15 +7,15 @@ import glat.program.instructions.expressions.terminals.Variable;
 
 public interface AbstractDomain {
 	
-	public AbstractState initVars(List<Variable> vars);
+	public AbstractState bottom(List<Variable> vars);
 	public AbstractState empty();
 	
 	public AbstractState abstractExec(GlatInstruction i, AbstractState st);
-	
+
 	public AbstractState extend(AbstractState s0, AbstractState st);
-	
+
 	public AbstractState project(AbstractState s0, List<Variable> lv);
-	
+
 	public AbstractState rename(AbstractState s0, List<Variable> actual, List<Variable> formal);
 	
 	//least upper bound
