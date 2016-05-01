@@ -9,10 +9,6 @@ public class StringValue implements Values {
 	public StringValue(String s){
 		value = s;
 	}
-	
-	@Override
-	public boolean isVar() {return false;}
-
 
 	@Override
 	public String getValue() {
@@ -39,6 +35,11 @@ public class StringValue implements Values {
 	@Override
 	public String getType() {
 		return "string";
+	}
+	
+	@Override
+	public String toString(){
+		return value.toString();
 	}
 
 }

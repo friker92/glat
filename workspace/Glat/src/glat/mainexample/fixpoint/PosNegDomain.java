@@ -32,7 +32,7 @@ public class PosNegDomain implements AbstractDomain {
 	}
 
 	public PosNegValues getV(PosNegState pt, Terminal t) {
-		if (t.isVar())
+		if (t instanceof Variable)
 			return pt.get((Variable) t);
 		else {
 			Values v = (Values) t;

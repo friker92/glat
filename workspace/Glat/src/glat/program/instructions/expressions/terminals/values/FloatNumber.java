@@ -2,7 +2,7 @@ package glat.program.instructions.expressions.terminals.values;
 
 import glat.program.instructions.expressions.terminals.Values;
 
-public class FloatNumber implements Values {
+public class FloatNumber implements NumberValue {
 
 	private Float value;
 	
@@ -11,11 +11,8 @@ public class FloatNumber implements Values {
 	}
 	
 	@Override
-	public boolean isVar() {return false;}
-
-	@Override
-	public String getValue() {
-		return value.toString();
+	public Float getValue() {
+		return value;
 	}
 
 	@Override
@@ -36,6 +33,11 @@ public class FloatNumber implements Values {
 	@Override
 	public String getType() {
 		return "float";
+	}
+	
+	@Override
+	public String toString(){
+		return value.toString();
 	}
 
 }

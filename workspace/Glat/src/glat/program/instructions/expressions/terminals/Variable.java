@@ -31,9 +31,6 @@ public class Variable extends GlatClass implements Terminal {
 	}
 	
 	@Override
-	public boolean isVar() {return true;}
-
-	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;

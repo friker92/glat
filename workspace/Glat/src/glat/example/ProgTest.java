@@ -24,9 +24,14 @@ import glat.program.Transition;
 import glat.program.instructions.expressions.terminals.Variable;
 
 public class ProgTest {
+	//*
+	private static String basePath = "/home/genaim/Systems/glat/workspace/Glat";
+	/*/
+	private static String basePath = "/home/friker/Systems/glat/workspace/Glat";
+	//*/
 	public static void main(String[] args) throws FileNotFoundException, ParseException {
 		Glat g = new Glat();
-		GlatProgram p = g.parse( new String[] { "/home/genaim/Systems/glat/workspace/Glat/examples/example2" });
+		GlatProgram p = g.parse( new String[] { basePath+"/examples/example2" });
 
 		analyse(p);
 		

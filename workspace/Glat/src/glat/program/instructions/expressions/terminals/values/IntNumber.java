@@ -2,21 +2,17 @@ package glat.program.instructions.expressions.terminals.values;
 
 import glat.program.instructions.expressions.terminals.Values;
 
-public class IntNumber implements Values {
+public class IntNumber implements NumberValue {
 
 	private Integer value;
 	
 	public IntNumber(String s){
 		value = Integer.parseInt(s);
 	}
-	
-	@Override
-	public boolean isVar() {return false;}
-
 
 	@Override
-	public String getValue() {
-		return value.toString();
+	public Integer getValue() {
+		return value;
 	}
 
 	@Override
@@ -41,4 +37,9 @@ public class IntNumber implements Values {
 		return "int";
 	}
 
+	@Override
+	public String toString(){
+		return value.toString();
+	}
+	
 }

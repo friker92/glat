@@ -9,14 +9,10 @@ public class BoolValue implements Values {
 	public BoolValue(String s){
 		value = Boolean.parseBoolean(s);
 	}
-	
-	@Override
-	public boolean isVar() {return false;}
-
 
 	@Override
-	public String getValue() {
-		return value.toString();
+	public Boolean getValue() {
+		return value;
 	}
 
 
@@ -40,6 +36,11 @@ public class BoolValue implements Values {
 	@Override
 	public String getType() {
 		return "bool";
+	}
+	
+	@Override
+	public String toString(){
+		return value.toString();
 	}
 
 }

@@ -81,7 +81,7 @@ public class FixPoint {
 				m = i.getMethod();
 				lv = m.getParameters();
 				Terminal t = ((Return)i).getVar();
-				if (t != null && t.isVar())
+				if (t != null && t instanceof Variable)
 					lv.add((Variable)t);
 				s0 = domain.project(s, lv);//m.retvar()+m.formalParm());
 				
@@ -144,7 +144,7 @@ public class FixPoint {
 		retPoint = cl.getReturn();
 		Terminal t = r.getVar();
 		
-		if (t != null && t.isVar() && retPoint != null){
+		if (t != null && t instanceof Variable && retPoint != null){
 			lv.add((Variable)t);
 			lv2.add(retPoint);
 		}

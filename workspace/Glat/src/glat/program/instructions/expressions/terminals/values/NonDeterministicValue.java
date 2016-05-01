@@ -9,11 +9,8 @@ public class NonDeterministicValue implements Values {
 	public NonDeterministicValue(Token t){}
 	
 	@Override
-	public boolean isVar() {return false;}
-	
-	@Override
 	public String getValue() {
-		return "*";
+		return "?";
 	}
 	
 	@Override
@@ -32,6 +29,11 @@ public class NonDeterministicValue implements Values {
 	}
 	@Override
 	public String getType() {
+		return "nondeterministic";
+	}
+	
+	@Override
+	public String toString(){
 		return "nondeterministic";
 	}
 	

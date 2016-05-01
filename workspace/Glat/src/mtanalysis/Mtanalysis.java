@@ -79,7 +79,7 @@ public class Mtanalysis {
 		return b;
 	}
 	private boolean isGlobalRead(Terminal t) {
-		if(t.isVar())
+		if(t instanceof Variable)
 			return ((Variable)t).getPropValue("scope").equals("global");
 		else
 			return false;

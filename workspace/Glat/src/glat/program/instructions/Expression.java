@@ -5,7 +5,7 @@ import java.util.List;
 
 import glat.program.instructions.expressions.Terminal;
 
-public class Expression {
+public class Expression implements Terminal{
 	
 	public Expression(){
 		operator = "";
@@ -32,11 +32,17 @@ public class Expression {
 		operator = op;
 	}
 	
-	public void addOperand(Terminal t){
-		operands.add(t);
+	public void addOperand(Terminal e){
+		operands.add(e);
 	}
 	
 	private List<Terminal> operands;
 	private String operator;
+	
+	
+	@Override
+	public String getType() {
+		throw new UnsupportedOperationException(getClass().getName()+" does not support getType");
+	}
 	 
 }
