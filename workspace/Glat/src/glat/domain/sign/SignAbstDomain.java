@@ -54,14 +54,21 @@ public class SignAbstDomain implements AbstractDomain {
 		switch (intsr.getType()) {
 		case ASSIGNMENT:
 			Assignment assignInstr = (Assignment) intsr;
-			Expression exp = assignInstr.getExpr();
-
-			if (exp.getOperands().size() == 1) {
-				SignAbstValue v = getV(b, exp.getOperand(0));
+			Terminal e = assignInstr.getExpr();
+			if( e instanceof Expression){
+				Expression exp = (Expression)e;
+				if (exp.getOperands().size() == 1) {
+					Terminal operand = exp.getOperand(0);
+					SignAbstValue v = getV(b, exp.getOperand(0));
+					b.setValue(assignInstr.getDest(), v);
+				} else {
+					b.setValue(assignInstr.getDest(), op(b, exp.getOperator(), exp.getOperand(0), exp.getOperand(1)));
+				}
+			}else{
+				SignAbstValue v = getV(b, e);
 				b.setValue(assignInstr.getDest(), v);
-			} else {
-				b.setValue(assignInstr.getDest(), op(b, exp.getOperator(), exp.getOperand(0), exp.getOperand(1)));
 			}
+			
 			break;
 
 		default:
@@ -128,7 +135,6 @@ public class SignAbstDomain implements AbstractDomain {
 	}
 
 	private SignAbstValue getV(AbstractState a, Terminal t) {
-
 		if (t instanceof Variable) {
 			return (SignAbstValue) a.getValue((Variable) t);
 		} else {

@@ -24,7 +24,7 @@ import glat.program.Transition;
 import glat.program.instructions.expressions.terminals.Variable;
 
 public class ProgTest {
-	//*
+	/*
 	private static String basePath = "/home/genaim/Systems/glat/workspace/Glat";
 	/*/
 	private static String basePath = "/home/friker/Systems/glat/workspace/Glat";
