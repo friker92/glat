@@ -5,9 +5,12 @@ import java.util.List;
 import glat.domain.AbstractDomain;
 import glat.domain.AbstractState;
 import glat.domain.AbstractValue;
+import glat.mainexample.fixpoint.PosNegState;
+import glat.mainexample.fixpoint.PosNegValues;
 import glat.program.Instruction;
 import glat.program.instructions.Assignment;
 import glat.program.instructions.Expression;
+import glat.program.instructions.expressions.CompoundExpr;
 import glat.program.instructions.expressions.Terminal;
 import glat.program.instructions.expressions.terminals.Values;
 import glat.program.instructions.expressions.terminals.Variable;
@@ -54,34 +57,30 @@ public class SignAbstDomain implements AbstractDomain {
 		switch (intsr.getType()) {
 		case ASSIGNMENT:
 			Assignment assignInstr = (Assignment) intsr;
-			Terminal e = assignInstr.getExpr();
-			if( e instanceof Expression){
-				Expression exp = (Expression)e;
-				if (exp.getOperands().size() == 1) {
-					Terminal operand = exp.getOperand(0);
-					SignAbstValue v = getV(b, exp.getOperand(0));
-					b.setValue(assignInstr.getDest(), v);
-				} else {
-					b.setValue(assignInstr.getDest(), op(b, exp.getOperator(), exp.getOperand(0), exp.getOperand(1)));
-				}
-			}else{
-				SignAbstValue v = getV(b, e);
-				b.setValue(assignInstr.getDest(), v);
-			}
-			
+			Expression e = assignInstr.getExpr();
+			b.setValue(assignInstr.getDest(), exprV(b,e));
 			break;
-
 		default:
 			break;
 		}
 
 		return b;
 	}
+	
+	
+	private AbstractValue exprV(AbstractState b, Expression e){
+		if(e instanceof CompoundExpr){
+			CompoundExpr exp = (CompoundExpr) e;
+			if (exp.getOperands().size() == 1)
+				return exprV(b, exp.getOperand(0));
+			else
+				return op(b, exp.getOperator(), exprV(b, exp.getOperand(0)), exprV(b, exp.getOperand(1)));
+		}else{
+			return getV(b, (Terminal)e);
+		}
+	}
 
-	private AbstractValue op(AbstractState b, String operator, Terminal operand1, Terminal operand2) {
-		SignAbstValue v1 = getV(b, operand1);
-		SignAbstValue v2 = getV(b, operand2);
-
+	private AbstractValue op(AbstractState b, String operator, AbstractValue v1, AbstractValue v2) {
 		if (v1.equals(SignAbstValue.BOT) || v2.equals(SignAbstValue.BOT))
 			return SignAbstValue.BOT;
 

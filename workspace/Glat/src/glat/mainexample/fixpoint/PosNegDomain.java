@@ -9,6 +9,7 @@ import glat.fixpoint.AbstractState;
 import glat.program.GlatInstruction;
 import glat.program.instructions.Assignment;
 import glat.program.instructions.Expression;
+import glat.program.instructions.expressions.CompoundExpr;
 import glat.program.instructions.expressions.Terminal;
 import glat.program.instructions.expressions.terminals.Values;
 import glat.program.instructions.expressions.terminals.Variable;
@@ -31,7 +32,10 @@ public class PosNegDomain implements AbstractDomain {
 		return new PosNegState();
 	}
 
+	
+	
 	public PosNegValues getV(PosNegState pt, Terminal t) {
+		
 		if (t instanceof Variable)
 			return pt.get((Variable) t);
 		else {
@@ -57,16 +61,7 @@ public class PosNegDomain implements AbstractDomain {
 		switch (i.getType()) {
 		case ASSIGNMENT:
 			Assignment a = (Assignment) i;
-			Terminal e = a.getExpr();
-			if(e instanceof Expression){
-				Expression exp = (Expression) e;
-				if (exp.getOperands().size() == 1)
-					pt.add(a.getDest(), getV(pt, exp.getOperand(0)));
-				else
-					pt.add(a.getDest(), op(pt, exp.getOperator(), exp.getOperand(0), exp.getOperand(1)));
-			}else{
-				pt.add(a.getDest(), getV(pt, e));
-			}
+			pt.add(a.getDest(), exprV(pt,a.getExpr()));
 			break;
 		case ASSERT:
 		case ASSUME:
@@ -86,10 +81,20 @@ public class PosNegDomain implements AbstractDomain {
 		}
 		return pt;
 	}
+	
+	private PosNegValues exprV(PosNegState pt, Expression e){
+		if(e instanceof CompoundExpr){
+			CompoundExpr exp = (CompoundExpr) e;
+			if (exp.getOperands().size() == 1)
+				return exprV(pt, exp.getOperand(0));
+			else
+				return op(pt, exp.getOperator(), exprV(pt, exp.getOperand(0)), exprV(pt, exp.getOperand(1)));
+		}else{
+			return getV(pt, (Terminal)e);
+		}
+	}
 
-	private PosNegValues op(PosNegState pt, String op, Terminal t1, Terminal t2) {
-		PosNegValues v1 = getV(pt, t1);
-		PosNegValues v2 = getV(pt, t2);
+	private PosNegValues op(PosNegState pt, String op, PosNegValues v1, PosNegValues v2) {
 		if (v1 == PosNegValues.NONE || v2 == PosNegValues.NONE)
 			return PosNegValues.NONE;
 		switch (op) {

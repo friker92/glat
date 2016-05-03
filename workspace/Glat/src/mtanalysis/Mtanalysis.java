@@ -14,6 +14,7 @@ import glat.program.Node;
 import glat.program.Program;
 import glat.program.Transition;
 import glat.program.instructions.*;
+import glat.program.instructions.expressions.CompoundExpr;
 import glat.program.instructions.expressions.Terminal;
 import glat.program.instructions.expressions.terminals.Variable;
 
@@ -72,9 +73,13 @@ public class Mtanalysis {
 	}
 	private boolean isGlobalRead(Expression expr) {
 		boolean b = false;
-		List<Terminal> ops = expr.getOperands();
-		for (Terminal T : ops){
-			b |= isGlobalRead(T);
+		if(expr instanceof CompoundExpr){
+			List<Expression> ops = ((CompoundExpr)expr).getOperands();
+			for (Expression T : ops){
+				b |= isGlobalRead(T);
+			}
+		}else{
+			return isGlobalRead((Terminal)expr);
 		}
 		return b;
 	}

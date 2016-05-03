@@ -9,7 +9,7 @@ public class Assert extends GlatInstruction {
 		type = TypeInst.ASSERT;
 	}
 
-	public Assert(Terminal e) {
+	public Assert(Expression e) {
 		type = TypeInst.ASSERT;
 		expr = e;
 	}
@@ -17,8 +17,8 @@ public class Assert extends GlatInstruction {
 	public String toString(){
 		return type.name()+": "+expr.toString();
 	}
-	public Terminal getExpr(){
+	public Expression getExpr(){
 		return expr;
 	}
-	private Terminal expr;
+	private Expression expr;
 }

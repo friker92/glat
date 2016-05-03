@@ -8,7 +8,7 @@ public class Assume extends GlatInstruction {
 		super();
 		type = TypeInst.ASSUME;
 	}
-	public Assume(Terminal e) {
+	public Assume(Expression e) {
 		type = TypeInst.ASSUME;
 		expr = e;
 	}
@@ -16,8 +16,8 @@ public class Assume extends GlatInstruction {
 	public String toString(){
 		return type.name()+": "+expr.toString();
 	}
-	public Terminal getExpr(){
+	public Expression getExpr(){
 		return expr;
 	}
-	private Terminal expr;
+	private Expression expr;
 }

@@ -1,5 +1,7 @@
 package glat.program.instructions.expressions;
 
-public interface Terminal {
+import glat.program.instructions.Expression;
+
+public interface Terminal extends Expression {
 	public String getType();
 }

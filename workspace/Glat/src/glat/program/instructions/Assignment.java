@@ -6,7 +6,7 @@ import glat.program.instructions.expressions.terminals.Variable;
 
 public class Assignment extends GlatInstruction {
 
-	public Assignment(Variable d, Terminal e) {
+	public Assignment(Variable d, Expression e) {
 		type = TypeInst.ASSIGNMENT;
 		expr = e;
 		dest = d;
@@ -17,7 +17,7 @@ public class Assignment extends GlatInstruction {
 		return type.name()+": "+dest.toString()+" := "+expr.toString();
 	}
 	
-	public Terminal getExpr(){
+	public Expression getExpr(){
 		return expr;
 	}
 	
@@ -25,7 +25,7 @@ public class Assignment extends GlatInstruction {
 		return dest;
 	}
 
-	private Terminal expr;
+	private Expression expr;
 	private Variable dest;
 
 }
