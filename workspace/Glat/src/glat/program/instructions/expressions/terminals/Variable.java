@@ -2,7 +2,6 @@ package glat.program.instructions.expressions.terminals;
 
 import glat.parser.Token;
 import glat.program.GlatClass;
-import glat.program.Method;
 import glat.program.instructions.expressions.Terminal;
 
 public class Variable extends GlatClass implements Terminal {

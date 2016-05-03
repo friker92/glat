@@ -1,6 +1,12 @@
 package glat.fixpoint;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.Set;
+import java.util.Vector;
 
 import glat.program.GlatInstruction;
 import glat.program.GlatMethod;
@@ -8,7 +14,6 @@ import glat.program.GlatProgram;
 import glat.program.instructions.Call;
 import glat.program.instructions.Return;
 import glat.program.instructions.expressions.Terminal;
-import glat.program.instructions.expressions.terminals.TypeTerm;
 import glat.program.instructions.expressions.terminals.Variable;
 
 public class FixPoint {

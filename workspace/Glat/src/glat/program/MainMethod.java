@@ -3,7 +3,6 @@ package glat.program;
 import java.util.List;
 import java.util.Vector;
 
-import glat.program.instructions.Call;
 import glat.program.instructions.ThreadLaunch;
 import glat.program.instructions.expressions.terminals.Variable;
 

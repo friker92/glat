@@ -1,7 +1,6 @@
 package glat.program.instructions;
 
 import glat.program.GlatMethod;
-import glat.program.instructions.expressions.terminals.*;
 import glat.program.instructions.expressions.terminals.values.IntNumber;
 
 public class ThreadLaunch {

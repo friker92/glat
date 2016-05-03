@@ -1,17 +1,16 @@
 package glat.program;
-import java.util.Vector;
-
-import glat.program.instructions.Call;
-import glat.program.instructions.ThreadLaunch;
-import glat.program.instructions.TypeInst;
-import glat.program.instructions.expressions.terminals.Variable;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.Vector;
+
+import glat.program.instructions.Call;
+import glat.program.instructions.ThreadLaunch;
+import glat.program.instructions.TypeInst;
+import glat.program.instructions.expressions.terminals.Variable;
 
 
 /**

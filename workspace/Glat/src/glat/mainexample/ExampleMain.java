@@ -4,7 +4,6 @@ import java.io.FileNotFoundException;
 import java.util.Vector;
 
 import glat.mainexample.direct.ExampleAnalysis;
-import glat.mainexample.fixpoint.PosNegFixPoint;
 import glat.parser.Glat;
 import glat.parser.ParseException;
 import glat.program.GlatProgram;

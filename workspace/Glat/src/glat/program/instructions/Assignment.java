@@ -1,7 +1,6 @@
 package glat.program.instructions;
 
 import glat.program.GlatInstruction;
-import glat.program.instructions.expressions.Terminal;
 import glat.program.instructions.expressions.terminals.Variable;
 
 public class Assignment extends GlatInstruction {

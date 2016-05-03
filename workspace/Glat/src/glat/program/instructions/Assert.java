@@ -1,7 +1,6 @@
 package glat.program.instructions;
 
 import glat.program.GlatInstruction;
-import glat.program.instructions.expressions.Terminal;
 
 public class Assert extends GlatInstruction {
 	public Assert(){

@@ -5,8 +5,6 @@ import java.util.List;
 import glat.domain.AbstractDomain;
 import glat.domain.AbstractState;
 import glat.domain.AbstractValue;
-import glat.mainexample.fixpoint.PosNegState;
-import glat.mainexample.fixpoint.PosNegValues;
 import glat.program.Instruction;
 import glat.program.instructions.Assignment;
 import glat.program.instructions.Expression;

@@ -2,7 +2,6 @@ package glat.domain;
 
 import java.util.List;
 
-import glat.domain.sign.SignAbstValue;
 import glat.program.instructions.expressions.terminals.Variable;
 
 /**

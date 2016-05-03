@@ -15,7 +15,6 @@ import glat.domain.sign.SignAbstDomain;
 import glat.parser.Glat;
 import glat.parser.ParseException;
 import glat.program.ControlFlowGraph;
-import glat.program.GlatInstruction;
 import glat.program.GlatProgram;
 import glat.program.Instruction;
 import glat.program.Method;

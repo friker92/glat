@@ -1,7 +1,5 @@
 package glat.program.instructions.expressions.terminals.values;
 
-import glat.program.instructions.expressions.terminals.Values;
-
 public class FloatNumber implements NumberValue {
 
 	private Float value;
