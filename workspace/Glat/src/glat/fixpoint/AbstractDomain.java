@@ -6,10 +6,11 @@ import glat.program.GlatInstruction;
 import glat.program.instructions.expressions.terminals.Variable;
 
 public interface AbstractDomain {
-	
+
 	public AbstractState bottom(List<Variable> vars);
+
 	public AbstractState empty();
-	
+
 	public AbstractState abstractExec(GlatInstruction i, AbstractState st);
 
 	public AbstractState extend(AbstractState s0, AbstractState st);
@@ -17,9 +18,9 @@ public interface AbstractDomain {
 	public AbstractState project(AbstractState s0, List<Variable> lv);
 
 	public AbstractState rename(AbstractState s0, List<Variable> actual, List<Variable> formal);
-	
-	//least upper bound
+
+	// least upper bound
 	public AbstractState lub(AbstractState s0, AbstractState s1);
-	
+
 	public boolean le(AbstractState s0, AbstractState s1);
 }

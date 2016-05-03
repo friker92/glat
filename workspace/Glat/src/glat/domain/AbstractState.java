@@ -10,19 +10,19 @@ import glat.program.instructions.expressions.terminals.Variable;
  *
  */
 public interface AbstractState {
-	
+
 	/**
 	 * 
 	 * @return
 	 */
 	public List<Variable> getVars();
-	
+
 	/**
 	 * 
 	 * @return
 	 */
 	public AbstractState copy();
-	
+
 	/**
 	 * 
 	 * @return
@@ -30,7 +30,7 @@ public interface AbstractState {
 	default public String getDesc() {
 		return getClass().getName();
 	}
-	
+
 	/**
 	 * 
 	 * @param var
@@ -38,7 +38,7 @@ public interface AbstractState {
 	 * @return
 	 */
 	default public AbstractValue setValue(Variable var, AbstractValue value) {
-		throw new UnsupportedOperationException(getDesc()+ " does not support setValue");
+		throw new UnsupportedOperationException(getDesc() + " does not support setValue");
 	}
 
 	/**
@@ -47,7 +47,7 @@ public interface AbstractState {
 	 * @return
 	 */
 	default public AbstractValue getValue(Variable var) {
-		throw new UnsupportedOperationException(getDesc()+ " does not support getValue");
+		throw new UnsupportedOperationException(getDesc() + " does not support getValue");
 	}
 
 }
