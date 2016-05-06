@@ -6,33 +6,36 @@ import java.util.List;
 import java.util.Map;
 
 import glat.domain.AbstractState;
+import glat.domain.AbstractValue;
+import glat.domain.NonRelAbstractState;
+import glat.domain.sign.SignAbstValue;
 import glat.program.instructions.expressions.terminals.Variable;
 
-public class IntervalsAbstState implements AbstractState {
+public class IntervalsAbstState extends NonRelAbstractState {
 
-	
-	private List<Variable> vars;
-	private Map<Variable,IntervalsAbstValue> st;
-	
-	private IntervalsAbstState() {
+	protected IntervalsAbstState() {
 	}
 	
 	public IntervalsAbstState(List<Variable> vars) {
-		this.vars = vars;
-		this.st = new HashMap<Variable,IntervalsAbstValue>();
+		super(vars);
+	}
+
+
+
+	@Override
+	public String getDesc() {
+		return "Intervals Abstract State ("+getClass().getName()+")";
 	}
 	
 	@Override
-	public List<Variable> getVars() {
-		return vars;
+	protected NonRelAbstractState createInstance() {
+		return new IntervalsAbstState();
 	}
 
 	@Override
-	public AbstractState copy() {
-		IntervalsAbstState a = new IntervalsAbstState();
-		a.st = new HashMap<>(this.st);
-		a.vars = new ArrayList<Variable>(vars);
-		return a;
+	protected AbstractValue bottomValue() {
+		return new IntervalsAbstValue();
 	}
-
+	
+	
 }

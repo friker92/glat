@@ -8,10 +8,14 @@ init {
 }
 
 void main() {
-  start n0;
+  start n2;
+  
   trans n0 -> n1 {
   }
 
+  trans n2-> n0{
+  }
+ 
 }
 
 void m(){
@@ -20,19 +24,23 @@ void m(){
    start n0;
 
    trans n0 -> n1 {
-     x := 5;
-   }
-
-   trans n0 -> n2 {
-     x := 5;
+     x := 0-1;
    }
    
+   
+   trans n0 -> n2 {
+     x := 0+1;
+   }
+
    trans n1 -> n3 {
-     x := x+2;
+     x:=x*x;
+     g := $op("<=",1,2,1+2,$op("-",1,2,3,4),x);
    }
 
    trans n2 -> n3 {
-     x := x+5;
    }
    
+   trans n3 -> n3 {
+        x := x-?;
+   }
 }

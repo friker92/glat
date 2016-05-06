@@ -11,6 +11,7 @@ import java.util.Queue;
 
 import glat.domain.AbstractDomain;
 import glat.domain.AbstractState;
+import glat.domain.intervals.IntervalsAbstDomain;
 import glat.domain.sign.SignAbstDomain;
 import glat.parser.Glat;
 import glat.parser.ParseException;
@@ -23,27 +24,29 @@ import glat.program.Transition;
 import glat.program.instructions.expressions.terminals.Variable;
 
 public class ProgTest {
-	//* 
-	private static String basePath = "/home/genaim/Systems/glat/workspace/Glat"; 
-	/*/
-	private static String basePath = "/home/friker/Systems/glat/workspace/Glat";
-	// */
+	// *
+	private static String basePath = "/home/genaim/Systems/glat/workspace/Glat";
+
+	/*
+	 * / private static String basePath =
+	 * "/home/friker/Systems/glat/workspace/Glat"; //
+	 */
 	public static void main(String[] args) throws FileNotFoundException, ParseException {
 		Glat g = new Glat();
 		GlatProgram p = g.parse(new String[] { basePath + "/examples/example2" });
 
-		analyse(p);
+		//analyse(p, new SignAbstDomain());
+		analyse(p, new IntervalsAbstDomain());
 
 	}
 
-	public static void analyse(GlatProgram p) {
+	public static void analyse(GlatProgram p, AbstractDomain d) {
 
 		Method m = p.getMethods().get(1);
 		ControlFlowGraph cfg = m.getControlFlowGraph();
 		List<Variable> vs = new ArrayList<Variable>(m.getVariables());
 		vs.addAll(p.getGlobalVariables());
 
-		AbstractDomain d = new SignAbstDomain();
 		AbstractState a = d.bottom(vs);
 
 		Map<Node, AbstractState> table = new HashMap<Node, AbstractState>();
@@ -84,7 +87,7 @@ public class ProgTest {
 			}
 		}
 
-		System.out.println(table.get(cfg.getNode("n3")));
+		System.out.println(table);
 
 	}
 

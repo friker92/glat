@@ -5,6 +5,7 @@ import java.util.List;
 import glat.domain.AbstractDomain;
 import glat.domain.AbstractState;
 import glat.domain.AbstractValue;
+import glat.domain.NonRelAbstractDomain;
 import glat.program.Instruction;
 import glat.program.instructions.Assignment;
 import glat.program.instructions.Expression;
@@ -14,37 +15,11 @@ import glat.program.instructions.expressions.terminals.Values;
 import glat.program.instructions.expressions.terminals.Variable;
 import glat.program.instructions.expressions.terminals.values.NonDeterministicValue;
 
-public class SignAbstDomain implements AbstractDomain {
+public class SignAbstDomain extends NonRelAbstractDomain {
 
 	@Override
 	public AbstractState bottom(List<Variable> vars) {
 		return new SignAbstState(vars);
-	}
-
-	@Override
-	public AbstractState lub(AbstractState a, AbstractState b) {
-		List<Variable> vars = a.getVars();
-
-		SignAbstState c = new SignAbstState(a.getVars());
-		for (Variable v : vars) {
-			c.setValue(v, lub((SignAbstValue) a.getValue(v), (SignAbstValue) b.getValue(v)));
-		}
-
-		return c;
-	}
-
-	@Override
-	public boolean lte(AbstractState a, AbstractState b) {
-
-		List<Variable> vars = a.getVars();
-
-		for (Variable v : vars) {
-			if (!a.getValue(v).lte(b.getValue(v))) {
-				return false;
-			}
-		}
-
-		return true;
 	}
 
 	@Override
@@ -150,32 +125,5 @@ public class SignAbstDomain implements AbstractDomain {
 		}
 	}
 
-	/**
-	 * 
-	 * @param a
-	 * @param b
-	 * @return
-	 */
-	private SignAbstValue lub(SignAbstValue a, SignAbstValue b) {
-
-		if (a.equals(SignAbstValue.TOP) || b.equals(SignAbstValue.TOP)) {
-			return SignAbstValue.TOP;
-		}
-
-		if (a.equals(SignAbstValue.BOT)) {
-			return b;
-		}
-
-		if (b.equals(SignAbstValue.BOT)) {
-			return a;
-		}
-
-		if (a.equals(b)) {
-			return a;
-		}
-
-		return SignAbstValue.TOP;
-
-	}
 
 }

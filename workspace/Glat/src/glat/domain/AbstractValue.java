@@ -10,6 +10,16 @@ public interface AbstractValue {
 		return getClass().getName();
 	}
 
+	
+	/**
+	 * 
+	 * @param a
+	 * @return
+	 */
+	default public AbstractValue lub(AbstractValue a) {
+		throw new UnsupportedOperationException(getDesc() + " does not support lub");
+	}
+
 	/**
 	 * 
 	 * @param a

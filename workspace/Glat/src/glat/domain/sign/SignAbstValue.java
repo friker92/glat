@@ -18,9 +18,6 @@ public enum SignAbstValue implements AbstractValue {
 	
 	@Override
 	public boolean lte(AbstractValue a) {
-		if ( ! (a instanceof SignAbstValue) ) {
-			return false;
-		}
 		
 		SignAbstValue value = (SignAbstValue) a;
 		
@@ -37,5 +34,28 @@ public enum SignAbstValue implements AbstractValue {
 		}
 		
 		return false;
+	}
+	
+	@Override
+	public AbstractValue lub(AbstractValue a) {
+		SignAbstValue b = (SignAbstValue) a;
+		
+		if (this.equals(SignAbstValue.TOP) || b.equals(SignAbstValue.TOP)) {
+			return SignAbstValue.TOP;
+		}
+
+		if (this.equals(SignAbstValue.BOT)) {
+			return b;
+		}
+
+		if (this.equals(SignAbstValue.BOT)) {
+			return this;
+		}
+
+		if (this.equals(b)) {
+			return this;
+		}
+
+		return SignAbstValue.TOP;
 	}
 }
