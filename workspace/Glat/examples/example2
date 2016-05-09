@@ -16,23 +16,27 @@ void main() {
 
 void m(){
    var int x;
+   var int y;
+   var int z;
 
    start n0;
 
    trans n0 -> n1 {
-     x := 5;
+     x := 8;
+     y := 7;
    }
 
    trans n0 -> n2 {
-     x := 5;
+     x := 8;
+     y := 7;
    }
    
    trans n1 -> n3 {
-     x := x+2;
+     z := x+y;
    }
 
    trans n2 -> n3 {
-     x := x+5;
+     z := x+y;
    }
    
 }

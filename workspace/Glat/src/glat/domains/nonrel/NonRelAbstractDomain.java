@@ -10,8 +10,9 @@ import glat.program.instructions.Assignment;
 import glat.program.instructions.Expression;
 import glat.program.instructions.expressions.CompoundExpr;
 import glat.program.instructions.expressions.Terminal;
-import glat.program.instructions.expressions.terminals.Values;
+import glat.program.instructions.expressions.terminals.Value;
 import glat.program.instructions.expressions.terminals.Variable;
+import glat.program.instructions.expressions.terminals.values.NonDeterministicValue;
 
 public abstract class NonRelAbstractDomain implements AbstractDomain {
 
@@ -83,12 +84,15 @@ public abstract class NonRelAbstractDomain implements AbstractDomain {
 	
 		if (t instanceof Variable) {
 			return a.getValue((Variable) t);
+		} else if (t instanceof NonDeterministicValue) {
+			return nondet_abstract_value( (NonDeterministicValue) t);
 		} else {
-			return abstract_value( (Values) t);
+			return abstract_value( (Value) t);
 		}
 	}
 	
-	protected abstract AbstractValue abstract_value(Values t);
+	protected abstract AbstractValue nondet_abstract_value(NonDeterministicValue t);
+	protected abstract AbstractValue abstract_value(Value t);
 	protected abstract AbstractValue evaluate_expression(String operator, List<AbstractValue> abst_values);
 
 

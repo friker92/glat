@@ -5,7 +5,7 @@ import java.util.List;
 import glat.domains.AbstractState;
 import glat.domains.nonrel.AbstractValue;
 import glat.domains.nonrel.NonRelAbstractDomain;
-import glat.program.instructions.expressions.terminals.Values;
+import glat.program.instructions.expressions.terminals.Value;
 import glat.program.instructions.expressions.terminals.Variable;
 import glat.program.instructions.expressions.terminals.values.NonDeterministicValue;
 
@@ -22,21 +22,22 @@ public class IntervalsAbstDomain extends NonRelAbstractDomain {
 	public AbstractState top(List<Variable> vars) {
 		IntervalsAbstState a = new IntervalsAbstState(vars);
 		AbstractValue topValue = new IntervalsAbstValue(-inf, inf);
-		
-		for( Variable v : vars ) {
+
+		for (Variable v : vars) {
 			a.setValue(v, topValue);
 		}
 		return a;
 	}
 
 	@Override
-	protected AbstractValue abstract_value(Values v) {
-		if (v instanceof NonDeterministicValue) {
-			return new IntervalsAbstValue(-inf, inf);
-		} else {
-			float f = v.getFloatNumber();
-			return new IntervalsAbstValue(f, f);
-		}
+	protected AbstractValue nondet_abstract_value(NonDeterministicValue t) {
+		return new IntervalsAbstValue(-inf, inf);
+	}
+
+	@Override
+	protected AbstractValue abstract_value(Value v) {
+		float f = v.getFloatNumber();
+		return new IntervalsAbstValue(f, f);
 	}
 
 	@Override

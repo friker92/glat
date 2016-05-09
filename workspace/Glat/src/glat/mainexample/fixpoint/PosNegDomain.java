@@ -11,7 +11,7 @@ import glat.program.instructions.Assignment;
 import glat.program.instructions.Expression;
 import glat.program.instructions.expressions.CompoundExpr;
 import glat.program.instructions.expressions.Terminal;
-import glat.program.instructions.expressions.terminals.Values;
+import glat.program.instructions.expressions.terminals.Value;
 import glat.program.instructions.expressions.terminals.Variable;
 
 public class PosNegDomain implements AbstractDomain {
@@ -39,7 +39,7 @@ public class PosNegDomain implements AbstractDomain {
 		if (t instanceof Variable)
 			return pt.get((Variable) t);
 		else {
-			Values v = (Values) t;
+			Value v = (Value) t;
 			if (v.getType().equals("nondeterministic"))
 				return PosNegValues.TOP;
 			else {

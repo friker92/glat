@@ -1,12 +1,15 @@
 package glat.program.instructions.expressions.terminals.values;
 
 import glat.parser.Token;
-import glat.program.instructions.expressions.terminals.Values;
+import glat.program.instructions.expressions.terminals.Value;
 
-public class NonDeterministicValue implements Values {
+public class NonDeterministicValue implements Value {
 
-	public NonDeterministicValue(){}
-	public NonDeterministicValue(Token t){}
+	public NonDeterministicValue() {
+	}
+	
+	public NonDeterministicValue(Token t){
+	}
 	
 	@Override
 	public String getValue() {
@@ -27,6 +30,7 @@ public class NonDeterministicValue implements Values {
 	public boolean getBoolean() {
 		return false;
 	}
+	
 	@Override
 	public String getType() {
 		return "nondeterministic";

@@ -1,8 +1,8 @@
 package glat.program.instructions.expressions.terminals.values;
 
-import glat.program.instructions.expressions.terminals.Values;
+import glat.program.instructions.expressions.terminals.Value;
 
-public class BoolValue implements Values {
+public class BoolValue implements Value {
 
 	private Boolean value;
 	

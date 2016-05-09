@@ -5,7 +5,7 @@ import java.util.List;
 import glat.domains.AbstractState;
 import glat.domains.nonrel.AbstractValue;
 import glat.domains.nonrel.NonRelAbstractDomain;
-import glat.program.instructions.expressions.terminals.Values;
+import glat.program.instructions.expressions.terminals.Value;
 import glat.program.instructions.expressions.terminals.Variable;
 import glat.program.instructions.expressions.terminals.values.NonDeterministicValue;
 
@@ -19,25 +19,26 @@ public class SignAbstDomain extends NonRelAbstractDomain {
 	@Override
 	public AbstractState top(List<Variable> vars) {
 		SignAbstState a = new SignAbstState(vars);
-		for( Variable v : vars ) {
+		for (Variable v : vars) {
 			a.setValue(v, SignAbstValue.TOP);
 		}
 		return a;
 	}
 
 	@Override
-	protected AbstractValue abstract_value(Values v) {
-		if (v instanceof NonDeterministicValue) {
-			return SignAbstValue.TOP;
-		} else {
-			float f = v.getFloatNumber();
-			if (f == 0)
-				return SignAbstValue.ZERO;
-			else if (f > 0)
-				return SignAbstValue.POS;
-			else
-				return SignAbstValue.NEG;
-		}
+	protected AbstractValue nondet_abstract_value(NonDeterministicValue t) {
+		return SignAbstValue.TOP;
+	}
+
+	@Override
+	protected AbstractValue abstract_value(Value v) {
+		float f = v.getFloatNumber();
+		if (f == 0)
+			return SignAbstValue.ZERO;
+		else if (f > 0)
+			return SignAbstValue.POS;
+		else
+			return SignAbstValue.NEG;
 	}
 
 	@Override

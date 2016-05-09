@@ -1,8 +1,8 @@
 package glat.program.instructions.expressions.terminals.values;
 
-import glat.program.instructions.expressions.terminals.Values;
+import glat.program.instructions.expressions.terminals.Value;
 
-public class StringValue implements Values {
+public class StringValue implements Value {
 
 	private String value;
 	

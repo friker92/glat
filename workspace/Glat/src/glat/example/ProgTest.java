@@ -11,6 +11,7 @@ import java.util.Queue;
 
 import glat.domains.AbstractDomain;
 import glat.domains.AbstractState;
+import glat.domains.constprop.ConstPropDomain;
 import glat.domains.intervals.IntervalsAbstDomain;
 import glat.domains.sign.SignAbstDomain;
 import glat.parser.Glat;
@@ -35,8 +36,9 @@ public class ProgTest {
 		Glat g = new Glat();
 		GlatProgram p = g.parse(new String[] { basePath + "/examples/example2" });
 
-		//analyse(p, new SignAbstDomain());
-		analyse(p, new IntervalsAbstDomain());
+//		analyse(p, new SignAbstDomain());
+		analyse(p, new ConstPropDomain());
+		//analyse(p, new IntervalsAbstDomain());
 
 	}
 
