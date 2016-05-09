@@ -2,16 +2,9 @@ package glat.domains.sign;
 
 import java.util.List;
 
-import glat.domains.AbstractDomain;
 import glat.domains.AbstractState;
 import glat.domains.nonrel.AbstractValue;
 import glat.domains.nonrel.NonRelAbstractDomain;
-import glat.domains.nonrel.NonRelAbstractState;
-import glat.program.Instruction;
-import glat.program.instructions.Assignment;
-import glat.program.instructions.Expression;
-import glat.program.instructions.expressions.CompoundExpr;
-import glat.program.instructions.expressions.Terminal;
 import glat.program.instructions.expressions.terminals.Values;
 import glat.program.instructions.expressions.terminals.Variable;
 import glat.program.instructions.expressions.terminals.values.NonDeterministicValue;
@@ -24,38 +17,34 @@ public class SignAbstDomain extends NonRelAbstractDomain {
 	}
 
 	@Override
-	public AbstractState exec(Instruction intsr, AbstractState a) {
-
-		NonRelAbstractState nonRel_a = (NonRelAbstractState) a;
-		NonRelAbstractState nonRel_b = (NonRelAbstractState) a.copy();
-
-		switch (intsr.getType()) {
-		case ASSIGNMENT:
-			Assignment assignInstr = (Assignment) intsr;
-			Expression e = assignInstr.getExpr();
-			nonRel_b.setValue(assignInstr.getDest(), exprV(nonRel_b,e));
-			break;
-		default:
-			break;
+	public AbstractState top(List<Variable> vars) {
+		SignAbstState a = new SignAbstState(vars);
+		for( Variable v : vars ) {
+			a.setValue(v, SignAbstValue.TOP);
 		}
-
-		return nonRel_b;
+		return a;
 	}
-	
-	
-	private AbstractValue exprV(AbstractState b, Expression e){
-		if(e instanceof CompoundExpr){
-			CompoundExpr exp = (CompoundExpr) e;
-			if (exp.getOperands().size() == 1)
-				return exprV(b, exp.getOperand(0));
+
+	@Override
+	protected AbstractValue abstract_value(Values v) {
+		if (v instanceof NonDeterministicValue) {
+			return SignAbstValue.TOP;
+		} else {
+			float f = v.getFloatNumber();
+			if (f == 0)
+				return SignAbstValue.ZERO;
+			else if (f > 0)
+				return SignAbstValue.POS;
 			else
-				return op(b, exp.getOperator(), exprV(b, exp.getOperand(0)), exprV(b, exp.getOperand(1)));
-		}else{
-			return getV(b, (Terminal)e);
+				return SignAbstValue.NEG;
 		}
 	}
 
-	private AbstractValue op(AbstractState b, String operator, AbstractValue v1, AbstractValue v2) {
+	@Override
+	protected AbstractValue evaluate_expression(String operator, List<AbstractValue> abst_values) {
+		AbstractValue v1 = abst_values.get(0);
+		AbstractValue v2 = abst_values.get(1);
+
 		if (v1.equals(SignAbstValue.BOT) || v2.equals(SignAbstValue.BOT))
 			return SignAbstValue.BOT;
 
@@ -107,32 +96,5 @@ public class SignAbstDomain extends NonRelAbstractDomain {
 		}
 		return SignAbstValue.BOT;
 	}
-
-	private SignAbstValue getV(AbstractState a, Terminal t) {
-		NonRelAbstractState nonRel_a = (NonRelAbstractState) a;
-	
-		if (t instanceof Variable) {
-			return (SignAbstValue) nonRel_a.getValue((Variable) t);
-		} else {
-			Values v = (Values) t;
-			if (v instanceof NonDeterministicValue) {
-				return SignAbstValue.TOP;
-			} else {
-				float f = v.getFloatNumber();
-				if (f == 0)
-					return SignAbstValue.ZERO;
-				else if (f > 0)
-					return SignAbstValue.POS;
-				else
-					return SignAbstValue.NEG;
-			}
-		}
-	}
-
-	@Override
-	public AbstractState top(List<Variable> vars) {
-		return null;
-	}
-
 
 }
