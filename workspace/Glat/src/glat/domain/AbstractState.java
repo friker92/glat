@@ -27,27 +27,6 @@ public interface AbstractState {
 	 * 
 	 * @return
 	 */
-	default public String getDesc() {
-		return getClass().getName();
-	}
-
-	/**
-	 * 
-	 * @param var
-	 * @param value
-	 * @return
-	 */
-	default public AbstractValue setValue(Variable var, AbstractValue value) {
-		throw new UnsupportedOperationException(getDesc() + " does not support setValue");
-	}
-
-	/**
-	 * 
-	 * @param var
-	 * @return
-	 */
-	default public AbstractValue getValue(Variable var) {
-		throw new UnsupportedOperationException(getDesc() + " does not support getValue");
-	}
+	public String getDesc();
 
 }

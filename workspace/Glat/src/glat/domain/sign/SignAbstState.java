@@ -1,6 +1,7 @@
 package glat.domain.sign;
 
 import java.util.List;
+
 import glat.domain.AbstractValue;
 import glat.domain.NonRelAbstractState;
 import glat.program.instructions.expressions.terminals.Variable;

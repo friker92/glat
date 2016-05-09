@@ -10,7 +10,6 @@ public interface AbstractValue {
 		return getClass().getName();
 	}
 
-	
 	/**
 	 * 
 	 * @param a

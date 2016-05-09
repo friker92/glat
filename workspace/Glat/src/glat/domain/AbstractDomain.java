@@ -10,6 +10,14 @@ import glat.program.instructions.expressions.terminals.Variable;
  *
  */
 public interface AbstractDomain {
+
+	/**
+	 * 
+	 * @param vars
+	 * @return
+	 */
+	public AbstractState top(List<Variable> vars);
+
 	/**
 	 * 
 	 * @param vars

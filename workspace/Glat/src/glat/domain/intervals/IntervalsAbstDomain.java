@@ -6,6 +6,7 @@ import glat.domain.AbstractDomain;
 import glat.domain.AbstractState;
 import glat.domain.AbstractValue;
 import glat.domain.NonRelAbstractDomain;
+import glat.domain.NonRelAbstractState;
 import glat.domain.sign.SignAbstState;
 import glat.domain.sign.SignAbstValue;
 import glat.program.Instruction;
@@ -28,19 +29,20 @@ public class IntervalsAbstDomain extends NonRelAbstractDomain {
 
 	@Override
 	public AbstractState exec(Instruction intsr, AbstractState a) {
-		AbstractState b = a.copy();
+		NonRelAbstractState nonRel_a = (NonRelAbstractState) a;
+		NonRelAbstractState nonRel_b = (NonRelAbstractState) a.copy();
 
 		switch (intsr.getType()) {
 		case ASSIGNMENT:
 			Assignment assignInstr = (Assignment) intsr;
 			Expression e = assignInstr.getExpr();
-			b.setValue(assignInstr.getDest(), exprV(b, e));
+			nonRel_b.setValue(assignInstr.getDest(), exprV(nonRel_b, e));
 			break;
 		default:
 			break;
 		}
 
-		return b;
+		return nonRel_b;
 
 	}
 
@@ -57,8 +59,10 @@ public class IntervalsAbstDomain extends NonRelAbstractDomain {
 	}
 
 	private IntervalsAbstValue getV(AbstractState a, Terminal t) {
+		NonRelAbstractState nonRel_a = (NonRelAbstractState) a;
+
 		if (t instanceof Variable) {
-			return (IntervalsAbstValue) a.getValue((Variable) t);
+			return (IntervalsAbstValue) nonRel_a.getValue((Variable) t);
 		} else {
 			Values v = (Values) t;
 			if (v instanceof NonDeterministicValue) {
@@ -96,6 +100,12 @@ public class IntervalsAbstDomain extends NonRelAbstractDomain {
 		default:
 			break;
 		}
+		return null;
+	}
+
+	@Override
+	public AbstractState top(List<Variable> vars) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 

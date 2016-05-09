@@ -9,6 +9,7 @@ import glat.domain.sign.SignAbstValue;
 import glat.program.instructions.expressions.terminals.Variable;
 
 public abstract class NonRelAbstractState implements AbstractState {
+
 	/**
 	 * 
 	 */
@@ -32,7 +33,7 @@ public abstract class NonRelAbstractState implements AbstractState {
 			st.put(v, bottomValue());
 		}
 	}
-	
+
 	@Override
 	public List<Variable> getVars() {
 		return vars;
@@ -44,7 +45,6 @@ public abstract class NonRelAbstractState implements AbstractState {
 	 * @param value
 	 * @return
 	 */
-	@Override
 	public AbstractValue setValue(Variable var, AbstractValue value) {
 		return st.put(var, value);
 	}
@@ -54,7 +54,6 @@ public abstract class NonRelAbstractState implements AbstractState {
 	 * @param var
 	 * @return
 	 */
-	@Override
 	public AbstractValue getValue(Variable var) {
 		return st.get(var);
 	}
