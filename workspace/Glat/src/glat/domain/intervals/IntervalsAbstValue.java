@@ -1,6 +1,6 @@
 package glat.domain.intervals;
 
-import glat.domain.AbstractValue;
+import glat.domain.nonrel.AbstractValue;
 
 public class IntervalsAbstValue implements AbstractValue {
 
@@ -48,5 +48,10 @@ public class IntervalsAbstValue implements AbstractValue {
 	@Override
 	public String toString() {
 		return "[" + leftLimit + "," + rightLimit + "]";
+	}
+
+	@Override
+	public String getDesc() {
+		return "Intervals abstract value";
 	}
 }

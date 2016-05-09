@@ -1,6 +1,6 @@
 package glat.domain.sign;
 
-import glat.domain.AbstractValue;
+import glat.domain.nonrel.AbstractValue;
 
 public enum SignAbstValue implements AbstractValue {
 	TOP("T"), BOT("B"), POS("P"), NEG("N"), ZERO("Z");
@@ -57,5 +57,10 @@ public enum SignAbstValue implements AbstractValue {
 		}
 
 		return SignAbstValue.TOP;
+	}
+
+	@Override
+	public String getDesc() {
+		return "Sign abstract value";
 	}
 }

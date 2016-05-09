@@ -4,9 +4,9 @@ import java.util.List;
 
 import glat.domain.AbstractDomain;
 import glat.domain.AbstractState;
-import glat.domain.AbstractValue;
-import glat.domain.NonRelAbstractDomain;
-import glat.domain.NonRelAbstractState;
+import glat.domain.nonrel.AbstractValue;
+import glat.domain.nonrel.NonRelAbstractDomain;
+import glat.domain.nonrel.NonRelAbstractState;
 import glat.program.Instruction;
 import glat.program.instructions.Assignment;
 import glat.program.instructions.Expression;

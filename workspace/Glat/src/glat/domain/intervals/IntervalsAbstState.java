@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import glat.domain.AbstractState;
-import glat.domain.AbstractValue;
-import glat.domain.NonRelAbstractState;
+import glat.domain.nonrel.AbstractValue;
+import glat.domain.nonrel.NonRelAbstractState;
 import glat.domain.sign.SignAbstValue;
 import glat.program.instructions.expressions.terminals.Variable;
 

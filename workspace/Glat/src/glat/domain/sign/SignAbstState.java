@@ -2,8 +2,8 @@ package glat.domain.sign;
 
 import java.util.List;
 
-import glat.domain.AbstractValue;
-import glat.domain.NonRelAbstractState;
+import glat.domain.nonrel.AbstractValue;
+import glat.domain.nonrel.NonRelAbstractState;
 import glat.program.instructions.expressions.terminals.Variable;
 
 /**
