@@ -1,14 +1,14 @@
-package glat.domain.intervals;
+package glat.domains.intervals;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import glat.domain.AbstractState;
-import glat.domain.nonrel.AbstractValue;
-import glat.domain.nonrel.NonRelAbstractState;
-import glat.domain.sign.SignAbstValue;
+import glat.domains.AbstractState;
+import glat.domains.nonrel.AbstractValue;
+import glat.domains.nonrel.NonRelAbstractState;
+import glat.domains.sign.SignAbstValue;
 import glat.program.instructions.expressions.terminals.Variable;
 
 public class IntervalsAbstState extends NonRelAbstractState {

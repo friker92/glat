@@ -1,4 +1,4 @@
-package glat.domain.nonrel;
+package glat.domains.nonrel;
 
 public interface AbstractValue {
 

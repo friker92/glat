@@ -1,12 +1,12 @@
-package glat.domain.sign;
+package glat.domains.sign;
 
 import java.util.List;
 
-import glat.domain.AbstractDomain;
-import glat.domain.AbstractState;
-import glat.domain.nonrel.AbstractValue;
-import glat.domain.nonrel.NonRelAbstractDomain;
-import glat.domain.nonrel.NonRelAbstractState;
+import glat.domains.AbstractDomain;
+import glat.domains.AbstractState;
+import glat.domains.nonrel.AbstractValue;
+import glat.domains.nonrel.NonRelAbstractDomain;
+import glat.domains.nonrel.NonRelAbstractState;
 import glat.program.Instruction;
 import glat.program.instructions.Assignment;
 import glat.program.instructions.Expression;

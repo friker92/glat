@@ -1,4 +1,4 @@
-package glat.domain;
+package glat.domains;
 
 import java.util.HashMap;
 import java.util.Map;

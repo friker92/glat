@@ -1,6 +1,6 @@
-package glat.domain.intervals;
+package glat.domains.intervals;
 
-import glat.domain.nonrel.AbstractValue;
+import glat.domains.nonrel.AbstractValue;
 
 public class IntervalsAbstValue implements AbstractValue {
 

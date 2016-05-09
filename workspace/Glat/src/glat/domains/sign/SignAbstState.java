@@ -1,9 +1,9 @@
-package glat.domain.sign;
+package glat.domains.sign;
 
 import java.util.List;
 
-import glat.domain.nonrel.AbstractValue;
-import glat.domain.nonrel.NonRelAbstractState;
+import glat.domains.nonrel.AbstractValue;
+import glat.domains.nonrel.NonRelAbstractState;
 import glat.program.instructions.expressions.terminals.Variable;
 
 /**

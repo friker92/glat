@@ -1,4 +1,4 @@
-package glat.domain;
+package glat.domains;
 
 import glat.program.Node;
 

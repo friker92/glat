@@ -9,10 +9,10 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
-import glat.domain.AbstractDomain;
-import glat.domain.AbstractState;
-import glat.domain.intervals.IntervalsAbstDomain;
-import glat.domain.sign.SignAbstDomain;
+import glat.domains.AbstractDomain;
+import glat.domains.AbstractState;
+import glat.domains.intervals.IntervalsAbstDomain;
+import glat.domains.sign.SignAbstDomain;
 import glat.parser.Glat;
 import glat.parser.ParseException;
 import glat.program.ControlFlowGraph;

@@ -1,14 +1,14 @@
-package glat.domain.intervals;
+package glat.domains.intervals;
 
 import java.util.List;
 
-import glat.domain.AbstractDomain;
-import glat.domain.AbstractState;
-import glat.domain.nonrel.AbstractValue;
-import glat.domain.nonrel.NonRelAbstractDomain;
-import glat.domain.nonrel.NonRelAbstractState;
-import glat.domain.sign.SignAbstState;
-import glat.domain.sign.SignAbstValue;
+import glat.domains.AbstractDomain;
+import glat.domains.AbstractState;
+import glat.domains.nonrel.AbstractValue;
+import glat.domains.nonrel.NonRelAbstractDomain;
+import glat.domains.nonrel.NonRelAbstractState;
+import glat.domains.sign.SignAbstState;
+import glat.domains.sign.SignAbstValue;
 import glat.program.Instruction;
 import glat.program.instructions.Assignment;
 import glat.program.instructions.Expression;

@@ -1,7 +1,9 @@
-package glat.domain;
+package glat.domains.nonrel;
 
 import java.util.List;
 
+import glat.domains.AbstractDomain;
+import glat.domains.AbstractState;
 import glat.program.instructions.expressions.terminals.Variable;
 
 public abstract class NonRelAbstractDomain implements AbstractDomain {
