@@ -1,5 +1,7 @@
 package glat.program.instructions.expressions.terminals.values;
 
+import glat.program.instructions.expressions.TypeValue;
+
 public class IntNumber implements NumberValue {
 
 	private Integer value;
@@ -31,8 +33,8 @@ public class IntNumber implements NumberValue {
 	}
 
 	@Override
-	public String getType() {
-		return "int";
+	public TypeValue getType() {
+		return TypeValue.fromString("int");
 	}
 
 	@Override

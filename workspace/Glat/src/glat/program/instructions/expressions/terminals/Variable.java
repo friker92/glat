@@ -3,12 +3,13 @@ package glat.program.instructions.expressions.terminals;
 import glat.parser.Token;
 import glat.program.GlatClass;
 import glat.program.instructions.expressions.Terminal;
+import glat.program.instructions.expressions.TypeValue;
 
 public class Variable extends GlatClass implements Terminal {
 
 	public Variable(String type, Token s){
 		name = s.image;
-		this.type = type;
+		this.type = TypeValue.fromString(type);
 	}
 	
 	public String getName(){
@@ -25,7 +26,7 @@ public class Variable extends GlatClass implements Terminal {
 	}
 	
 	@Override
-	public String getType(){
+	public TypeValue getType(){
 		return type;
 	}
 	
@@ -56,6 +57,6 @@ public class Variable extends GlatClass implements Terminal {
 
 
 	private String name;
-	private String type;
+	private TypeValue type;
 	
 }

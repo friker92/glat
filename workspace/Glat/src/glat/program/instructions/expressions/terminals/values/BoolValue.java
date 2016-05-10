@@ -1,8 +1,10 @@
 package glat.program.instructions.expressions.terminals.values;
 
+import glat.program.instructions.expressions.TypeValue;
 import glat.program.instructions.expressions.terminals.Value;
 
 public class BoolValue implements Value {
+	// TODO : this class is never used, because we dont accept booleans
 
 	private Boolean value;
 	
@@ -34,8 +36,8 @@ public class BoolValue implements Value {
 	}
 
 	@Override
-	public String getType() {
-		return "bool";
+	public TypeValue getType() {
+		return TypeValue.fromString("bool");
 	}
 	
 	@Override

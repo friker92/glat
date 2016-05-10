@@ -4,6 +4,7 @@ import java.util.*;
 
 import glat.mainexample.Analysis;
 import glat.program.*;
+import glat.program.instructions.expressions.TypeValue;
 import glat.program.instructions.expressions.terminals.Variable;
 
 public class ExampleAnalysis implements Analysis {
@@ -16,7 +17,7 @@ public class ExampleAnalysis implements Analysis {
 	public void print() {
 		System.out.println("Your program have:");
 		System.out.println("\tYou have declared the following types:");
-		List<String> prim = p.getPrimitiveTypes();
+		List<TypeValue> prim = p.getPrimitiveTypes();
 		prim.forEach((s) -> System.out.println("\t\t- " + s));
 		System.out.println("\tThere are a few global variables:");
 		List<Variable> lv = p.getGlobalVariables();

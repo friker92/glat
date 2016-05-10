@@ -1,9 +1,10 @@
 package glat.program.instructions.expressions.terminals.values;
 
+import glat.program.instructions.expressions.TypeValue;
 import glat.program.instructions.expressions.terminals.Value;
 
 public class StringValue implements Value {
-
+	// TODO : this class is never used, because we dont accept strings
 	private String value;
 	
 	public StringValue(String s){
@@ -33,8 +34,8 @@ public class StringValue implements Value {
 	}
 
 	@Override
-	public String getType() {
-		return "string";
+	public TypeValue getType() {
+		return TypeValue.fromString("string");
 	}
 	
 	@Override

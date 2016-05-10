@@ -1,5 +1,7 @@
 package glat.program.instructions.expressions.terminals.values;
 
+import glat.program.instructions.expressions.TypeValue;
+
 public class FloatNumber implements NumberValue {
 
 	private Float value;
@@ -29,8 +31,8 @@ public class FloatNumber implements NumberValue {
 	}
 
 	@Override
-	public String getType() {
-		return "float";
+	public TypeValue getType() {
+		return TypeValue.fromString("float");
 	}
 	
 	@Override

@@ -26,4 +26,9 @@ public enum TypeOperator {
 		}
 		return null;
 	}
+	
+	@Override
+	public String toString() {
+		return this.symbol;
+	}
 }

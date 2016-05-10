@@ -10,6 +10,7 @@ import java.util.Vector;
 import glat.program.instructions.Call;
 import glat.program.instructions.ThreadLaunch;
 import glat.program.instructions.TypeInst;
+import glat.program.instructions.expressions.TypeValue;
 import glat.program.instructions.expressions.terminals.Variable;
 
 
@@ -33,7 +34,9 @@ public class GlatProgram extends GlatClass implements Program{
 
 	
 	public GlatProgram(){
-		primitive = new HashSet<String>();
+		primitive = new HashSet<TypeValue>();
+		for(TypeValue t : TypeValue.values())
+			primitive.add(t);
 		globDecl = new Vector<Variable>();
 		methods = new HashMap<String,GlatMethod>();
 		initInstr = new Vector<GlatInstruction>();
@@ -47,8 +50,8 @@ public class GlatProgram extends GlatClass implements Program{
 		return new ArrayList<Method>(methods.values());
 	}
 
-	public List<String> getPrimitiveTypes(){
-		return new ArrayList<String>(primitive);
+	public List<TypeValue> getPrimitiveTypes(){
+		return new ArrayList<TypeValue>(primitive);
 	}
 	
 	public List<Variable> getGlobalVariables(){
@@ -88,7 +91,7 @@ public class GlatProgram extends GlatClass implements Program{
 	public void addMethod(GlatMethod m){
 		if(methods.containsKey(m.getName()))
 			throw new Error("Error: "+m.getName()+" method already exits");
-		addPrimitive(m.getReturnType());
+		/*addPrimitive(m.getReturnType());
 		Variable v;
 		Iterator<Variable> it = m.getParameters().iterator();
 		while (it.hasNext()){
@@ -99,22 +102,22 @@ public class GlatProgram extends GlatClass implements Program{
 		while (it.hasNext()){
 			v = it.next();
 			addPrimitive(v.getType());
-		}
+		}*/
 		methods.put(m.getName(), m);
 	}
 	
 	public void addVar(Variable v){
-		addPrimitive(v.getType());
+		//addPrimitive(v.getType());
 		globDecl.add(v);
 	}
 	public void addInitInstr(GlatInstruction i){
 		initInstr.add(i);
 	}
 	
-	private void addPrimitive(String s){
+	/*private void addPrimitive(String s){
 		if(!(s.equals("thread")||s.equals("lock")||s.equals("void")))
 			primitive.add(s);
-	}
+	}*/
 	
 	public void checkProgram(){
 		//checkThreads();
@@ -160,7 +163,7 @@ public class GlatProgram extends GlatClass implements Program{
 	
 	private MainMethod mainmethod;
 	private HashMap<String,GlatMethod> methods;
-	private Set<String> primitive;
+	private Set<TypeValue> primitive;
 	private Vector<Variable> globDecl;
 	private Vector<GlatInstruction> initInstr;
 

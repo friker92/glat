@@ -43,13 +43,8 @@ public class ProgTest {
 
 	}
 
-	// *
-	private static String basePath = "/home/genaim/Systems/glat/workspace/Glat";
+	private static String basePath = System.getProperty("user.home")+"/Systems/glat/workspace/Glat";
 
-	/*
-	 * / private static String basePath =
-	 * "/home/friker/Systems/glat/workspace/Glat"; //
-	 */
 	public static void main(String[] args) throws FileNotFoundException, ParseException {
 		Glat g = new Glat();
 		GlatProgram p = g.parse(new String[] { basePath + "/examples/example2" });
