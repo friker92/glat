@@ -9,6 +9,7 @@ import glat.domains.nonrel.NonRelAbstractState;
 import glat.program.instructions.Expression;
 import glat.program.instructions.expressions.CompoundExpr;
 import glat.program.instructions.expressions.Terminal;
+import glat.program.instructions.expressions.TypeOperator;
 import glat.program.instructions.expressions.terminals.Value;
 import glat.program.instructions.expressions.terminals.Variable;
 import glat.program.instructions.expressions.terminals.values.NonDeterministicValue;
@@ -46,7 +47,7 @@ public class SignAbstDomain extends NonRelAbstractDomain {
 	}
 
 	@Override
-	protected AbstractValue evaluate_expression(String operator, List<AbstractValue> abst_values) {
+	protected AbstractValue evaluate_expression(TypeOperator operator, List<AbstractValue> abst_values) {
 		AbstractValue v1 = abst_values.get(0);
 		AbstractValue v2 = abst_values.get(1);
 
@@ -54,7 +55,7 @@ public class SignAbstDomain extends NonRelAbstractDomain {
 			return SignAbstValue.BOT;
 
 		switch (operator) {
-		case "+":
+		case ADD:
 			if (v1.equals(SignAbstValue.TOP) || v2.equals(SignAbstValue.TOP))
 				return SignAbstValue.TOP;
 			else if (v1.equals(SignAbstValue.ZERO))
@@ -65,7 +66,7 @@ public class SignAbstDomain extends NonRelAbstractDomain {
 				return SignAbstValue.TOP;
 			else
 				return v1;
-		case "-":
+		case SUB:
 			if (v1.equals(SignAbstValue.TOP) || v2.equals(SignAbstValue.TOP))
 				return SignAbstValue.TOP;
 			else if (v2.equals(SignAbstValue.ZERO))
@@ -76,7 +77,7 @@ public class SignAbstDomain extends NonRelAbstractDomain {
 				return v1;
 			else
 				return SignAbstValue.TOP;
-		case "/":
+		case DIV:
 			if (v2.equals(SignAbstValue.ZERO))
 				return SignAbstValue.BOT;
 			else if (v1.equals(SignAbstValue.ZERO))
@@ -87,7 +88,7 @@ public class SignAbstDomain extends NonRelAbstractDomain {
 				return SignAbstValue.POS;
 			else
 				return SignAbstValue.NEG;
-		case "*":
+		case MUL:
 			if (v1.equals(SignAbstValue.TOP) || v2.equals(SignAbstValue.TOP))
 				return SignAbstValue.TOP;
 			else if (v1.equals(SignAbstValue.ZERO) || v2.equals(SignAbstValue.ZERO))
@@ -111,10 +112,10 @@ public class SignAbstDomain extends NonRelAbstractDomain {
 
 
 		CompoundExpr compExp_e = (CompoundExpr) e;
-		String op = compExp_e.getOperator();
-		Variable op1 = (Variable) compExp_e.getOperand(0);
+		TypeOperator op = compExp_e.getOperator();
+		Variable op1 = (Variable) compExp_e.getOperandLeft();
 		SignAbstValue v1 = (SignAbstValue) evaluate_expression(b, op1);
-		SignAbstValue v2 = (SignAbstValue) evaluate_expression(b, compExp_e.getOperand(1));
+		SignAbstValue v2 = (SignAbstValue) evaluate_expression(b, compExp_e.getOperandRight());
 		System.out.println("> "+v2);
 		if (v1.equals(v2)) {
 			return b;

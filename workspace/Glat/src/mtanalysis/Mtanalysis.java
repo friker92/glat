@@ -84,10 +84,10 @@ public class Mtanalysis {
 	private boolean isGlobalRead(Expression expr) {
 		boolean b = false;
 		if (expr instanceof CompoundExpr) {
-			List<Expression> ops = ((CompoundExpr) expr).getOperands();
-			for (Expression T : ops) {
-				b |= isGlobalRead(T);
-			}
+			Terminal op1 = ((CompoundExpr) expr).getOperandLeft();
+			Terminal op2 = ((CompoundExpr) expr).getOperandRight();
+			b |= isGlobalRead(op1);
+			b |= isGlobalRead(op2);
 		} else {
 			return isGlobalRead((Terminal) expr);
 		}

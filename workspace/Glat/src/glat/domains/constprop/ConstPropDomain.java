@@ -7,6 +7,7 @@ import glat.domains.nonrel.AbstractValue;
 import glat.domains.nonrel.NonRelAbstractDomain;
 import glat.domains.nonrel.NonRelAbstractState;
 import glat.program.instructions.Expression;
+import glat.program.instructions.expressions.TypeOperator;
 import glat.program.instructions.expressions.terminals.Value;
 import glat.program.instructions.expressions.terminals.Variable;
 import glat.program.instructions.expressions.terminals.values.NonDeterministicValue;
@@ -39,7 +40,7 @@ public class ConstPropDomain extends NonRelAbstractDomain {
 	}
 
 	@Override
-	protected AbstractValue evaluate_expression(String operator, List<AbstractValue> abst_values) {
+	protected AbstractValue evaluate_expression(TypeOperator operator, List<AbstractValue> abst_values) {
 
 		if ( abst_values.contains( new ConsPropTOP() ) ) {
 			return new ConsPropTOP();
@@ -52,7 +53,7 @@ public class ConstPropDomain extends NonRelAbstractDomain {
 		double res = 0.0;
 		
 		switch (operator) {
-		case "+":
+		case ADD:
 			for( AbstractValue v : abst_values ) {
 				res += ((ConsPropAbstValue) v).getValue();
 			}

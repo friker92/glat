@@ -7,36 +7,34 @@ import glat.program.instructions.Expression;
 
 public class CompoundExpr implements Expression {
 
-	public CompoundExpr() {
-		operator = "";
-		operands = new ArrayList<Expression>();
-	}
-
 	public String toString() {
-		return "$op(" + operator + "," + operands + ")";
+		return ""+op1+" " + operator + " " + op2;
 	}
 
-	public String getOperator() {
+	public TypeOperator getOperator() {
 		return operator;
 	}
 
-	public List<Expression> getOperands() {
-		return operands;
+	public Terminal getOperandLeft(){
+		return op1;
 	}
-
-	public Expression getOperand(int pos) {
-		return operands.get(pos);
+	public Terminal getOperandRight(){
+		return op2;
 	}
-
+	
 	public void setOperator(String op) {
-		operator = op;
+		operator = TypeOperator.fromString(op);
 	}
 
-	public void addOperand(Expression e) {
-		operands.add(e);
+	public void addOperandLeft(Terminal e) {
+		op1 = e;
+	}
+	
+	public void addOperandRight(Terminal e) {
+		op2 = e;
 	}
 
-	private List<Expression> operands;
-	private String operator;
+	private Terminal op1,op2;
+	private TypeOperator operator;
 
 }

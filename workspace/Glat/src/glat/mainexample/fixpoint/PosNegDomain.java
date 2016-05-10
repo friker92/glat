@@ -11,6 +11,7 @@ import glat.program.instructions.Assignment;
 import glat.program.instructions.Expression;
 import glat.program.instructions.expressions.CompoundExpr;
 import glat.program.instructions.expressions.Terminal;
+import glat.program.instructions.expressions.TypeOperator;
 import glat.program.instructions.expressions.terminals.Value;
 import glat.program.instructions.expressions.terminals.Variable;
 
@@ -85,20 +86,17 @@ public class PosNegDomain implements AbstractDomain {
 	private PosNegValues exprV(PosNegState pt, Expression e){
 		if(e instanceof CompoundExpr){
 			CompoundExpr exp = (CompoundExpr) e;
-			if (exp.getOperands().size() == 1)
-				return exprV(pt, exp.getOperand(0));
-			else
-				return op(pt, exp.getOperator(), exprV(pt, exp.getOperand(0)), exprV(pt, exp.getOperand(1)));
+			return op(pt, exp.getOperator(), getV(pt, exp.getOperandLeft()), getV(pt, exp.getOperandRight()));
 		}else{
 			return getV(pt, (Terminal)e);
 		}
 	}
 
-	private PosNegValues op(PosNegState pt, String op, PosNegValues v1, PosNegValues v2) {
+	private PosNegValues op(PosNegState pt, TypeOperator typeOperator, PosNegValues v1, PosNegValues v2) {
 		if (v1 == PosNegValues.NONE || v2 == PosNegValues.NONE)
 			return PosNegValues.NONE;
-		switch (op) {
-		case "+":
+		switch (typeOperator) {
+		case ADD:
 			if (v1 == PosNegValues.TOP || v2 == PosNegValues.TOP)
 				return PosNegValues.TOP;
 			else if (v1 == PosNegValues.ZERO)
@@ -109,7 +107,7 @@ public class PosNegDomain implements AbstractDomain {
 				return PosNegValues.TOP;
 			else
 				return v1;
-		case "-":
+		case SUB:
 			if (v1 == PosNegValues.TOP || v2 == PosNegValues.TOP)
 				return PosNegValues.TOP;
 			else if (v2 == PosNegValues.ZERO)
@@ -120,7 +118,7 @@ public class PosNegDomain implements AbstractDomain {
 				return v1;
 			else
 				return PosNegValues.TOP;
-		case "/":
+		case DIV:
 			if (v2 == PosNegValues.ZERO)
 				return PosNegValues.NONE;
 			else if (v1 == PosNegValues.ZERO)
@@ -131,7 +129,7 @@ public class PosNegDomain implements AbstractDomain {
 				return PosNegValues.POS;
 			else
 				return PosNegValues.NEG;
-		case "*":
+		case MUL:
 			if (v1 == PosNegValues.TOP || v2 == PosNegValues.TOP)
 				return PosNegValues.TOP;
 			else if (v1 == PosNegValues.ZERO || v2 == PosNegValues.ZERO)

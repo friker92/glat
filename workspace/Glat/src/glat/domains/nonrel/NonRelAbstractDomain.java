@@ -11,6 +11,7 @@ import glat.program.instructions.Assume;
 import glat.program.instructions.Expression;
 import glat.program.instructions.expressions.CompoundExpr;
 import glat.program.instructions.expressions.Terminal;
+import glat.program.instructions.expressions.TypeOperator;
 import glat.program.instructions.expressions.terminals.Value;
 import glat.program.instructions.expressions.terminals.Variable;
 import glat.program.instructions.expressions.terminals.values.NonDeterministicValue;
@@ -96,9 +97,9 @@ public abstract class NonRelAbstractDomain implements AbstractDomain {
 		if (exp instanceof CompoundExpr) {
 			CompoundExpr compundExp = (CompoundExpr) exp;
 			List<AbstractValue> abst_values = new ArrayList<AbstractValue>();
-			for (Expression e : compundExp.getOperands()) {
-				abst_values.add(evaluate_expression(b, e));
-			}
+			// TODO remove List
+			abst_values.add(evaluate_expression(b, compundExp.getOperandLeft()));
+			abst_values.add(evaluate_expression(b, compundExp.getOperandRight()));
 			return evaluate_expression(compundExp.getOperator(), abst_values);	
 		} else {
 			return evaluate_terminal(b, (Terminal) exp);
@@ -118,7 +119,7 @@ public abstract class NonRelAbstractDomain implements AbstractDomain {
 	
 	protected abstract AbstractValue nondet_abstract_value(NonDeterministicValue t);
 	protected abstract AbstractValue abstract_value(Value t);
-	protected abstract AbstractValue evaluate_expression(String operator, List<AbstractValue> abst_values);
+	protected abstract AbstractValue evaluate_expression(TypeOperator operator, List<AbstractValue> abst_values);
 
 
 }
