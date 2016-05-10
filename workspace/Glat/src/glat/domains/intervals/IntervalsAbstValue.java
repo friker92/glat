@@ -4,6 +4,8 @@ import glat.domains.nonrel.AbstractValue;
 
 public class IntervalsAbstValue implements AbstractValue {
 
+	public static double inf = Double.MAX_VALUE;
+
 	private double leftLimit;
 	private double rightLimit;
 
@@ -53,5 +55,14 @@ public class IntervalsAbstValue implements AbstractValue {
 	@Override
 	public String getDesc() {
 		return "Intervals abstract value";
+	}
+
+	@Override
+	public AbstractValue widen(AbstractValue a) {
+		IntervalsAbstValue interVal_a = (IntervalsAbstValue) a;
+		double r = interVal_a.rightLimit > this.rightLimit ? inf : this.rightLimit;
+		double l = interVal_a.leftLimit < this.leftLimit ? -inf : this.leftLimit;
+
+		return new IntervalsAbstValue(l, r);
 	}
 }

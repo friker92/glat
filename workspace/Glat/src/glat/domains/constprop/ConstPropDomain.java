@@ -61,4 +61,9 @@ public class ConstPropDomain extends NonRelAbstractDomain {
 		
 		return new ConsPropAbstValue(res);
 	}
+
+	@Override
+	public AbstractState widen(AbstractState a, AbstractState b) {
+		return lub(a,b);
+	}
 }

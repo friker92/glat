@@ -63,4 +63,9 @@ public enum SignAbstValue implements AbstractValue {
 	public String getDesc() {
 		return "Sign abstract value";
 	}
+
+	@Override
+	public AbstractValue widen(AbstractValue a) {
+		return this.lub(a);
+	}
 }

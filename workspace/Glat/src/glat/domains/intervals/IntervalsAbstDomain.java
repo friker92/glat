@@ -11,7 +11,6 @@ import glat.program.instructions.expressions.terminals.values.NonDeterministicVa
 
 public class IntervalsAbstDomain extends NonRelAbstractDomain {
 
-	public static double inf = Double.MAX_VALUE;
 
 	@Override
 	public AbstractState bottom(List<Variable> vars) {
@@ -21,7 +20,7 @@ public class IntervalsAbstDomain extends NonRelAbstractDomain {
 	@Override
 	public AbstractState top(List<Variable> vars) {
 		IntervalsAbstState a = new IntervalsAbstState(vars);
-		AbstractValue topValue = new IntervalsAbstValue(-inf, inf);
+		AbstractValue topValue = new IntervalsAbstValue(-IntervalsAbstValue.inf, IntervalsAbstValue.inf);
 
 		for (Variable v : vars) {
 			a.setValue(v, topValue);
@@ -31,7 +30,7 @@ public class IntervalsAbstDomain extends NonRelAbstractDomain {
 
 	@Override
 	protected AbstractValue nondet_abstract_value(NonDeterministicValue t) {
-		return new IntervalsAbstValue(-inf, inf);
+		return new IntervalsAbstValue(-IntervalsAbstValue.inf, IntervalsAbstValue.inf);
 	}
 
 	@Override
@@ -50,14 +49,14 @@ public class IntervalsAbstDomain extends NonRelAbstractDomain {
 		case "+":
 
 			double l, r;
-			if (op1IntV.getLeftLimit() == -inf || op2IntV.getLeftLimit() == -inf) {
-				l = -inf;
+			if (op1IntV.getLeftLimit() == -IntervalsAbstValue.inf || op2IntV.getLeftLimit() == -IntervalsAbstValue.inf) {
+				l = -IntervalsAbstValue.inf;
 			} else {
 				l = op1IntV.getLeftLimit() + op2IntV.getLeftLimit();
 			}
 
-			if (op1IntV.getRightLimit() == inf || op2IntV.getRightLimit() == inf) {
-				r = inf;
+			if (op1IntV.getRightLimit() == IntervalsAbstValue.inf || op2IntV.getRightLimit() == IntervalsAbstValue.inf) {
+				r = IntervalsAbstValue.inf;
 			} else {
 				r = op1IntV.getRightLimit() + op2IntV.getRightLimit();
 			}

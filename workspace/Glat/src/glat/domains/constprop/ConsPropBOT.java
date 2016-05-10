@@ -32,4 +32,9 @@ public class ConsPropBOT implements AbstractValue {
 	public boolean equals(Object obj) {
 		return obj instanceof ConsPropBOT;
 	}
+
+	@Override
+	public AbstractValue widen(AbstractValue a) {
+		return this.lub(a);
+	}
 }

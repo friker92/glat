@@ -25,6 +25,24 @@ import glat.program.Transition;
 import glat.program.instructions.expressions.terminals.Variable;
 
 public class ProgTest {
+
+	static class TableEntry {
+		public AbstractState st;
+		public int count;
+
+		TableEntry(AbstractState st, int count) {
+			this.st = st;
+			this.count = count;
+		}
+		
+		@Override
+		public String toString() {
+			// TODO Auto-generated method stub
+			return st.toString();
+		}
+
+	}
+
 	// *
 	private static String basePath = "/home/genaim/Systems/glat/workspace/Glat";
 
@@ -36,9 +54,9 @@ public class ProgTest {
 		Glat g = new Glat();
 		GlatProgram p = g.parse(new String[] { basePath + "/examples/example2" });
 
-//		analyse(p, new SignAbstDomain());
-		analyse(p, new ConstPropDomain());
-		//analyse(p, new IntervalsAbstDomain());
+		// analyse(p, new SignAbstDomain());
+		//analyse(p, new ConstPropDomain());
+		analyse(p, new IntervalsAbstDomain());
 
 	}
 
@@ -51,10 +69,10 @@ public class ProgTest {
 
 		AbstractState a = d.bottom(vs);
 
-		Map<Node, AbstractState> table = new HashMap<Node, AbstractState>();
+		Map<Node, TableEntry> table = new HashMap<Node, TableEntry>();
 
 		for (Node n : cfg.getNodes()) {
-			table.put(n, a);
+			table.put(n, new TableEntry(a, 0));
 		}
 
 		Queue<Node> q = new PriorityQueue<Node>(new Comparator<Node>() {
@@ -66,8 +84,10 @@ public class ProgTest {
 		q.add(m.getInitNode());
 
 		while (!q.isEmpty()) {
+			System.out.println(table);
+
 			Node n = q.poll();
-			AbstractState currState = table.get(n);
+			AbstractState currState = table.get(n).st;
 
 			for (Transition t : cfg.getOutTransitions(n)) {
 
@@ -78,14 +98,18 @@ public class ProgTest {
 					st = d.exec(i, st);
 				}
 
-				AbstractState destCurrState = table.get(dest);
-				st = d.lub(destCurrState, st);
+				TableEntry e = table.get(dest);
+				AbstractState destCurrState = e.st;
+				e.st = d.lub(e.st, st);
+				e.count++;
 
 				if (!d.lte(st, destCurrState)) {
-					table.put(dest, st);
+					if (e.count > 8) {
+						e.count = 0;
+						e.st = d.widen(destCurrState, e.st);
+					}
 					q.add(t.getTargetNode());
 				}
-
 			}
 		}
 

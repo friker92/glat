@@ -34,6 +34,14 @@ public interface AbstractDomain {
 	public AbstractState lub(AbstractState a, AbstractState b);
 
 	/**
+	 * 
+	 * @param a
+	 * @param b
+	 * @return
+	 */
+	public AbstractState widen(AbstractState a, AbstractState b);
+
+	/**
 	 * Returns {@code true} if {@code a} is smaller than or equal to {@code b}
 	 * with respect to the order of the corresponding domain.
 	 * 

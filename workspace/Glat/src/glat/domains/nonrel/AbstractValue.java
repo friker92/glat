@@ -20,5 +20,12 @@ public interface AbstractValue {
 	 * @param a
 	 * @return
 	 */
+	public AbstractValue widen(AbstractValue a);
+
+	/**
+	 * 
+	 * @param a
+	 * @return
+	 */
 	public boolean lte(AbstractValue a);
 }

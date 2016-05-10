@@ -45,4 +45,9 @@ public class ConsPropAbstValue implements AbstractValue {
 	public String toString() {
 		return ""+value;
 	}
+
+	@Override
+	public AbstractValue widen(AbstractValue a) {
+		return this.lub(a);
+	}
 }
