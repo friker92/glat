@@ -3,20 +3,24 @@ package glat.program.instructions;
 import glat.program.GlatInstruction;
 
 public class Assume extends GlatInstruction {
-	public Assume(){
+	public Assume() {
 		super();
 		type = TypeInst.ASSUME;
 	}
+
 	public Assume(Expression e) {
 		type = TypeInst.ASSUME;
 		expr = e;
 	}
+
 	@Override
-	public String toString(){
-		return type.name()+": "+expr.toString();
+	public String toString() {
+		return type.name() + ": " + expr.toString();
 	}
-	public Expression getExpr(){
+
+	public Expression getExpr() {
 		return expr;
 	}
+
 	private Expression expr;
 }

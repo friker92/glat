@@ -20,8 +20,12 @@ void m(){
      x := 5;
    }
 
-   trans n1 -> n1 {
-     x := x+1;
+   trans n1 -> n2 {
+     assume(x>=2);
+   }
+
+   trans n2 -> n1 {
+     x := x-1;
    }
    
 }

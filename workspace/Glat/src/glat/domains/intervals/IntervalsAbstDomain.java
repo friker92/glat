@@ -5,6 +5,8 @@ import java.util.List;
 import glat.domains.AbstractState;
 import glat.domains.nonrel.AbstractValue;
 import glat.domains.nonrel.NonRelAbstractDomain;
+import glat.domains.nonrel.NonRelAbstractState;
+import glat.program.instructions.Expression;
 import glat.program.instructions.expressions.terminals.Value;
 import glat.program.instructions.expressions.terminals.Variable;
 import glat.program.instructions.expressions.terminals.values.NonDeterministicValue;
@@ -65,6 +67,22 @@ public class IntervalsAbstDomain extends NonRelAbstractDomain {
 		default:
 			break;
 		}
+		return null;
+	}
+
+	@Override
+	public boolean hasInfiniteAscendingChains() {
+		return true;
+	}
+
+	@Override
+	public boolean hasInfiniteDescendingChains() {
+		return true;
+	}
+
+	@Override
+	protected AbstractState evaluate_boolean_expression(NonRelAbstractState nonRel_b, Expression e) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 

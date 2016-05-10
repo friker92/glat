@@ -54,9 +54,9 @@ public class ProgTest {
 		Glat g = new Glat();
 		GlatProgram p = g.parse(new String[] { basePath + "/examples/example2" });
 
-		// analyse(p, new SignAbstDomain());
+	analyse(p, new SignAbstDomain());
 		//analyse(p, new ConstPropDomain());
-		analyse(p, new IntervalsAbstDomain());
+	//	analyse(p, new IntervalsAbstDomain());
 
 	}
 
@@ -104,7 +104,7 @@ public class ProgTest {
 				e.count++;
 
 				if (!d.lte(st, destCurrState)) {
-					if (e.count > 8) {
+					if (e.count > 3) {
 						e.count = 0;
 						e.st = d.widen(destCurrState, e.st);
 					}

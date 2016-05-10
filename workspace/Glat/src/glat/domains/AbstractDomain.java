@@ -35,11 +35,25 @@ public interface AbstractDomain {
 
 	/**
 	 * 
+	 * Assume a is smaller than or equal to b
+	 * 
 	 * @param a
 	 * @param b
 	 * @return
 	 */
 	public AbstractState widen(AbstractState a, AbstractState b);
+
+	/**
+	 * 
+	 * @return
+	 */
+	public boolean hasInfiniteAscendingChains();
+
+	/**
+	 * 
+	 * @return
+	 */
+	public boolean hasInfiniteDescendingChains();
 
 	/**
 	 * Returns {@code true} if {@code a} is smaller than or equal to {@code b}
@@ -53,9 +67,9 @@ public interface AbstractDomain {
 
 	/**
 	 * 
-	 * @param intsr
+	 * @param instr
 	 * @param a
 	 * @return
 	 */
-	public AbstractState exec(Instruction intsr, AbstractState a);
+	public AbstractState exec(Instruction instr, AbstractState a);
 }

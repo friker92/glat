@@ -7,6 +7,7 @@ import glat.domains.AbstractDomain;
 import glat.domains.AbstractState;
 import glat.program.Instruction;
 import glat.program.instructions.Assignment;
+import glat.program.instructions.Assume;
 import glat.program.instructions.Expression;
 import glat.program.instructions.expressions.CompoundExpr;
 import glat.program.instructions.expressions.Terminal;
@@ -65,23 +66,31 @@ public abstract class NonRelAbstractDomain implements AbstractDomain {
 	}
 
 	@Override
-	public AbstractState exec(Instruction intsr, AbstractState a) {
+	public AbstractState exec(Instruction instr, AbstractState a) {
 
 		NonRelAbstractState nonRel_a = (NonRelAbstractState) a;
 		NonRelAbstractState nonRel_b = (NonRelAbstractState) nonRel_a.copy();
-
-		switch (intsr.getType()) {
-		case ASSIGNMENT:
-			Assignment assignInstr = (Assignment) intsr;
-			Expression e = assignInstr.getExpr();
+		Expression e;
+		
+		switch (instr.getType()) {
+		case ASSIGNMENT: 
+			Assignment assignInstr = (Assignment) instr;
+			e = assignInstr.getExpr();
 			nonRel_b.setValue(assignInstr.getDest(), evaluate_expression(nonRel_b, e));
 			break;
+		case ASSUME:
+			Assume assumeInstr = (Assume) instr;
+			e = assumeInstr.getExpr();
+			return evaluate_boolean_expression(nonRel_b, e);
 		default:
+			
 			break;
 		}
 
 		return nonRel_b;
 	}
+
+	protected abstract AbstractState evaluate_boolean_expression(NonRelAbstractState nonRel_b, Expression e);
 
 	protected AbstractValue evaluate_expression(NonRelAbstractState b, Expression exp) {
 		if (exp instanceof CompoundExpr) {

@@ -16,6 +16,8 @@ public interface AbstractValue {
 	public AbstractValue lub(AbstractValue a);
 
 	/**
+	 * assuming this is smaller than or euqal a
+	 * 
 	 * 
 	 * @param a
 	 * @return

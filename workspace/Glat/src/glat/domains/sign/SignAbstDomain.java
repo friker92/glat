@@ -5,6 +5,10 @@ import java.util.List;
 import glat.domains.AbstractState;
 import glat.domains.nonrel.AbstractValue;
 import glat.domains.nonrel.NonRelAbstractDomain;
+import glat.domains.nonrel.NonRelAbstractState;
+import glat.program.instructions.Expression;
+import glat.program.instructions.expressions.CompoundExpr;
+import glat.program.instructions.expressions.Terminal;
 import glat.program.instructions.expressions.terminals.Value;
 import glat.program.instructions.expressions.terminals.Variable;
 import glat.program.instructions.expressions.terminals.values.NonDeterministicValue;
@@ -92,10 +96,70 @@ public class SignAbstDomain extends NonRelAbstractDomain {
 				return SignAbstValue.POS;
 			else
 				return SignAbstValue.NEG;
+			// no need for break, all paths return
 		default:
 			break;
 		}
 		return SignAbstValue.BOT;
+	}
+
+	@Override
+	protected AbstractState evaluate_boolean_expression(NonRelAbstractState b, Expression e) {
+		if (e instanceof Terminal) {
+			return b;
+		}
+
+
+		CompoundExpr compExp_e = (CompoundExpr) e;
+		String op = compExp_e.getOperator();
+		Variable op1 = (Variable) compExp_e.getOperand(0);
+		SignAbstValue v1 = (SignAbstValue) evaluate_expression(b, op1);
+		SignAbstValue v2 = (SignAbstValue) evaluate_expression(b, compExp_e.getOperand(1));
+		System.out.println("> "+v2);
+		if (v1.equals(v2)) {
+			return b;
+		}
+
+		if (v1.equals(SignAbstValue.BOT) || v2.equals(SignAbstValue.BOT)) {
+			return new SignAbstState(b.getVars());
+		}
+
+		if (v2.equals(SignAbstValue.TOP)) {
+			return b;
+		}
+
+		switch (v1) {
+		case NEG:
+			return new SignAbstState(b.getVars());
+		case POS:
+			return b;
+		case TOP:
+			if (v2.equals(SignAbstValue.POS)) {
+				b.setValue(op1, SignAbstValue.POS);
+			}
+			return b;
+		case ZERO:
+			if (v2.equals(SignAbstValue.POS)) {
+				return new SignAbstState(b.getVars());
+			} else {
+				return b;
+			}
+			// break;
+		default:
+			break;
+		}
+
+		return b;
+	}
+
+	@Override
+	public boolean hasInfiniteAscendingChains() {
+		return false;
+	}
+
+	@Override
+	public boolean hasInfiniteDescendingChains() {
+		return false;
 	}
 
 }
