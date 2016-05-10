@@ -1,8 +1,5 @@
 package glat.program.instructions.expressions;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import glat.program.instructions.Expression;
 
 public class CompoundExpr implements Expression {

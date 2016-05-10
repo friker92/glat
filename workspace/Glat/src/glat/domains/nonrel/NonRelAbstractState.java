@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import glat.domains.AbstractState;
-import glat.domains.sign.SignAbstValue;
 import glat.program.instructions.expressions.terminals.Variable;
 
 public abstract class NonRelAbstractState implements AbstractState {
