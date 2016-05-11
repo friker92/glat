@@ -5,6 +5,7 @@ import java.util.List;
 
 import glat.domains.AbstractDomain;
 import glat.domains.AbstractState;
+import glat.domains.BottomState;
 import glat.program.Instruction;
 import glat.program.instructions.Assignment;
 import glat.program.instructions.Assume;
@@ -70,45 +71,45 @@ public abstract class NonRelAbstractDomain implements AbstractDomain {
 	public AbstractState exec(Instruction instr, AbstractState a) {
 
 		NonRelAbstractState nonRel_a = (NonRelAbstractState) a;
-		NonRelAbstractState nonRel_b = (NonRelAbstractState) nonRel_a.copy();
 		Expression e;
 		
 		switch (instr.getType()) {
 		case ASSIGNMENT: 
 			Assignment assignInstr = (Assignment) instr;
 			e = assignInstr.getExpr();
-			nonRel_b.setValue(assignInstr.getDest(), evaluate_expression(nonRel_b, e));
-			break;
+			NonRelAbstractState nonRel_b = (NonRelAbstractState) nonRel_a.copy();
+			AbstractValue res = evaluate_arithm_expression(nonRel_a, e);
+			if ( res != null ) { 
+				nonRel_b.setValue(assignInstr.getDest(), res);
+				return nonRel_b;
+			} else {
+				return new BottomState();
+			}
 		case ASSUME:
 			Assume assumeInstr = (Assume) instr;
 			e = assumeInstr.getExpr();
-			return evaluate_boolean_expression(nonRel_b, e);
+			return evaluate_boolean_expression(nonRel_a, e);
+		case ASSERT:
+			return a;
 		default:
-			
-			break;
+			throw new UnsupportedOperationException("Invalid instruction: "+instr);
 		}
-
-		return nonRel_b;
 	}
 
-	protected abstract AbstractState evaluate_boolean_expression(NonRelAbstractState nonRel_b, Expression e);
 
-	protected AbstractValue evaluate_expression(NonRelAbstractState b, Expression exp) {
+	protected AbstractValue evaluate_arithm_expression(NonRelAbstractState b, Expression exp) {
 		if (exp instanceof CompoundExpr) {
 			CompoundExpr compundExp = (CompoundExpr) exp;
-			List<AbstractValue> abst_values = new ArrayList<AbstractValue>();
-			// TODO remove List
-			abst_values.add(evaluate_expression(b, compundExp.getOperandLeft()));
-			abst_values.add(evaluate_expression(b, compundExp.getOperandRight()));
-			return evaluate_expression(compundExp.getOperator(), abst_values);	
+			return evaluate_arithm_expression(b, compundExp.getOperator(), compundExp.getOperandLeft(), compundExp.getOperandRight());	
 		} else {
 			return evaluate_terminal(b, (Terminal) exp);
 		}
 	}
 	
-	private AbstractValue evaluate_terminal(NonRelAbstractState a, Terminal t) {
-	
-		if (t instanceof Variable) {
+	protected AbstractValue evaluate_terminal(NonRelAbstractState a, Terminal t) {
+		if ( t == null ) {
+			return null;
+		} else if (t instanceof Variable) {
 			return a.getValue((Variable) t);
 		} else if (t instanceof NonDeterministicValue) {
 			return nondet_abstract_value( (NonDeterministicValue) t);
@@ -117,9 +118,10 @@ public abstract class NonRelAbstractDomain implements AbstractDomain {
 		}
 	}
 	
+	protected abstract AbstractState evaluate_boolean_expression(NonRelAbstractState nonRel_b, Expression e);
 	protected abstract AbstractValue nondet_abstract_value(NonDeterministicValue t);
 	protected abstract AbstractValue abstract_value(Value t);
-	protected abstract AbstractValue evaluate_expression(TypeOperator operator, List<AbstractValue> abst_values);
+	protected abstract AbstractValue evaluate_arithm_expression(NonRelAbstractState b, TypeOperator operator, Terminal t1, Terminal t2);
 
 
 }

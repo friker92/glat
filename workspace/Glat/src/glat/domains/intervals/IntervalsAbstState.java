@@ -25,7 +25,7 @@ public class IntervalsAbstState extends NonRelAbstractState {
 	}
 
 	@Override
-	protected AbstractValue bottomValue() {
+	protected AbstractValue defaultValue(Variable v) {
 		return new IntervalsAbstValue();
 	}
 }

@@ -40,23 +40,31 @@ public class ConstPropDomain extends NonRelAbstractDomain {
 	}
 
 	@Override
-	protected AbstractValue evaluate_expression(TypeOperator operator, List<AbstractValue> abst_values) {
+	protected AbstractValue evaluate_arithm_expression(TypeOperator operator, AbstractValue v1, AbstractValue v2) {
 
-		if ( abst_values.contains( new ConsPropTOP() ) ) {
+		if ( v1.equals( new ConsPropTOP() ) || v2.equals( new ConsPropTOP() )) {
 			return new ConsPropTOP();
 		}
-
-		if ( abst_values.contains( new ConsPropBOT() ) ) {
+		if ( v1.equals( new ConsPropBOT() ) || v2.equals( new ConsPropBOT() )) {
 			return new ConsPropBOT();
 		}
 
 		double res = 0.0;
+		double valueV1 = ((ConsPropAbstValue) v1).getValue();
+		double valueV2 = ((ConsPropAbstValue) v2).getValue();
 		
 		switch (operator) {
 		case ADD:
-			for( AbstractValue v : abst_values ) {
-				res += ((ConsPropAbstValue) v).getValue();
-			}
+			res =  valueV1+valueV2;
+			break;
+		case SUB:
+			res =  valueV1-valueV2;
+			break;
+		case DIV:
+			res =  valueV2 == 0 ? 0 : valueV1/valueV2;
+			break;
+		case MUL:
+			res =  valueV1*valueV2;
 			break;
 		default:
 			break;

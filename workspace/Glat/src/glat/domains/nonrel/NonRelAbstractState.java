@@ -30,7 +30,7 @@ public abstract class NonRelAbstractState implements AbstractState {
 		this.vars = new ArrayList<Variable>(vars);
 		st = new HashMap<Variable, AbstractValue>();
 		for ( Variable v : vars ) {
-			st.put(v, bottomValue());
+			st.put(v, defaultValue(v));
 		}
 	}
 
@@ -72,6 +72,6 @@ public abstract class NonRelAbstractState implements AbstractState {
 	}
 
 	protected abstract NonRelAbstractState createInstance();
-	protected abstract AbstractValue bottomValue();
+	protected abstract AbstractValue defaultValue(Variable v);
 
 }

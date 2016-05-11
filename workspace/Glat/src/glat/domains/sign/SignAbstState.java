@@ -38,8 +38,8 @@ public class SignAbstState extends NonRelAbstractState {
 	}
 
 	@Override
-	protected AbstractValue bottomValue() {
-		return SignAbstValue.BOT;
+	protected AbstractValue defaultValue(Variable v) {
+		return SignAbstValue.ZERO;
 	}
 
 }

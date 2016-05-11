@@ -27,6 +27,13 @@ public interface AbstractDomain {
 
 	/**
 	 * 
+	 * @param vars
+	 * @return
+	 */
+	public AbstractState defaultState(List<Variable> vars);
+
+	/**
+	 * 
 	 * @param a
 	 * @param b
 	 * @return

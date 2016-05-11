@@ -43,7 +43,7 @@ public class IntervalsAbstDomain extends NonRelAbstractDomain {
 	}
 
 	@Override
-	protected AbstractValue evaluate_expression(TypeOperator operator, List<AbstractValue> abst_values) {
+	protected AbstractValue evaluate_arithm_expression(TypeOperator operator, List<AbstractValue> abst_values) {
 
 		IntervalsAbstValue op1IntV = (IntervalsAbstValue) abst_values.get(0);
 		IntervalsAbstValue op2IntV = (IntervalsAbstValue) abst_values.get(1);

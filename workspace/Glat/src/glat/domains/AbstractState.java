@@ -29,4 +29,7 @@ public interface AbstractState {
 	 */
 	public String getDesc();
 
+	default boolean isBottom() {
+		return false;
+	}
 }

@@ -3,7 +3,7 @@ package glat.domains.sign;
 import glat.domains.nonrel.AbstractValue;
 
 public enum SignAbstValue implements AbstractValue {
-	TOP("T"), BOT("B"), POS("P"), NEG("N"), ZERO("Z");
+	TOP("T"), POS("P"), NEG("N"), ZERO("Z");
 	
 	private String desc;
 	
@@ -25,10 +25,6 @@ public enum SignAbstValue implements AbstractValue {
 			return true;
 		}
 
-		if ( this.equals(BOT) ) {
-			return true;
-		}
-
 		if ( this.equals(value) ) {
 			return true;
 		}
@@ -42,14 +38,6 @@ public enum SignAbstValue implements AbstractValue {
 		
 		if (this.equals(SignAbstValue.TOP) || b.equals(SignAbstValue.TOP)) {
 			return SignAbstValue.TOP;
-		}
-
-		if (this.equals(SignAbstValue.BOT)) {
-			return b;
-		}
-
-		if (this.equals(SignAbstValue.BOT)) {
-			return this;
 		}
 
 		if (this.equals(b)) {

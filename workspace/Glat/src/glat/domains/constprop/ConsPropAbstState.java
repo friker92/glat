@@ -26,7 +26,7 @@ public class ConsPropAbstState extends NonRelAbstractState {
 	}
 
 	@Override
-	protected AbstractValue bottomValue() {
+	protected AbstractValue defaultValue(Variable v) {
 		return new ConsPropBOT();
 	}
 
