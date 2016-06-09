@@ -2,7 +2,7 @@ package glat.domains.constprop;
 
 import glat.domains.nonrel.AbstractValue;
 
-public class ConsPropTOP implements AbstractValue {
+public class ConsPropTOP extends ConsPropAbstValue {
 
 	
 	ConsPropTOP() {
@@ -37,4 +37,5 @@ public class ConsPropTOP implements AbstractValue {
 	public AbstractValue widen(AbstractValue a) {
 		return this.lub(a);
 	}
+	
 }

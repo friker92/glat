@@ -37,7 +37,7 @@ public class ConstPropDomain extends NonRelAbstractDomain {
 
 	@Override
 	protected AbstractValue abstract_value(Value t) {
-		return new ConsPropAbstValue(t.getFloatNumber());
+		return new ConsPropValue(t.getFloatNumber());
 	}
 
 	@Override
@@ -84,8 +84,8 @@ public class ConstPropDomain extends NonRelAbstractDomain {
 		}
 
 		double res = 0.0;
-		double valueV1 = ((ConsPropAbstValue) v1).getValue();
-		double valueV2 = ((ConsPropAbstValue) v2).getValue();
+		double valueV1 = ((ConsPropValue) v1).getValue();
+		double valueV2 = ((ConsPropValue) v2).getValue();
 
 		switch (operator) {
 		case ADD:
@@ -95,7 +95,9 @@ public class ConstPropDomain extends NonRelAbstractDomain {
 			res = valueV1 - valueV2;
 			break;
 		case DIV:
-			res = valueV2 == 0 ? 0 : valueV1 / valueV2;
+			if(valueV2 == 0)
+				return new ConsPropBOT();
+			res = valueV1 / (1.0 * valueV2);
 			break;
 		case MUL:
 			res = valueV1 * valueV2;
@@ -104,6 +106,6 @@ public class ConstPropDomain extends NonRelAbstractDomain {
 			break;
 		}
 
-		return new ConsPropAbstValue(res);
+		return new ConsPropValue(res);
 	}
 }
