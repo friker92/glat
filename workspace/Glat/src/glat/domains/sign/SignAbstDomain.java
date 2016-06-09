@@ -5,10 +5,10 @@ import java.util.List;
 import glat.domains.AbstractState;
 import glat.domains.BottomState;
 import glat.domains.nonrel.AbstractValue;
+import glat.domains.nonrel.BottomAbstractValue;
 import glat.domains.nonrel.NonRelAbstractDomain;
 import glat.domains.nonrel.NonRelAbstractState;
 import glat.program.instructions.Expression;
-import glat.program.instructions.expressions.CompoundExpr;
 import glat.program.instructions.expressions.Terminal;
 import glat.program.instructions.expressions.TypeOperator;
 import glat.program.instructions.expressions.TypeValue;
@@ -89,7 +89,7 @@ public class SignAbstDomain extends NonRelAbstractDomain {
 				return SignAbstValue.TOP;
 		case DIV:
 			if (v2.equals(SignAbstValue.ZERO))
-				return null;
+				return new BottomAbstractValue();
 			else if (v1.equals(SignAbstValue.ZERO))
 				return SignAbstValue.ZERO;
 			else if (v1.equals(SignAbstValue.TOP) || v2.equals(SignAbstValue.TOP))
@@ -112,141 +112,13 @@ public class SignAbstDomain extends NonRelAbstractDomain {
 		}
 	}
 
-	protected AbstractState evaluate_boolean_expression(NonRelAbstractState b, TypeOperator op, Variable v1, Variable v2) {
-		switch (op) {
-		case EQ:
-			// handle
-			break;
-		case GT:
-			// handle
-			break;
-		case GTE:
-			// handle
-			break;
-		case LT:
-			return evaluate_boolean_expression(b, TypeOperator.GT, v2, v1);
-		case LTE:
-			return evaluate_boolean_expression(b, TypeOperator.GTE, v2, v1);
-		case NEQ:
-			// handle
-			break;
-		default:
-			break;
-		}
-		return null;
-	}
-
-	protected AbstractState evaluate_boolean_expression(NonRelAbstractState b, TypeOperator op, Variable v1, Value v2) {
-		switch (op) {
-		case EQ:
-			// handle
-			break;
-		case GT:
-			// handle
-			break;
-		case GTE:
-			// handle
-			break;
-		case LT:
-			// handle
-			break;
-		case LTE:
-			// handle
-			break;
-		case NEQ:
-			// handle
-			break;
-		default:
-			break;
-		}
-		return null;
-	}
-
-	protected AbstractState evaluate_boolean_expression(NonRelAbstractState b, TypeOperator op, Value v1, Value v2) {
-		switch (op) {
-		case EQ:
-			// handle
-			break;
-		case GT:
-			// handle
-			break;
-		case GTE:
-			// handle
-			break;
-		case LT:
-			return evaluate_boolean_expression(b, TypeOperator.GT, v2, v1);
-		case LTE:
-			return evaluate_boolean_expression(b, TypeOperator.GTE, v2, v1);
-		case NEQ:
-			// handle
-			break;
-		default:
-			break;
-		}
-		return null;
-	}
-
 	@Override
 	protected AbstractState evaluate_boolean_expression(NonRelAbstractState b, Expression e) {
 		if (e instanceof Terminal) {
+			throw new UnsupportedOperationException("Boolean cannot be a terminal");
+		} else {
 			return b;
 		}
-
-		NonRelAbstractState a = (NonRelAbstractState) b.copy();
-
-		CompoundExpr compExp_e = (CompoundExpr) e;
-		TypeOperator op = compExp_e.getOperator();
-		Variable op1 = (Variable) compExp_e.getOperandLeft();
-		SignAbstValue v1 = (SignAbstValue) evaluate_arithm_expression(b, op1);
-		SignAbstValue v2 = (SignAbstValue) evaluate_arithm_expression(b, compExp_e.getOperandRight());
-
-		switch (op) {
-		case EQ:
-			break;
-		case GT:
-			break;
-		case GTE:
-			if (v1.equals(v2)) {
-				return a;
-			}
-
-			if (v2.equals(SignAbstValue.TOP)) {
-				return a;
-			}
-
-			switch (v1) {
-			case NEG:
-				return new BottomState();
-			case POS:
-				return a;
-			case TOP:
-				if (v2.equals(SignAbstValue.POS)) {
-					b.setValue(op1, SignAbstValue.POS);
-				}
-				return b;
-			case ZERO:
-				if (v2.equals(SignAbstValue.POS)) {
-					return new SignAbstState(b.getVars());
-				} else {
-					return b;
-				}
-				// break;
-			default:
-				break;
-			}
-
-			return b;
-			break;
-		case LT:
-			break;
-		case LTE:
-			break;
-		case NEQ:
-			break;
-		default:
-			break;
-		}
-
 	}
 
 	@Override

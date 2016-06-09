@@ -7,6 +7,7 @@ import glat.domains.nonrel.AbstractValue;
 import glat.domains.nonrel.NonRelAbstractDomain;
 import glat.domains.nonrel.NonRelAbstractState;
 import glat.program.instructions.Expression;
+import glat.program.instructions.expressions.Terminal;
 import glat.program.instructions.expressions.TypeOperator;
 import glat.program.instructions.expressions.terminals.Value;
 import glat.program.instructions.expressions.terminals.Variable;
@@ -40,42 +41,8 @@ public class ConstPropDomain extends NonRelAbstractDomain {
 	}
 
 	@Override
-	protected AbstractValue evaluate_arithm_expression(TypeOperator operator, AbstractValue v1, AbstractValue v2) {
-
-		if ( v1.equals( new ConsPropTOP() ) || v2.equals( new ConsPropTOP() )) {
-			return new ConsPropTOP();
-		}
-		if ( v1.equals( new ConsPropBOT() ) || v2.equals( new ConsPropBOT() )) {
-			return new ConsPropBOT();
-		}
-
-		double res = 0.0;
-		double valueV1 = ((ConsPropAbstValue) v1).getValue();
-		double valueV2 = ((ConsPropAbstValue) v2).getValue();
-		
-		switch (operator) {
-		case ADD:
-			res =  valueV1+valueV2;
-			break;
-		case SUB:
-			res =  valueV1-valueV2;
-			break;
-		case DIV:
-			res =  valueV2 == 0 ? 0 : valueV1/valueV2;
-			break;
-		case MUL:
-			res =  valueV1*valueV2;
-			break;
-		default:
-			break;
-		}
-		
-		return new ConsPropAbstValue(res);
-	}
-
-	@Override
 	public AbstractState widen(AbstractState a, AbstractState b) {
-		return lub(a,b);
+		return lub(a, b);
 	}
 
 	@Override
@@ -90,7 +57,53 @@ public class ConstPropDomain extends NonRelAbstractDomain {
 
 	@Override
 	protected AbstractState evaluate_boolean_expression(NonRelAbstractState nonRel_b, Expression e) {
-		// TODO Auto-generated method stub
-		return null;
+		if (e instanceof Terminal) {
+			throw new UnsupportedOperationException("Boolean cannot be a terminal");
+		} else {
+			return nonRel_b;
+		}
+	}
+
+	@Override
+	public AbstractState defaultState(List<Variable> vars) {
+		return new ConsPropAbstState(vars);
+	}
+
+	@Override
+	protected AbstractValue evaluate_arithm_expression(NonRelAbstractState b, TypeOperator operator, Terminal t1,
+			Terminal t2) {
+
+		ConsPropAbstValue v1 = (ConsPropAbstValue) evaluate_terminal(b, t1);
+		ConsPropAbstValue v2 = (ConsPropAbstValue) evaluate_terminal(b, t2);
+
+		if (v1.equals(new ConsPropTOP()) || v2.equals(new ConsPropTOP())) {
+			return new ConsPropTOP();
+		}
+		if (v1.equals(new ConsPropBOT()) || v2.equals(new ConsPropBOT())) {
+			return new ConsPropBOT();
+		}
+
+		double res = 0.0;
+		double valueV1 = ((ConsPropAbstValue) v1).getValue();
+		double valueV2 = ((ConsPropAbstValue) v2).getValue();
+
+		switch (operator) {
+		case ADD:
+			res = valueV1 + valueV2;
+			break;
+		case SUB:
+			res = valueV1 - valueV2;
+			break;
+		case DIV:
+			res = valueV2 == 0 ? 0 : valueV1 / valueV2;
+			break;
+		case MUL:
+			res = valueV1 * valueV2;
+			break;
+		default:
+			break;
+		}
+
+		return new ConsPropAbstValue(res);
 	}
 }

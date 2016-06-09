@@ -1,6 +1,5 @@
 package glat.domains.nonrel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import glat.domains.AbstractDomain;
@@ -26,7 +25,7 @@ public abstract class NonRelAbstractDomain implements AbstractDomain {
 
 		List<Variable> vars = a.getVars();
 
-		NonRelAbstractState c = (NonRelAbstractState) bottom(vars);
+		NonRelAbstractState c = (NonRelAbstractState) defaultState(vars);
 
 		for (Variable v : vars) {
 			c.setValue(v, nonRel_a.getValue(v).lub(nonRel_b.getValue(v)));
@@ -79,18 +78,18 @@ public abstract class NonRelAbstractDomain implements AbstractDomain {
 			e = assignInstr.getExpr();
 			NonRelAbstractState nonRel_b = (NonRelAbstractState) nonRel_a.copy();
 			AbstractValue res = evaluate_arithm_expression(nonRel_a, e);
-			if ( res != null ) { 
+			if ( res instanceof BottomAbstractValue ) { 
+				return new BottomState();
+			} else {
 				nonRel_b.setValue(assignInstr.getDest(), res);
 				return nonRel_b;
-			} else {
-				return new BottomState();
 			}
 		case ASSUME:
 			Assume assumeInstr = (Assume) instr;
 			e = assumeInstr.getExpr();
 			return evaluate_boolean_expression(nonRel_a, e);
 		case ASSERT:
-			return a;
+			return a; // TODO: check this
 		default:
 			throw new UnsupportedOperationException("Invalid instruction: "+instr);
 		}
@@ -107,9 +106,7 @@ public abstract class NonRelAbstractDomain implements AbstractDomain {
 	}
 	
 	protected AbstractValue evaluate_terminal(NonRelAbstractState a, Terminal t) {
-		if ( t == null ) {
-			return null;
-		} else if (t instanceof Variable) {
+		if (t instanceof Variable) {
 			return a.getValue((Variable) t);
 		} else if (t instanceof NonDeterministicValue) {
 			return nondet_abstract_value( (NonDeterministicValue) t);
@@ -117,10 +114,39 @@ public abstract class NonRelAbstractDomain implements AbstractDomain {
 			return abstract_value( (Value) t);
 		}
 	}
-	
-	protected abstract AbstractState evaluate_boolean_expression(NonRelAbstractState nonRel_b, Expression e);
+
+	/**
+	 * Returns a non-deterministic value that correspond to t 
+	 * @param t
+	 * @return
+	 */
 	protected abstract AbstractValue nondet_abstract_value(NonDeterministicValue t);
+	
+	/**
+	 * Returns an abstraction of t
+	 * @param t
+	 * @return
+	 */
 	protected abstract AbstractValue abstract_value(Value t);
+	
+	/**
+	 * returns a restricted abstract state, depending on the condition
+	 * 
+	 * @param nonRel_b
+	 * @param e
+	 * @return
+	 */
+	protected abstract AbstractState evaluate_boolean_expression(NonRelAbstractState nonRel_b, Expression e);
+	
+	/**
+	 * Returns a new abstract value the corresponds to the evaluation of the expression 
+	 * 
+	 * @param b
+	 * @param operator
+	 * @param t1
+	 * @param t2
+	 * @return
+	 */
 	protected abstract AbstractValue evaluate_arithm_expression(NonRelAbstractState b, TypeOperator operator, Terminal t1, Terminal t2);
 
 

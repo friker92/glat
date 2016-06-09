@@ -11,6 +11,8 @@ import java.util.Queue;
 
 import glat.domains.AbstractDomain;
 import glat.domains.AbstractState;
+import glat.domains.constprop.ConstPropDomain;
+import glat.domains.intervals.IntervalsAbstDomain;
 import glat.domains.sign.SignAbstDomain;
 import glat.parser.Glat;
 import glat.parser.ParseException;
@@ -35,7 +37,6 @@ public class ProgTest {
 		
 		@Override
 		public String toString() {
-			// TODO Auto-generated method stub
 			return st.toString();
 		}
 
@@ -47,25 +48,25 @@ public class ProgTest {
 		Glat g = new Glat();
 		GlatProgram p = g.parse(new String[] { basePath + "/examples/example2" });
 
-	analyse(p, new SignAbstDomain());
+	//analyse(p, new SignAbstDomain());
 		//analyse(p, new ConstPropDomain());
-	//	analyse(p, new IntervalsAbstDomain());
+		analyse(p, new IntervalsAbstDomain());
 
 	}
 
 	public static void analyse(GlatProgram p, AbstractDomain d) {
 
+		Store table = new SimpleStore(d);
+		
 		Method m = p.getMethods().get(1);
 		ControlFlowGraph cfg = m.getControlFlowGraph();
 		List<Variable> vs = new ArrayList<Variable>(m.getVariables());
 		vs.addAll(p.getGlobalVariables());
 
-		AbstractState a = d.bottom(vs);
-
-		Map<Node, TableEntry> table = new HashMap<Node, TableEntry>();
+		AbstractState a = d.defaultState(vs);
 
 		for (Node n : cfg.getNodes()) {
-			table.put(n, new TableEntry(a, 0));
+			table.set(n, a);
 		}
 
 		Queue<Node> q = new PriorityQueue<Node>(new Comparator<Node>() {
@@ -80,7 +81,7 @@ public class ProgTest {
 			System.out.println(table);
 
 			Node n = q.poll();
-			AbstractState currState = table.get(n).st;
+			AbstractState currState = table.get(n);
 
 			for (Transition t : cfg.getOutTransitions(n)) {
 
@@ -91,16 +92,8 @@ public class ProgTest {
 					st = d.exec(i, st);
 				}
 
-				TableEntry e = table.get(dest);
-				AbstractState destCurrState = e.st;
-				e.st = d.lub(e.st, st);
-				e.count++;
-
-				if (!d.lte(st, destCurrState)) {
-					if (e.count > 3) {
-						e.count = 0;
-						e.st = d.widen(destCurrState, e.st);
-					}
+				
+				if ( table.modify(dest, st) ) {
 					q.add(t.getTargetNode());
 				}
 			}
