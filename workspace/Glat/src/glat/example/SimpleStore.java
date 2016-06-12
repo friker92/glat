@@ -5,7 +5,6 @@ import java.util.Map;
 
 import glat.domains.AbstractDomain;
 import glat.domains.AbstractState;
-import glat.example.ProgTest.TableEntry;
 import glat.program.Node;
 
 public class SimpleStore implements Store {

@@ -26,22 +26,6 @@ import glat.program.instructions.expressions.terminals.Variable;
 
 public class ProgTest {
 
-	static class TableEntry {
-		public AbstractState st;
-		public int count;
-
-		TableEntry(AbstractState st, int count) {
-			this.st = st;
-			this.count = count;
-		}
-		
-		@Override
-		public String toString() {
-			return st.toString();
-		}
-
-	}
-
 	private static String basePath = System.getProperty("user.home")+"/Systems/glat/workspace/Glat";
 
 	public static void main(String[] args) throws FileNotFoundException, ParseException {
@@ -56,6 +40,7 @@ public class ProgTest {
 
 	public static void analyse(GlatProgram p, AbstractDomain d) {
 
+		
 		Store table = new SimpleStore(d);
 		
 		Method m = p.getMethods().get(1);
@@ -75,6 +60,9 @@ public class ProgTest {
 				return 0;
 			}
 		});
+		
+		// fixpoint
+		
 		q.add(m.getInitNode());
 
 		while (!q.isEmpty()) {
