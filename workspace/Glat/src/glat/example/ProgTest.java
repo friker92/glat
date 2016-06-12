@@ -33,8 +33,8 @@ public class ProgTest {
 		GlatProgram p = g.parse(new String[] { basePath + "/examples/example2" });
 
 	//analyse(p, new SignAbstDomain());
-		//analyse(p, new ConstPropDomain());
-		analyse(p, new IntervalsAbstDomain());
+		analyse(p, new ConstPropDomain());
+		//analyse(p, new IntervalsAbstDomain());
 
 	}
 
