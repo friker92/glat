@@ -19,7 +19,12 @@ public class SimpleStore implements Store {
 
 		public ExtAbsSt(AbstractState st) {
 			this.st = st;
-			this.count = 0;
+			this.count = -1;
+		}
+		
+		public ExtAbsSt(AbstractState st, int count) {
+			this.st = st;
+			this.count = count;
 		}
 		
 		@Override
@@ -43,16 +48,16 @@ public class SimpleStore implements Store {
 		
 		ExtAbsSt e = table.get(key);
 		AbstractState destCurrState = e.st;
-		e.st = domain.lub(e.st, value);
+		//e.st = domain.lub(e.st, value);
 		e.count++;
-		if (domain.lte(value, destCurrState)) {
+		if (e.count!= 0 && domain.lte(value, destCurrState)) {
 			return false;
 		}else if (e.count > 3) {
-			e.count = 0;
 			e.st = domain.widen(destCurrState, e.st);
 		}else {
-			set(key, value);
+			e.st = value;
 		}
+		e.count = 0;
 		return true;
 		
 		/*if (!domain.lte(value, destCurrState)) {

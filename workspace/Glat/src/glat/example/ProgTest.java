@@ -64,18 +64,21 @@ public class ProgTest {
 		// fixpoint
 		
 		q.add(m.getInitNode());
+		
 
 		while (!q.isEmpty()) {
-			System.out.println(table);
+			
 
 			Node n = q.poll();
+			
 			AbstractState currState = table.get(n);
 			
 			List<AbstractState> lst = new ArrayList<AbstractState>();
 			lst.add(currState);
 			
 			AbstractState st = currState;
-			for(Transition t : cfg.getInTransitions(n)){		
+			for(Transition t : cfg.getInTransitions(n)){
+				st = table.get(t.getSrcNode());
 				//Node dest = t.getTargetNode();
 				for (Instruction i : t.getInstructions()) {
 					st = d.exec(i, st);
@@ -87,6 +90,7 @@ public class ProgTest {
 			if ( table.modify(n, st) ) {
 				cfg.getOutTransitions(n).forEach((t)->q.add(t.getTargetNode()));
 			}
+			System.out.println("node: "+n+" -> "+table);
 		}
 		System.out.println(table);
 	}
