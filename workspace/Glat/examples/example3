@@ -5,22 +5,27 @@ init {
 }
 
 void main() {
+	var int y;
+	var int y2;
   start n0;
   trans n0 -> n1 {
+  y := 3;
+  y2 := 5;
   }
   trans n1 -> n2 {
-  	sync m();
+  	sync m(y);
+  	sync m(y2);
   }
 }
 
-void m(){
+void m(var int j){
    var int x;
    //var int y;
 
    start n0;
 
    trans n0 -> n1 {
-     x := 4;
+     x := j;
    }
 
    trans n1 -> n2 {

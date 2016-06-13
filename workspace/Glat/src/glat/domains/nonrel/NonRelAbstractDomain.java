@@ -1,5 +1,6 @@
 package glat.domains.nonrel;
 
+import java.util.Iterator;
 import java.util.List;
 
 import glat.domains.AbstractDomain;
@@ -159,5 +160,18 @@ public abstract class NonRelAbstractDomain implements AbstractDomain {
 	 */
 	protected abstract AbstractValue evaluate_arithm_expression(NonRelAbstractState b, TypeArithOperator operator, Terminal t1, Terminal t2);
 
+	@Override
+	public AbstractState rename(AbstractState st, AbstractState bt, List<Variable> current, List<Variable> newValue){
+		if(current.size() != newValue.size()) // TODO: exception params
+			throw new ExceptionInInitializerError();
+		NonRelAbstractState nonRel_st = (NonRelAbstractState) st;
+		NonRelAbstractState nonRel_copy = (NonRelAbstractState) bt.copy();
+		
+		Iterator<Variable> it_curr = current.iterator(), it_new = newValue.iterator();
+		while (it_curr.hasNext() && it_new.hasNext()) {
+			nonRel_copy.setValue(it_new.next(), nonRel_st.getValue(it_curr.next()));
+		}
+		return nonRel_copy;
+	}
 
 }
