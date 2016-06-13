@@ -13,6 +13,7 @@ void main() {
 
 void m(){
    var int x;
+   //var int y;
 
    start n0;
 
@@ -21,11 +22,18 @@ void m(){
    }
 
    trans n1 -> n2 {
-     assume(x>=2);
+     assume(x<=7);
    }
 
    trans n2 -> n1 {
      x := x+1;
+   }
+   
+   trans n1 -> n3 {
+     assume(x>7);
+   }
+   trans n3 -> n4 {
+     x := x+8;
    }
    
 }

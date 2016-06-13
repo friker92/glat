@@ -9,9 +9,11 @@ import glat.program.Instruction;
 import glat.program.instructions.Assignment;
 import glat.program.instructions.Assume;
 import glat.program.instructions.Expression;
-import glat.program.instructions.expressions.CompoundExpr;
+import glat.program.instructions.expressions.CompoundArithExpr;
+import glat.program.instructions.expressions.CompoundBoolExpr;
 import glat.program.instructions.expressions.Terminal;
-import glat.program.instructions.expressions.TypeOperator;
+import glat.program.instructions.expressions.TypeArithOperator;
+import glat.program.instructions.expressions.TypeBoolOperator;
 import glat.program.instructions.expressions.terminals.Value;
 import glat.program.instructions.expressions.terminals.Variable;
 import glat.program.instructions.expressions.terminals.values.NonDeterministicValue;
@@ -87,7 +89,7 @@ public abstract class NonRelAbstractDomain implements AbstractDomain {
 		case ASSUME:
 			Assume assumeInstr = (Assume) instr;
 			e = assumeInstr.getExpr();
-			return evaluate_boolean_expression(nonRel_a, e);
+			return reduce_state(nonRel_a, e);
 		case ASSERT:
 			return a; // TODO: check this
 		default:
@@ -97,12 +99,20 @@ public abstract class NonRelAbstractDomain implements AbstractDomain {
 
 
 	protected AbstractValue evaluate_arithm_expression(NonRelAbstractState b, Expression exp) {
-		if (exp instanceof CompoundExpr) {
-			CompoundExpr compundExp = (CompoundExpr) exp;
+		if (exp instanceof CompoundArithExpr) {
+			CompoundArithExpr compundExp = (CompoundArithExpr) exp;
 			return evaluate_arithm_expression(b, compundExp.getOperator(), compundExp.getOperandLeft(), compundExp.getOperandRight());	
 		} else {
 			return evaluate_terminal(b, (Terminal) exp);
 		}
+	}
+	
+	protected AbstractState reduce_state(NonRelAbstractState b, Expression exp) {
+		if (exp instanceof CompoundBoolExpr) {
+			CompoundBoolExpr compundExp = (CompoundBoolExpr) exp;
+			return reduce_state(b, compundExp.getOperator(), compundExp.getOperandLeft(), compundExp.getOperandRight());	
+		} 
+		return new BottomState();
 	}
 	
 	protected AbstractValue evaluate_terminal(NonRelAbstractState a, Terminal t) {
@@ -136,7 +146,7 @@ public abstract class NonRelAbstractDomain implements AbstractDomain {
 	 * @param e
 	 * @return
 	 */
-	protected abstract AbstractState evaluate_boolean_expression(NonRelAbstractState nonRel_b, Expression e);
+	protected abstract AbstractState reduce_state(NonRelAbstractState nonRel_b, TypeBoolOperator operator, Terminal t1, Terminal t2);
 	
 	/**
 	 * Returns a new abstract value the corresponds to the evaluation of the expression 
@@ -147,7 +157,7 @@ public abstract class NonRelAbstractDomain implements AbstractDomain {
 	 * @param t2
 	 * @return
 	 */
-	protected abstract AbstractValue evaluate_arithm_expression(NonRelAbstractState b, TypeOperator operator, Terminal t1, Terminal t2);
+	protected abstract AbstractValue evaluate_arithm_expression(NonRelAbstractState b, TypeArithOperator operator, Terminal t1, Terminal t2);
 
 
 }

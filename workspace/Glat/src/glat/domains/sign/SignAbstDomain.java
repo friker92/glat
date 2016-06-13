@@ -10,7 +10,8 @@ import glat.domains.nonrel.NonRelAbstractDomain;
 import glat.domains.nonrel.NonRelAbstractState;
 import glat.program.instructions.Expression;
 import glat.program.instructions.expressions.Terminal;
-import glat.program.instructions.expressions.TypeOperator;
+import glat.program.instructions.expressions.TypeArithOperator;
+import glat.program.instructions.expressions.TypeBoolOperator;
 import glat.program.instructions.expressions.TypeValue;
 import glat.program.instructions.expressions.terminals.Value;
 import glat.program.instructions.expressions.terminals.Variable;
@@ -59,7 +60,7 @@ public class SignAbstDomain extends NonRelAbstractDomain {
 	}
 
 	@Override
-	protected AbstractValue evaluate_arithm_expression(NonRelAbstractState b, TypeOperator operator, Terminal t1,
+	protected AbstractValue evaluate_arithm_expression(NonRelAbstractState b, TypeArithOperator operator, Terminal t1,
 			Terminal t2) {
 		AbstractValue v1 = evaluate_terminal(b, t1);
 		AbstractValue v2 = evaluate_terminal(b, t2);
@@ -113,12 +114,9 @@ public class SignAbstDomain extends NonRelAbstractDomain {
 	}
 
 	@Override
-	protected AbstractState evaluate_boolean_expression(NonRelAbstractState b, Expression e) {
-		if (e instanceof Terminal) {
-			throw new UnsupportedOperationException("Boolean cannot be a terminal");
-		} else {
-			return b;
-		}
+	protected AbstractState reduce_state(NonRelAbstractState nonRel_b, TypeBoolOperator operator, Terminal t1, Terminal t2) {
+		// TODO : reduce state by boolean expresion
+		return nonRel_b;
 	}
 
 	@Override

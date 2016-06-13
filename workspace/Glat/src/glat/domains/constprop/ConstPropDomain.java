@@ -8,7 +8,8 @@ import glat.domains.nonrel.NonRelAbstractDomain;
 import glat.domains.nonrel.NonRelAbstractState;
 import glat.program.instructions.Expression;
 import glat.program.instructions.expressions.Terminal;
-import glat.program.instructions.expressions.TypeOperator;
+import glat.program.instructions.expressions.TypeArithOperator;
+import glat.program.instructions.expressions.TypeBoolOperator;
 import glat.program.instructions.expressions.terminals.Value;
 import glat.program.instructions.expressions.terminals.Variable;
 import glat.program.instructions.expressions.terminals.values.NonDeterministicValue;
@@ -56,12 +57,8 @@ public class ConstPropDomain extends NonRelAbstractDomain {
 	}
 
 	@Override
-	protected AbstractState evaluate_boolean_expression(NonRelAbstractState nonRel_b, Expression e) {
-		if (e instanceof Terminal) {
-			throw new UnsupportedOperationException("Boolean cannot be a terminal");
-		} else {
-			return nonRel_b;
-		}
+	protected AbstractState reduce_state(NonRelAbstractState nonRel_b, TypeBoolOperator operator, Terminal t1, Terminal t2) {
+		return nonRel_b;
 	}
 
 	@Override
@@ -70,7 +67,7 @@ public class ConstPropDomain extends NonRelAbstractDomain {
 	}
 
 	@Override
-	protected AbstractValue evaluate_arithm_expression(NonRelAbstractState b, TypeOperator operator, Terminal t1,
+	protected AbstractValue evaluate_arithm_expression(NonRelAbstractState b, TypeArithOperator operator, Terminal t1,
 			Terminal t2) {
 
 		ConsPropAbstValue v1 = (ConsPropAbstValue) evaluate_terminal(b, t1);

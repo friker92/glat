@@ -1,7 +1,6 @@
 package glat.domains;
 
 import java.util.ArrayList;
-import java.util.EmptyStackException;
 import java.util.List;
 
 import glat.program.Instruction;

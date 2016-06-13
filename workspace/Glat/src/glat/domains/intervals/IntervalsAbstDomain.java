@@ -2,15 +2,14 @@ package glat.domains.intervals;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter.DEFAULT;
-
 import glat.domains.AbstractState;
 import glat.domains.nonrel.AbstractValue;
 import glat.domains.nonrel.NonRelAbstractDomain;
 import glat.domains.nonrel.NonRelAbstractState;
 import glat.program.instructions.Expression;
 import glat.program.instructions.expressions.Terminal;
-import glat.program.instructions.expressions.TypeOperator;
+import glat.program.instructions.expressions.TypeArithOperator;
+import glat.program.instructions.expressions.TypeBoolOperator;
 import glat.program.instructions.expressions.terminals.Value;
 import glat.program.instructions.expressions.terminals.Variable;
 import glat.program.instructions.expressions.terminals.values.NonDeterministicValue;
@@ -45,7 +44,7 @@ public class IntervalsAbstDomain extends NonRelAbstractDomain {
 		return new IntervalsAbstValue(f, f);
 	}
 	@Override
-	protected AbstractValue evaluate_arithm_expression(NonRelAbstractState b, TypeOperator operator, Terminal t1, Terminal t2) {
+	protected AbstractValue evaluate_arithm_expression(NonRelAbstractState b, TypeArithOperator operator, Terminal t1, Terminal t2) {
 		IntervalsAbstValue op1IntV = (IntervalsAbstValue) evaluate_terminal(b, t1);
 		IntervalsAbstValue op2IntV = (IntervalsAbstValue) evaluate_terminal(b, t2);
 		if (op1IntV.isBottom() || op2IntV.isBottom())
@@ -194,19 +193,75 @@ public class IntervalsAbstDomain extends NonRelAbstractDomain {
 		return true;
 	}
 
-	@Override
-	protected AbstractState evaluate_boolean_expression(NonRelAbstractState nonRel_b, Expression e) {
-		if (e instanceof Terminal) {
-			throw new UnsupportedOperationException("Boolean cannot be a terminal");
-		} else {
-			return nonRel_b;
+
+
+	
+	protected AbstractValue reduce_state(NonRelAbstractState nonRel_b, TypeBoolOperator operator, Variable t1, Terminal t2) {
+		IntervalsAbstValue v1 = (IntervalsAbstValue) evaluate_terminal(nonRel_b, t1);
+		IntervalsAbstValue v2 = (IntervalsAbstValue) evaluate_terminal(nonRel_b, t2);
+		double l,r;
+		switch(operator){
+		case EQ:
+			if ( v1.getRightLimit() < v2.getRightLimit() )
+				return new IntervalsAbstValue(1,-1);
+			if ( v1.getLeftLimit() > v2.getLeftLimit() )
+				return new IntervalsAbstValue(1,-1);
+			return new IntervalsAbstValue(v2.getLeftLimit(),v2.getRightLimit());
+		case GT: // TODO : problem with = 
+			if ( v1.getRightLimit() <= v2.getRightLimit() )
+				return new IntervalsAbstValue(1,-1);
+			return new IntervalsAbstValue(Math.max(v1.getRightLimit(),v2.getRightLimit()),v1.getRightLimit());
+		case GTE:
+			if ( v1.getRightLimit() < v2.getRightLimit() )
+				return new IntervalsAbstValue(1,-1);
+			return new IntervalsAbstValue(Math.max(v1.getRightLimit(),v2.getRightLimit()),v1.getRightLimit());
+		case LT: // TODO : problem with = 
+			if ( v1.getLeftLimit() >= v2.getLeftLimit() )
+				return new IntervalsAbstValue(1,-1);
+			return new IntervalsAbstValue(v1.getLeftLimit(),Math.min(v1.getRightLimit(),v2.getRightLimit()));
+		case LTE:
+			if ( v1.getLeftLimit() > v2.getLeftLimit() )
+				return new IntervalsAbstValue(1,-1);
+			return new IntervalsAbstValue(v1.getLeftLimit(),Math.min(v1.getRightLimit(),v2.getRightLimit()));
+		case NEQ:// TODO : how to create two possible value?
+			// x = [ -3 , 3]
+			// reduce by ( x != 0 )
+			// x  = [-3, 0 ) U (0, 3]
+			break;
+		default:
+			break;
+		
 		}
+
+		return v1;
+	}
+	@Override
+	protected AbstractState reduce_state(NonRelAbstractState nonRel_b, TypeBoolOperator operator, Terminal t1, Terminal t2) {
+		NonRelAbstractState copy_b = (NonRelAbstractState) nonRel_b.copy();
+		boolean change = false;
+		AbstractValue v;
+		if( t1 instanceof Variable){
+			v = reduce_state(copy_b,operator,(Variable)t1,t2);
+			copy_b.setValue((Variable)t1, v);
+			change = true;
+		}
+		if( t2 instanceof Variable){
+			v = reduce_state(copy_b,operator.flip(),(Variable)t2,t1);
+			copy_b.setValue((Variable)t2, v);
+			change = true;
+		}
+		if(change)
+			return copy_b;
+		else
+			return nonRel_b;
 	}
 
 	@Override
 	public AbstractState defaultState(List<Variable> vars) {
 		return new IntervalsAbstState(vars);
 	}
+
+
 
 
 
