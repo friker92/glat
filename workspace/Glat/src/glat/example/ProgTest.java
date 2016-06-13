@@ -32,9 +32,9 @@ public class ProgTest {
 		Glat g = new Glat();
 		GlatProgram p = g.parse(new String[] { basePath + "/examples/example2" });
 
-	//analyse(p, new SignAbstDomain());
-		analyse(p, new ConstPropDomain());
-		//analyse(p, new IntervalsAbstDomain());
+		//analyse(p, new SignAbstDomain());
+		//analyse(p, new ConstPropDomain());
+		analyse(p, new IntervalsAbstDomain());
 
 	}
 
@@ -74,7 +74,7 @@ public class ProgTest {
 			AbstractState currState = table.get(n);
 			
 			List<AbstractState> lst = new ArrayList<AbstractState>();
-			lst.add(currState);
+			
 			
 			AbstractState st = currState;
 			for(Transition t : cfg.getInTransitions(n)){
@@ -85,14 +85,15 @@ public class ProgTest {
 				}
 				lst.add(st);
 			}
+			lst.add(currState);
 			st = d.lub(lst);
 	
 			if ( table.modify(n, st) ) {
 				cfg.getOutTransitions(n).forEach((t)->q.add(t.getTargetNode()));
 			}
-			System.out.println("node: "+n+" -> "+table);
+			System.out.println(n+" ->\t"+table);
 		}
-		System.out.println(table);
+		System.out.println("\t"+table);
 	}
 
 }
