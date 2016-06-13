@@ -1,46 +1,39 @@
 global {
-  var int f;
-  var bool g;
-  var string h;
 }
 
 init {
 }
 
 void main() {
-  start n2;
-  
+  start n0;
   trans n0 -> n1 {
   }
 
-  trans n2-> n0{
-  }
- 
 }
 
 void m(){
    var int x;
+   //var int y;
 
    start n0;
 
    trans n0 -> n1 {
-     x := 0-1;
-   }
-   
-   
-   trans n0 -> n2 {
-     x := 0+1;
+     x := 5;
    }
 
+   trans n1 -> n2 {
+     assume(x<=7);
+   }
+
+   trans n2 -> n1 {
+     x := x+1;
+   }
+   
    trans n1 -> n3 {
-     x:=x*x;
-     g := $op("<=",1,2,1+2,$op("-",1,2,3,4),x);
+     assume(x>7);
    }
-
-   trans n2 -> n3 {
+   trans n3 -> n4 {
+     x := x+8;
    }
    
-   trans n3 -> n3 {
-        x := x-?;
-   }
 }

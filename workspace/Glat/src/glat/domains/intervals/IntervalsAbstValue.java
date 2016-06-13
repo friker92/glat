@@ -54,13 +54,13 @@ public class IntervalsAbstValue implements AbstractValue {
 	@Override
 	public String toString() {
 		String str = "[";
-		if(leftLimit <= -inf)
-			str += "-inf";
+		if(leftLimit <= -inf+1e9)
+			str += "-INF";
 		else
 			str += leftLimit;
 		str += ",";
-		if(leftLimit >= inf)
-			str += "inf";
+		if(rightLimit >= inf-1e9)
+			str += "INF";
 		else
 			str += rightLimit;
 		str += "]";

@@ -74,9 +74,7 @@ public class ProgTest {
 			for (Transition t : cfg.getInTransitions(n)) {
 				st = table.get(t.getSrcNode());
 				// Node dest = t.getTargetNode();
-				for (Instruction i : t.getInstructions()) {
-					st = d.exec(i, st);
-				}
+				st = d.exec(t, st);
 				lst.add(st);
 			}
 			lst.add(currState);

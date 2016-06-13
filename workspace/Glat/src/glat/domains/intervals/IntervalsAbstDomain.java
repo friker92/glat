@@ -199,7 +199,6 @@ public class IntervalsAbstDomain extends NonRelAbstractDomain {
 	protected AbstractValue reduce_state(NonRelAbstractState nonRel_b, TypeBoolOperator operator, Variable t1, Terminal t2) {
 		IntervalsAbstValue v1 = (IntervalsAbstValue) evaluate_terminal(nonRel_b, t1);
 		IntervalsAbstValue v2 = (IntervalsAbstValue) evaluate_terminal(nonRel_b, t2);
-		double l,r;
 		switch(operator){
 		case EQ:
 			if ( v1.getRightLimit() < v2.getRightLimit() )

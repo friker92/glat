@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import glat.program.Instruction;
+import glat.program.Transition;
 import glat.program.instructions.expressions.terminals.Variable;
 
 /**
@@ -96,4 +97,18 @@ public interface AbstractDomain {
 	 * @return
 	 */
 	public AbstractState exec(Instruction instr, AbstractState a);
+	
+	/**
+	 * 
+	 * @param trans
+	 * @param a
+	 * @return
+	 */
+	public default AbstractState exec(Transition t, AbstractState currst){
+		AbstractState st = currst;
+		for (Instruction i : t.getInstructions()) {
+			st = exec(i, st);
+		}
+		return st;
+	}
 }
