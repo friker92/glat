@@ -1,14 +1,14 @@
 package glat.program.instructions.expressions;
 
-public enum TypeOperator {
+public enum TypeArithOperator {
 	// Arith
-	ADD("+"), SUB("-"), DIV("/"), MUL("*"),
+	ADD("+"), SUB("-"), DIV("/"), MUL("*");//,
 	// bool
-	LT("<"), LTE("<="), GT(">"), GTE(">="), EQ("=="), NEQ("!=");
+	//LT("<"), LTE("<="), GT(">"), GTE(">="), EQ("=="), NEQ("!=");
 
 	private String symbol;
 
-	TypeOperator(String sym) {
+	TypeArithOperator(String sym) {
 		this.symbol = sym;
 	}
 
@@ -16,9 +16,9 @@ public enum TypeOperator {
 	    return this.symbol;
 	  }
 	
-	public static TypeOperator fromString(String text) {
+	public static TypeArithOperator fromString(String text) {
 		if (text != null) {
-			for (TypeOperator b : TypeOperator.values()) {
+			for (TypeArithOperator b : TypeArithOperator.values()) {
 				if (text.equalsIgnoreCase(b.symbol)) {
 					return b;
 				}

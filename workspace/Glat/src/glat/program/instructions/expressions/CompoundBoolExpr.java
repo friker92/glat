@@ -2,13 +2,13 @@ package glat.program.instructions.expressions;
 
 import glat.program.instructions.Expression;
 
-public class CompoundExpr implements Expression {
+public class CompoundBoolExpr implements Expression {
 
 	public String toString() {
 		return ""+op1+" " + operator + " " + op2;
 	}
 
-	public TypeOperator getOperator() {
+	public TypeBoolOperator getOperator() {
 		return operator;
 	}
 
@@ -20,7 +20,7 @@ public class CompoundExpr implements Expression {
 	}
 	
 	public void setOperator(String op) {
-		operator = TypeOperator.fromString(op);
+		operator = TypeBoolOperator.fromString(op);
 	}
 
 	public void addOperandLeft(Terminal e) {
@@ -32,6 +32,6 @@ public class CompoundExpr implements Expression {
 	}
 
 	private Terminal op1,op2;
-	private TypeOperator operator;
+	private TypeBoolOperator operator;
 
 }
