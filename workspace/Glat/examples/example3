@@ -8,7 +8,9 @@ void main() {
   start n0;
   trans n0 -> n1 {
   }
-
+  trans n1 -> n2 {
+  	sync m();
+  }
 }
 
 void m(){
@@ -18,7 +20,7 @@ void m(){
    start n0;
 
    trans n0 -> n1 {
-     x := 5;
+     x := 4;
    }
 
    trans n1 -> n2 {
