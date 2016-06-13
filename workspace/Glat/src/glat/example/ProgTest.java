@@ -70,25 +70,25 @@ public class ProgTest {
 
 			Node n = q.poll();
 			AbstractState currState = table.get(n);
-
-			for (Transition t : cfg.getOutTransitions(n)) {
-
-				AbstractState st = currState;
-				Node dest = t.getTargetNode();
-
+			
+			List<AbstractState> lst = new ArrayList<AbstractState>();
+			lst.add(currState);
+			
+			AbstractState st = currState;
+			for(Transition t : cfg.getInTransitions(n)){		
+				//Node dest = t.getTargetNode();
 				for (Instruction i : t.getInstructions()) {
 					st = d.exec(i, st);
 				}
-
-				
-				if ( table.modify(dest, st) ) {
-					q.add(t.getTargetNode());
-				}
+				lst.add(st);
+			}
+			st = d.lub(lst);
+	
+			if ( table.modify(n, st) ) {
+				cfg.getOutTransitions(n).forEach((t)->q.add(t.getTargetNode()));
 			}
 		}
-
 		System.out.println(table);
-
 	}
 
 }

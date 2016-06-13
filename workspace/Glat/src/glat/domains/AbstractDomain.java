@@ -1,5 +1,7 @@
 package glat.domains;
 
+import java.util.ArrayList;
+import java.util.EmptyStackException;
 import java.util.List;
 
 import glat.program.Instruction;
@@ -39,6 +41,22 @@ public interface AbstractDomain {
 	 * @return
 	 */
 	public AbstractState lub(AbstractState a, AbstractState b);
+	
+	/**
+	 * 
+	 * @param a
+	 * @param b
+	 * @return
+	 */
+	public default AbstractState lub(List<AbstractState> as){
+		if(as.isEmpty())
+			return bottom(new ArrayList<Variable>());
+		AbstractState st = as.get(0);
+		for(AbstractState s : as){
+			st = lub(st,s);
+		}
+		return st;
+	}
 
 	/**
 	 * 

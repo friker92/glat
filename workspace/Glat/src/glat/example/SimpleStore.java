@@ -45,15 +45,24 @@ public class SimpleStore implements Store {
 		AbstractState destCurrState = e.st;
 		e.st = domain.lub(e.st, value);
 		e.count++;
-
-		if (!domain.lte(value, destCurrState)) {
+		if (domain.lte(value, destCurrState)) {
+			return false;
+		}else if (e.count > 3) {
+			e.count = 0;
+			e.st = domain.widen(destCurrState, e.st);
+		}else {
+			set(key, value);
+		}
+		return true;
+		
+		/*if (!domain.lte(value, destCurrState)) {
 			if (e.count > 3) {
 				e.count = 0;
 				e.st = domain.widen(destCurrState, e.st);
 			}
 			return true;
 		}
-		return false;
+		return false;*/
 	}
 
 	@Override
