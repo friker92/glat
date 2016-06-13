@@ -53,11 +53,11 @@ public class SimpleStore implements Store {
 		if (e.count!= 0 && domain.lte(value, destCurrState)) {
 			return false;
 		}else if (e.count > 3) {
+			e.count = 0;
 			e.st = domain.widen(destCurrState, e.st);
 		}else {
 			e.st = value;
 		}
-		e.count = 0;
 		return true;
 		
 		/*if (!domain.lte(value, destCurrState)) {
