@@ -22,11 +22,6 @@ public class SimpleStore implements Store {
 			this.count = -1;
 		}
 		
-		public ExtAbsSt(AbstractState st, int count) {
-			this.st = st;
-			this.count = count;
-		}
-		
 		@Override
 		public String toString() {
 			return st.toString();
