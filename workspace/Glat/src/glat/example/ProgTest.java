@@ -24,23 +24,22 @@ import glat.program.instructions.expressions.terminals.Variable;
 
 public class ProgTest {
 
-	private static String basePath = System.getProperty("user.home")+"/Systems/glat/workspace/Glat";
+	private static String basePath = System.getProperty("user.home") + "/Systems/glat/workspace/Glat";
 
 	public static void main(String[] args) throws FileNotFoundException, ParseException {
 		Glat g = new Glat();
 		GlatProgram p = g.parse(new String[] { basePath + "/examples/example2" });
 
-		//analyse(p, new SignAbstDomain());
-		//analyse(p, new ConstPropDomain());
+		// analyse(p, new SignAbstDomain());
+		// analyse(p, new ConstPropDomain());
 		analyse(p, new IntervalsAbstDomain());
 
 	}
 
 	public static void analyse(GlatProgram p, AbstractDomain d) {
 
-		
 		Store table = new SimpleStore(d);
-		
+
 		Method m = p.getMethods().get(1);
 		ControlFlowGraph cfg = m.getControlFlowGraph();
 		List<Variable> vs = new ArrayList<Variable>(m.getVariables());
@@ -58,26 +57,23 @@ public class ProgTest {
 				return 0;
 			}
 		});
-		
+
 		// fixpoint
-		
+
 		q.add(m.getInitNode());
-		
 
 		while (!q.isEmpty()) {
-			
 
 			Node n = q.poll();
-			
+
 			AbstractState currState = table.get(n);
-			
+
 			List<AbstractState> lst = new ArrayList<AbstractState>();
-			
-			
+
 			AbstractState st = currState;
-			for(Transition t : cfg.getInTransitions(n)){
+			for (Transition t : cfg.getInTransitions(n)) {
 				st = table.get(t.getSrcNode());
-				//Node dest = t.getTargetNode();
+				// Node dest = t.getTargetNode();
 				for (Instruction i : t.getInstructions()) {
 					st = d.exec(i, st);
 				}
@@ -85,13 +81,13 @@ public class ProgTest {
 			}
 			lst.add(currState);
 			st = d.lub(lst);
-	
-			if ( table.modify(n, st) ) {
-				cfg.getOutTransitions(n).forEach((t)->q.add(t.getTargetNode()));
+
+			if (table.modify(n, st)) {
+				cfg.getOutTransitions(n).forEach((t) -> q.add(t.getTargetNode()));
 			}
-			System.out.println(n+" ->\t"+table);
+			System.out.println(n + " ->\t" + table);
 		}
-		System.out.println("\t"+table);
+		System.out.println("\t" + table);
 	}
 
 }

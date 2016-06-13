@@ -42,14 +42,14 @@ public class SimpleStore implements Store {
 	public boolean modify(Node key, AbstractState value) {
 		
 		ExtAbsSt e = table.get(key);
-		AbstractState destCurrState = e.st;
 		//e.st = domain.lub(e.st, value);
 		e.count++;
-		if (e.count!= 0 && domain.lte(value, destCurrState)) {
+		if (e.count!= 0 && domain.lte(value, e.st)) {
 			return false;
 		}else if (e.count > 3) {
 			e.count = 0;
-			e.st = domain.widen(destCurrState, e.st);
+			e.st = domain.widen(e.st, value);
+			System.out.println("> "+e.st);			
 		}else {
 			e.st = value;
 		}
