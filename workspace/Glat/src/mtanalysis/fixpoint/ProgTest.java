@@ -19,9 +19,7 @@ import glat.program.instructions.Call;
 import glat.program.instructions.expressions.terminals.Variable;
 import mtanalysis.domains.AbstractDomain;
 import mtanalysis.domains.AbstractState;
-import mtanalysis.domains.constprop.ConstPropDomain;
 import mtanalysis.domains.intervals.IntervalsAbstDomain;
-import mtanalysis.domains.sign.SignAbstDomain;
 import mtanalysis.stores.SimpleStore;
 import mtanalysis.stores.Store;
 

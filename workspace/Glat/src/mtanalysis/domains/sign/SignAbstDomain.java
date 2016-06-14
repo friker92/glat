@@ -2,7 +2,6 @@ package mtanalysis.domains.sign;
 
 import java.util.List;
 
-import glat.program.instructions.Expression;
 import glat.program.instructions.expressions.Terminal;
 import glat.program.instructions.expressions.TypeArithOperator;
 import glat.program.instructions.expressions.TypeBoolOperator;
