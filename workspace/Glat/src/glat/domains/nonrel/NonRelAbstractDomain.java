@@ -161,17 +161,28 @@ public abstract class NonRelAbstractDomain implements AbstractDomain {
 	protected abstract AbstractValue evaluate_arithm_expression(NonRelAbstractState b, TypeArithOperator operator, Terminal t1, Terminal t2);
 
 	@Override
-	public AbstractState rename(AbstractState st, AbstractState bt, List<Variable> current, List<Variable> newValue){
-		if(current.size() != newValue.size()) // TODO: exception params
-			throw new ExceptionInInitializerError();
-		NonRelAbstractState nonRel_st = (NonRelAbstractState) st;
-		NonRelAbstractState nonRel_copy = (NonRelAbstractState) bt.copy();
-		
-		Iterator<Variable> it_curr = current.iterator(), it_new = newValue.iterator();
+	public AbstractState extend(AbstractState s0, AbstractState st){
+		NonRelAbstractState n0 = (NonRelAbstractState) s0.copy();
+		n0.extend((NonRelAbstractState)st);
+		return n0;
+	}
+	@Override
+	public AbstractState project(AbstractState s0, List<Variable> lv){
+		NonRelAbstractState nonRel_s = (NonRelAbstractState) s0;
+		NonRelAbstractState s1 = (NonRelAbstractState) defaultState(lv);
+		lv.forEach((var) -> s1.setValue(var, nonRel_s.getValue(var)));
+		return s1;
+	}
+	@Override
+	public AbstractState rename(AbstractState s0, List<Variable> actual, List<Variable> formal){
+		NonRelAbstractState nonRel_copy = (NonRelAbstractState) s0.copy();
+
+		Iterator<Variable> it_curr = actual.iterator(), it_new = formal.iterator();
 		while (it_curr.hasNext() && it_new.hasNext()) {
-			nonRel_copy.setValue(it_new.next(), nonRel_st.getValue(it_curr.next()));
+			nonRel_copy.rename(it_curr.next(), it_new.next());
 		}
 		return nonRel_copy;
 	}
+	
 
 }

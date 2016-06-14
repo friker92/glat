@@ -74,4 +74,14 @@ public abstract class NonRelAbstractState implements AbstractState {
 	protected abstract NonRelAbstractState createInstance();
 	protected abstract AbstractValue defaultValue(Variable v);
 
+	public void extend(NonRelAbstractState stt) {
+		stt.st.forEach((v, s) -> setValue(v, s));
+	}
+
+	public void rename(Variable s1, Variable s2) {
+		setValue(s2, getValue(s1));
+		vars.add(s2);
+		st.remove(s1);
+		vars.remove(s1);
+	}
 }

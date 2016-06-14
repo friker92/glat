@@ -111,6 +111,7 @@ public interface AbstractDomain {
 		}
 		return st;
 	}
-	
-	public AbstractState rename(AbstractState st, AbstractState bt, List<Variable> current, List<Variable> newValue);
+	public AbstractState extend(AbstractState s0, AbstractState st);
+	public AbstractState project(AbstractState s0, List<Variable> lv);
+	public AbstractState rename(AbstractState s0, List<Variable> actual, List<Variable> formal);
 }

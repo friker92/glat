@@ -86,13 +86,18 @@ public class ProgTest {
 				c = (Call)i;
 				m = c.getMethodRef();
 				System.out.println("launch: "+ m.getLabel());
-				cfg = m.getControlFlowGraph();
-				table = new SimpleStore(d);
+				
 				vs = new ArrayList<Variable>(m.getVariables());
 				vs.addAll(m.getParameters());
 				vs.addAll(p.getGlobalVariables());
 				AbstractState bt = d.bottom(vs);
-				AbstractState def = d.rename(def_st,bt,c.getArgs(), m.getParameters());
+				AbstractState def = d.project(def_st,c.getArgs());
+				def = d.rename(def, c.getArgs(), m.getParameters());
+				def = d.extend(bt, def);
+				
+				cfg = m.getControlFlowGraph();
+				table = new SimpleStore(d);
+				
 				for (Node n : cfg.getNodes()) {
 					if(m.getInitNode().equals(n))
 						table.set(n, def);
