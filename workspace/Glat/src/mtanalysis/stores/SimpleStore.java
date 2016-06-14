@@ -1,11 +1,11 @@
-package glat.example;
+package mtanalysis.stores;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import glat.domains.AbstractDomain;
-import glat.domains.AbstractState;
 import glat.program.Node;
+import mtanalysis.domains.AbstractDomain;
+import mtanalysis.domains.AbstractState;
 
 public class SimpleStore implements Store {
 	

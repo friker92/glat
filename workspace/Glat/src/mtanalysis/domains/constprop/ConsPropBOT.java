@@ -1,6 +1,6 @@
-package glat.domains.constprop;
+package mtanalysis.domains.constprop;
 
-import glat.domains.nonrel.AbstractValue;
+import mtanalysis.domains.nonrel.AbstractValue;
 
 public class ConsPropBOT extends ConsPropAbstValue {
 

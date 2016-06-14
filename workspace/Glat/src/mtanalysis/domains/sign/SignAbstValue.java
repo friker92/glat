@@ -1,6 +1,6 @@
-package glat.domains.sign;
+package mtanalysis.domains.sign;
 
-import glat.domains.nonrel.AbstractValue;
+import mtanalysis.domains.nonrel.AbstractValue;
 
 public enum SignAbstValue implements AbstractValue {
 	TOP("T"), POS("P"), NEG("N"), ZERO("Z");

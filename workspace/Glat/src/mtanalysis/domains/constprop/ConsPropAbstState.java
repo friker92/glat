@@ -1,10 +1,10 @@
-package glat.domains.constprop;
+package mtanalysis.domains.constprop;
 
 import java.util.List;
 
-import glat.domains.nonrel.AbstractValue;
-import glat.domains.nonrel.NonRelAbstractState;
 import glat.program.instructions.expressions.terminals.Variable;
+import mtanalysis.domains.nonrel.AbstractValue;
+import mtanalysis.domains.nonrel.NonRelAbstractState;
 
 public class ConsPropAbstState extends NonRelAbstractState {
 

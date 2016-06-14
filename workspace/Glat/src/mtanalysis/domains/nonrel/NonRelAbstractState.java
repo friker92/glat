@@ -1,12 +1,12 @@
-package glat.domains.nonrel;
+package mtanalysis.domains.nonrel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import glat.domains.AbstractState;
 import glat.program.instructions.expressions.terminals.Variable;
+import mtanalysis.domains.AbstractState;
 
 public abstract class NonRelAbstractState implements AbstractState {
 

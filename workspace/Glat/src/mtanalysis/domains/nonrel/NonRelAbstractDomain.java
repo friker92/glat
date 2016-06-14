@@ -1,11 +1,8 @@
-package glat.domains.nonrel;
+package mtanalysis.domains.nonrel;
 
 import java.util.Iterator;
 import java.util.List;
 
-import glat.domains.AbstractDomain;
-import glat.domains.AbstractState;
-import glat.domains.BottomState;
 import glat.program.Instruction;
 import glat.program.instructions.Assignment;
 import glat.program.instructions.Assume;
@@ -18,6 +15,9 @@ import glat.program.instructions.expressions.TypeBoolOperator;
 import glat.program.instructions.expressions.terminals.Value;
 import glat.program.instructions.expressions.terminals.Variable;
 import glat.program.instructions.expressions.terminals.values.NonDeterministicValue;
+import mtanalysis.domains.AbstractDomain;
+import mtanalysis.domains.AbstractState;
+import mtanalysis.domains.BottomState;
 
 public abstract class NonRelAbstractDomain implements AbstractDomain {
 

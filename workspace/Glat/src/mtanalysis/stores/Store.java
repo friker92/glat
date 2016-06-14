@@ -1,7 +1,7 @@
-package glat.example;
+package mtanalysis.stores;
 
-import glat.domains.AbstractState;
 import glat.program.Node;
+import mtanalysis.domains.AbstractState;
 
 public interface Store {
 

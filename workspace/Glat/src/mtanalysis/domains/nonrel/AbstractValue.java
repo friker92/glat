@@ -1,4 +1,4 @@
-package glat.domains.nonrel;
+package mtanalysis.domains.nonrel;
 
 public interface AbstractValue {
 

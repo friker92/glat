@@ -1,4 +1,4 @@
-package glat.example;
+package mtanalysis.fixpoint;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -7,11 +7,6 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
-import glat.domains.AbstractDomain;
-import glat.domains.AbstractState;
-import glat.domains.constprop.ConstPropDomain;
-import glat.domains.intervals.IntervalsAbstDomain;
-import glat.domains.sign.SignAbstDomain;
 import glat.parser.Glat;
 import glat.parser.ParseException;
 import glat.program.ControlFlowGraph;
@@ -22,6 +17,13 @@ import glat.program.Node;
 import glat.program.Transition;
 import glat.program.instructions.Call;
 import glat.program.instructions.expressions.terminals.Variable;
+import mtanalysis.domains.AbstractDomain;
+import mtanalysis.domains.AbstractState;
+import mtanalysis.domains.constprop.ConstPropDomain;
+import mtanalysis.domains.intervals.IntervalsAbstDomain;
+import mtanalysis.domains.sign.SignAbstDomain;
+import mtanalysis.stores.SimpleStore;
+import mtanalysis.stores.Store;
 
 public class ProgTest {
 

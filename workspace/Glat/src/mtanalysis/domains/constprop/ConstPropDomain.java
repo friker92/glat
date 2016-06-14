@@ -1,11 +1,7 @@
-package glat.domains.constprop;
+package mtanalysis.domains.constprop;
 
 import java.util.List;
 
-import glat.domains.AbstractState;
-import glat.domains.nonrel.AbstractValue;
-import glat.domains.nonrel.NonRelAbstractDomain;
-import glat.domains.nonrel.NonRelAbstractState;
 import glat.program.instructions.Expression;
 import glat.program.instructions.expressions.Terminal;
 import glat.program.instructions.expressions.TypeArithOperator;
@@ -13,6 +9,10 @@ import glat.program.instructions.expressions.TypeBoolOperator;
 import glat.program.instructions.expressions.terminals.Value;
 import glat.program.instructions.expressions.terminals.Variable;
 import glat.program.instructions.expressions.terminals.values.NonDeterministicValue;
+import mtanalysis.domains.AbstractState;
+import mtanalysis.domains.nonrel.AbstractValue;
+import mtanalysis.domains.nonrel.NonRelAbstractDomain;
+import mtanalysis.domains.nonrel.NonRelAbstractState;
 
 public class ConstPropDomain extends NonRelAbstractDomain {
 

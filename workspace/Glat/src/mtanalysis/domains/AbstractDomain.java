@@ -1,4 +1,4 @@
-package glat.domains;
+package mtanalysis.domains;
 
 import java.util.ArrayList;
 import java.util.List;
