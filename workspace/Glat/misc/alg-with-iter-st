@@ -1,0 +1,26 @@
+
+
+analyse( st ) {
+  
+   if st is a node {
+   	  analyze node
+   	  return true/false depending if it has changed
+   }
+   
+   // st is a list
+   f = false;
+   changed = true;
+
+   while ( changed ) {
+     l is the list of elements in st
+     while ( l.hasNext() && changed )  {
+        changed = analyse( l.next() )
+        if ( changed ) f=true;     
+     }
+    }
+    
+    return f;
+   
+   
+}
+  
