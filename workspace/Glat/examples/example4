@@ -1,0 +1,62 @@
+/*
+
+x:=0;
+while x < 10 do
+	y:= 0;
+	while y < x do
+		y := y + 1;
+	end;
+	x := x + 1;
+end;
+
+
+*/
+global {
+}
+
+init {
+}
+
+void main() {
+  start n0;
+  trans n0 -> n1 {
+  }
+  trans n1 -> n2 {
+  	sync m();
+  }
+}
+
+void m(){
+   var int x;
+   var int y;
+
+   start n1;
+
+   trans n1 -> n20 {
+		x := 0;
+   }
+
+   trans n20 -> n3 {
+      assume(x<10);
+   }
+   
+   trans n3 -> n4 {
+      y := 0;
+   }
+   trans n4 -> n5 {
+     assume(y<x);
+   }
+   trans n5 -> n4 {
+   	y := y + 1;
+   }
+   trans n4 -> n6 {
+   	assume(y >= x);
+   }  
+   trans n6 -> n20 {
+   	x:= x + 1;
+   }
+   trans n20 -> n7 {
+   	assume(x >= 10);
+   }
+   
+}

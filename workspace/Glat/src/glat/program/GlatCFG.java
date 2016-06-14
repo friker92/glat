@@ -86,6 +86,10 @@ public class GlatCFG extends GlatClass implements ControlFlowGraph {
 	
 	private Node entry;
 	private DefaultDirectedGraph<GlatNode, GlatTransition> gh;
+	@Override
+	public DefaultDirectedGraph<GlatNode, GlatTransition> getGraph() {
+		return gh;
+	}
 
 
 }

@@ -7,10 +7,19 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
+import org.jgrapht.alg.cycle.*;
+import org.jgrapht.graph.DefaultDirectedGraph;
+import org.jgrapht.graph.DirectedSubgraph;
+import org.jgrapht.graph.EdgeSetFactory;
+import org.jgrapht.EdgeFactory;
+import org.jgrapht.alg.*;
+
 import glat.parser.Glat;
 import glat.parser.ParseException;
 import glat.program.ControlFlowGraph;
+import glat.program.GlatNode;
 import glat.program.GlatProgram;
+import glat.program.GlatTransition;
 import glat.program.Instruction;
 import glat.program.Method;
 import glat.program.Node;
@@ -29,7 +38,7 @@ public class ProgTest {
 
 	public static void main(String[] args) throws FileNotFoundException, ParseException {
 		Glat g = new Glat();
-		GlatProgram p = g.parse(new String[] { basePath + "/examples/example3" });
+		GlatProgram p = g.parse(new String[] { basePath + "/examples/example4" });
 
 		// analyse(p, new SignAbstDomain());
 		// analyse(p, new ConstPropDomain());
@@ -113,8 +122,10 @@ public class ProgTest {
 				});
 
 				// fixpoint
+				
+				Connect.askConnectivity(cfg);
 
-				q.add(m.getInitNode());
+		        q.add(m.getInitNode());
 
 				while (!q.isEmpty()) {
 
@@ -145,12 +156,6 @@ public class ProgTest {
 			default:
 				break;
 			}
-		}
-
-			
-			
+		}			
 	}	
-			
-		
-		
 }

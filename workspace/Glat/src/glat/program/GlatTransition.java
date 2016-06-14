@@ -26,11 +26,11 @@ public class GlatTransition extends GlatClass implements Transition {
 	
 	@Override
 	public String toString(){
-		String s = ""+source+" -> "+dest+" : { \n";
+		String s = ""+source+" -> "+dest;/*+" : { \n";
 		for (GlatInstruction i : Tcode){
 			s+="\t\t\t\t"+i.toString()+"\n";
 		}
-		s+= "\t\t\t}";
+		s+= "\t\t\t}";*/
 		return s;
 	}
 	
