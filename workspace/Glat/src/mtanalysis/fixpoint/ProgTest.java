@@ -167,9 +167,9 @@ public class ProgTest {
 				table.set(n, bt);
 		}
 
-		// analyze_strategy(m.getControlFlowGraph(),getStrategy(m.getControlFlowGraph()));
-		// System.out.println("\t" + table);
-		fixpoint_old(m.getControlFlowGraph());
+		analyze_strategy(m.getControlFlowGraph(),getStrategy(m.getControlFlowGraph()));
+		System.out.println("\t" + table);
+		//fixpoint_old(m.getControlFlowGraph());
 
 	}
 

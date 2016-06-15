@@ -17,60 +17,61 @@ public class SimpleStrategy implements IterationStrategy {
 	protected List<IterationStrategy> lst;
 	protected Node n;
 	protected boolean leaf;
-	public SimpleStrategy(ControlFlowGraph cfg){
+
+	public SimpleStrategy(ControlFlowGraph cfg) {
 		prop = new Properties();
 		lst = new ArrayList<IterationStrategy>();
 		buildList2(cfg);
 	}
-	
-	public SimpleStrategy(Node e){
+
+	public SimpleStrategy(Node e) {
 		n = e;
 		prop = new Properties();
 		lst = new ArrayList<IterationStrategy>();
 		leaf = true;
 	}
-	
+
 	public SimpleStrategy(Set<Node> vertexSet) {
 		n = null;
 		prop = new Properties();
 		lst = new ArrayList<IterationStrategy>();
-		vertexSet.forEach((v)->lst.add(new SimpleStrategy(v)));
+		vertexSet.forEach((v) -> lst.add(new SimpleStrategy(v)));
 		leaf = false;
 	}
 
 	private void buildList(ControlFlowGraph cfg) {
-		if(cfg.getNodes().size()==1){
+		if (cfg.getNodes().size() == 1) {
 			n = cfg.getNodes().get(0);
 			leaf = true;
-		}else{
+		} else {
 			n = null;
-			for(Node e : cfg.getNodes()){
+			for (Node e : cfg.getNodes()) {
 				lst.add(new SimpleStrategy(e));
 			}
 			leaf = false;
 		}
 	}
-	
+
 	private void buildList2(ControlFlowGraph cfg) {
-		if(cfg.getNodes().size()==1){
+		if (cfg.getNodes().size() == 1) {
 			n = cfg.getNodes().get(0);
 			leaf = true;
-		}else{
+		} else {
 			n = null;
 			leaf = false;
-			KosarajuStrongConnectivityInspector sci =
-			           new KosarajuStrongConnectivityInspector( cfg.getGraph());
-			       List<DirectedSubgraph> stronglyConnectedSubgraphs = sci.stronglyConnectedSubgraphs();
-			for( DirectedSubgraph dsg : stronglyConnectedSubgraphs){
+			KosarajuStrongConnectivityInspector sci = new KosarajuStrongConnectivityInspector(cfg.getGraph());
+			List<DirectedSubgraph> stronglyConnectedSubgraphs = sci.stronglyConnectedSubgraphs();
+			for (DirectedSubgraph dsg : stronglyConnectedSubgraphs) {
 				lst.add(new SimpleStrategy(dsg.vertexSet()));
 			}
 		}
 	}
-	
+
 	@Override
 	public Properties getProp() {
 		return prop;
 	}
+
 	@Override
 	public List<IterationStrategy> getStrategy() {
 		return lst;
@@ -85,9 +86,10 @@ public class SimpleStrategy implements IterationStrategy {
 	public Node getNode() {
 		return n;
 	}
+
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return lst.toString() + " node: "+ n;
+		return lst.toString() + " node: " + n;
 	}
 }

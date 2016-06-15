@@ -8,10 +8,10 @@ import glat.program.ControlFlowGraph;
 import glat.program.Node;
 
 public interface IterationStrategy {
-	//public abstract IterationStrategy(ControlFlowGraph cfg);
-	
+	// public abstract IterationStrategy(ControlFlowGraph cfg);
+
 	public Properties getProp();
-	
+
 	public List<IterationStrategy> getStrategy();
 
 	public boolean isLeaf();
