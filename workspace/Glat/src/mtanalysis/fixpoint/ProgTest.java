@@ -176,7 +176,9 @@ public class ProgTest {
 		vs.addAll(m.getParameters());
 		vs.addAll(p.getGlobalVariables());
 		AbstractState bt = domain.bottom(vs);
-		AbstractState def = domain.project(def_st,c.getArgs());
+		vs = new ArrayList<Variable>(c.getArgs());
+		vs.addAll(p.getGlobalVariables());
+		AbstractState def = domain.project(def_st,vs);
 		def = domain.rename(def, c.getArgs(), m.getParameters());
 		def = domain.extend(bt, def);
 		
