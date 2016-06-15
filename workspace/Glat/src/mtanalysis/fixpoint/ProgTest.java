@@ -30,6 +30,7 @@ import mtanalysis.stores.SimpleStore;
 import mtanalysis.stores.Store;
 import mtanalysis.strategies.IterationStrategy;
 import mtanalysis.strategies.SimpleStrategy;
+import mtanalysis.strategies.StrategyNode;
 
 public class ProgTest {
 
@@ -155,8 +156,8 @@ public class ProgTest {
 		vs.addAll(p.getGlobalVariables());
 		AbstractState bt = domain.bottom(vs);
 		vs = new ArrayList<Variable>(c.getArgs());
-		vs.addAll(p.getGlobalVariables());
-		AbstractState def = domain.project(def_st, vs);
+	//	vs.addAll(p.getGlobalVariables());
+		AbstractState def = domain.project(def_st, c.getArgs());
 		def = domain.rename(def, c.getArgs(), m.getParameters());
 		def = domain.extend(bt, def);
 
@@ -166,17 +167,24 @@ public class ProgTest {
 			else
 				table.set(n, bt);
 		}
-
-		analyze_strategy(m.getControlFlowGraph(),getStrategy(m.getControlFlowGraph()));
 		System.out.println("\t" + table);
+		analyze(getStrategy(m.getControlFlowGraph()));
 		//fixpoint_old(m.getControlFlowGraph());
-
+		System.out.println("\t" + table);
 	}
 
-	public boolean analyze_strategy(ControlFlowGraph cfg, IterationStrategy st) {
+	private boolean analyze(IterationStrategy strategy) {
+		//while(
+				analyze(strategy.getProp(), strategy.getStrategy()
+						//)
+				);
+		return false;
+	}
+
+	private boolean analyze(Properties strategyProp, StrategyNode st) {
 		if (st.isLeaf()) {
-			System.out.println(st.getNode() + " ->\t" + table);
-			return analyze(cfg, st.getNode());
+			System.out.println(st.getNode() + ":\t" + table);
+			return analyze_node(strategyProp, st);
 		}
 
 		// st is a list
@@ -184,35 +192,43 @@ public class ProgTest {
 		boolean changed = true;
 
 		while (changed && st.getStrategy().size() > 0) {
-			Iterator<IterationStrategy> l = st.getStrategy().iterator();
-			while (l.hasNext() && changed) {
-				changed = analyze_strategy(cfg, l.next());
+			
+			Iterator<StrategyNode> l = st.getStrategy().iterator();
+			while ( l.hasNext() ){//&& changed) {
+				StrategyNode tt = l.next();
+				//System.out.println(tt);
+				changed = analyze(strategyProp, tt);
 				if (changed)
 					f = true;
 			}
 		}
 
 		return f;
-
 	}
 
-	private boolean analyze(ControlFlowGraph cfg, Node n) {
+	private boolean analyze_node(Properties strategyProp, StrategyNode stn) {
+		Node n = stn.getNode();
 		AbstractState currState = table.get(n);
 
 		List<AbstractState> lst = new ArrayList<AbstractState>();
 
 		AbstractState st = currState;
-		for (Transition t : cfg.getInTransitions(n)) {
+		//System.out.println(n+" "+st);
+		for (Transition t : stn.getInTransitionOrdered()) {
 			st = domain.exec(t, table.get(t.getSrcNode()));
+			//System.out.println(t+" "+st);
 			lst.add(st);
 		}
 		lst.add(currState);
 
 		st = domain.lub(lst);
-
+		//System.out.println(n+" "+st);
 		return table.modify(n, st);
 	}
 
+	// *********************************************************************************
+	// TODO : delete
+	//
 	private void fixpoint_old(ControlFlowGraph cfg) {
 		Queue<Node> q = new PriorityQueue<Node>(new Comparator<Node>() {
 			@Override
@@ -231,7 +247,23 @@ public class ProgTest {
 
 			System.out.println(n + " ->\t" + table);
 		}
-		System.out.println("\t" + table);
+	}
+
+	private boolean analyze(ControlFlowGraph cfg, Node n) {
+		AbstractState currState = table.get(n);
+
+		List<AbstractState> lst = new ArrayList<AbstractState>();
+
+		AbstractState st = currState;
+		for (Transition t : cfg.getInTransitions(n)) {
+			st = domain.exec(t, table.get(t.getSrcNode()));
+			lst.add(st);
+		}
+		lst.add(currState);
+
+		st = domain.lub(lst);
+
+		return table.modify(n, st);
 	}
 
 }

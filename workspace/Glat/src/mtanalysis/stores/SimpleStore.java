@@ -48,7 +48,6 @@ public class SimpleStore implements Store {
 		} else if (e.count > 3) {
 			e.count = 0;
 			e.st = domain.widen(e.st, value);
-			System.out.println("> " + e.st);
 		} else {
 			e.st = value;
 		}

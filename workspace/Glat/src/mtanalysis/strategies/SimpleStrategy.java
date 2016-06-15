@@ -1,11 +1,9 @@
 package mtanalysis.strategies;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
-import org.jgrapht.DirectedGraph;
 import org.jgrapht.alg.KosarajuStrongConnectivityInspector;
 import org.jgrapht.graph.DirectedSubgraph;
 
@@ -14,55 +12,56 @@ import glat.program.Node;
 
 public class SimpleStrategy implements IterationStrategy {
 	protected Properties prop;
-	protected List<IterationStrategy> lst;
-	protected Node n;
-	protected boolean leaf;
+	protected StrategyNode lst;
 
 	public SimpleStrategy(ControlFlowGraph cfg) {
 		prop = new Properties();
-		lst = new ArrayList<IterationStrategy>();
 		buildList2(cfg);
-	}
-
-	public SimpleStrategy(Node e) {
-		n = e;
-		prop = new Properties();
-		lst = new ArrayList<IterationStrategy>();
-		leaf = true;
-	}
-
-	public SimpleStrategy(Set<Node> vertexSet) {
-		n = null;
-		prop = new Properties();
-		lst = new ArrayList<IterationStrategy>();
-		vertexSet.forEach((v) -> lst.add(new SimpleStrategy(v)));
-		leaf = false;
 	}
 
 	private void buildList(ControlFlowGraph cfg) {
 		if (cfg.getNodes().size() == 1) {
-			n = cfg.getNodes().get(0);
-			leaf = true;
+			lst = new StrategyNode(cfg.getNodes().get(0));
+			lst.setAllTransitions(cfg.getInTransitions(cfg.getNodes().get(0)));
 		} else {
-			n = null;
+			StrategyNode tmp;
+			lst = new StrategyNode();
 			for (Node e : cfg.getNodes()) {
-				lst.add(new SimpleStrategy(e));
+				tmp = new StrategyNode(e);
+				tmp.setAllTransitions(cfg.getInTransitions(e));
+				lst.addStrategyNode(tmp);
 			}
-			leaf = false;
 		}
 	}
 
 	private void buildList2(ControlFlowGraph cfg) {
 		if (cfg.getNodes().size() == 1) {
-			n = cfg.getNodes().get(0);
-			leaf = true;
+			lst = new StrategyNode(cfg.getNodes().get(0));
+			lst.setAllTransitions(cfg.getInTransitions(cfg.getNodes().get(0)));
 		} else {
-			n = null;
-			leaf = false;
+			StrategyNode tmp,tmp2;
+			lst = new StrategyNode();
 			KosarajuStrongConnectivityInspector sci = new KosarajuStrongConnectivityInspector(cfg.getGraph());
 			List<DirectedSubgraph> stronglyConnectedSubgraphs = sci.stronglyConnectedSubgraphs();
 			for (DirectedSubgraph dsg : stronglyConnectedSubgraphs) {
-				lst.add(new SimpleStrategy(dsg.vertexSet()));
+				Set<Node> s = dsg.vertexSet();
+				if(s.size()>0){
+					tmp = new StrategyNode();
+					
+					for(Node ee : s){
+						tmp2 = new StrategyNode(ee);
+						tmp2.setAllTransitions(cfg.getInTransitions(ee));
+						tmp.addStrategyNode(tmp2);
+					}
+					lst.addStrategyNode(tmp);
+				}
+				
+			}
+
+			for (Node e : cfg.getNodes()) {
+				tmp = new StrategyNode(e);
+				tmp.setAllTransitions(cfg.getInTransitions(e));
+				lst.addStrategyNode(tmp);
 			}
 		}
 	}
@@ -73,23 +72,12 @@ public class SimpleStrategy implements IterationStrategy {
 	}
 
 	@Override
-	public List<IterationStrategy> getStrategy() {
+	public StrategyNode getStrategy() {
 		return lst;
 	}
 
 	@Override
-	public boolean isLeaf() {
-		return leaf;
-	}
-
-	@Override
-	public Node getNode() {
-		return n;
-	}
-
-	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
-		return lst.toString() + " node: " + n;
+		return lst.toString();
 	}
 }
