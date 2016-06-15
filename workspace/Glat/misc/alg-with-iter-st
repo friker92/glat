@@ -1,6 +1,6 @@
 
 
-analyse( st ) {
+analyse( st ,rec  ) {
   
    if st is a node {
    	  analyze node
@@ -9,15 +9,14 @@ analyse( st ) {
    
    // st is a list
    f = false;
-   changed = true;
 
-   while ( changed ) {
+   do  {
      l is the list of elements in st
      while ( l.hasNext() && changed )  {
-        changed = analyse( l.next() )
+        changed = analyse( l.next() ,true )
         if ( changed ) f=true;     
      }
-    }
+    } while ( changed /\ st.rec()
     
     return f;
    
