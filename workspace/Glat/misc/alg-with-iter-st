@@ -23,3 +23,28 @@ analyse( st ,rec  ) {
    
 }
   
+  
+  
+  
+analyse( st ) {
+  
+  do {
+    notStable = false;
+     l = st.getSt();
+     while ( l.hasNext() and ( moreWP || notStable ) )  {
+		n = l.next();
+		if ( n.isLeaf() ) {
+			changed = analyze_node(n) 
+			if ( n.isWiden() ) {
+	 		    noStable = noStable || changed;
+	 		}
+		} else {
+		   analyse(n);
+		}
+     }
+    } while ( !stable )
+  
+}
+  
+  
+  
