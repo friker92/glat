@@ -78,7 +78,6 @@ public class SeqFixpoint implements Fixpoint {
 
 		st = domain.lub(lst);
 		if (table.modify(n, st)) {
-			System.out.println(n + ":\t" + table);
 			return true;
 		} else {
 			return false;
@@ -90,7 +89,6 @@ public class SeqFixpoint implements Fixpoint {
 		Method m;
 
 		m = call.getMethodRef();
-		System.out.println("launch: " + m.getLabel());
 
 		List<Variable> vs = new ArrayList<Variable>(m.getVariables());
 		vs.addAll(m.getParameters());
@@ -108,10 +106,7 @@ public class SeqFixpoint implements Fixpoint {
 			else
 				table.set(n, bt);
 		}
-		System.out.println("\t" + table);
 		analyze(itStrategy);
-		System.out.println("\t" + table);
-
 	}
 
 	@Override

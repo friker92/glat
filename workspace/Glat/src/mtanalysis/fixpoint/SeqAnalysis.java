@@ -26,7 +26,6 @@ public class SeqAnalysis implements Analysis {
 
 	private Properties properties;
 	private AbstractDomain domain;
-	private Store table;
 	Map<Object, Object> result;
 
 	public enum NameProp {
@@ -39,7 +38,7 @@ public class SeqAnalysis implements Analysis {
 		for (Object k : prop.keySet()) {
 			properties.put(k, prop.get(k));
 		}
-		initialize();
+		domain = getDomain();
 		result = new HashMap<Object, Object>();
 	}
 
@@ -51,15 +50,18 @@ public class SeqAnalysis implements Analysis {
 		return prop;
 	}
 
-	private void initialize() throws Exception {
-		domain = (AbstractDomain) ((Class) properties.get(NameProp.DOMAIN)).newInstance();
+	private AbstractDomain getDomain() throws Exception {
+		return (AbstractDomain) ((Class) properties.get(NameProp.DOMAIN)).newInstance();
+	}
+	
+	private Store getStore() throws Exception{
 		Class[] cArg = new Class[1];
 		cArg[0] = AbstractDomain.class;
-		table = (Store) ((Class) properties.get(NameProp.STORE)).getDeclaredConstructor(cArg).newInstance(domain);
+		return (Store) ((Class) properties.get(NameProp.STORE)).getDeclaredConstructor(cArg).newInstance(domain);
 	}
 
 	@Override
-	public void start(GlatProgram p) {
+	public void start(GlatProgram p) throws Exception{
 		/*
 		 * assume: void main(){ start m; trans m -> n { //init variables }
 		 * 
@@ -89,7 +91,7 @@ public class SeqAnalysis implements Analysis {
 			case SYNCCALL:
 				m = ((Call) i).getMethodRef();
 				System.out.println("launch: " + m.getLabel());
-				fx = new SeqFixpoint(p, (Call) i, table, def_st, domain, getStrategy(m.getControlFlowGraph()));
+				fx = new SeqFixpoint(p, (Call) i, getStore(), def_st, domain, getStrategy(m.getControlFlowGraph()));
 				fx.start();
 				result.put(i, fx.getResult());
 				break;
@@ -118,7 +120,7 @@ public class SeqAnalysis implements Analysis {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println(strategy);
+		System.out.println("strategy: " + strategy);
 		return strategy;
 	}
 

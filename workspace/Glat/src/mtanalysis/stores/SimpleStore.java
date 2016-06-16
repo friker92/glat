@@ -41,7 +41,6 @@ public class SimpleStore implements Store {
 	public boolean modify(Node key, AbstractState value) {
 
 		ExtAbsSt e = table.get(key);
-		// e.st = domain.lub(e.st, value);
 		e.count++;
 		if (e.count != 0 && domain.lte(value, e.st)) {
 			return false;
@@ -53,11 +52,6 @@ public class SimpleStore implements Store {
 		}
 		return true;
 
-		/*
-		 * if (!domain.lte(value, destCurrState)) { if (e.count > 3) { e.count =
-		 * 0; e.st = domain.widen(destCurrState, e.st); } return true; } return
-		 * false;
-		 */
 	}
 
 	@Override
@@ -67,6 +61,11 @@ public class SimpleStore implements Store {
 
 	@Override
 	public String toString() {
-		return table.toString();
+		String str = "{";
+		for (Node n : table.keySet()) {
+			str += "\n\t" + n + ": " + table.get(n);
+		}
+		str += "\n}\n";
+		return str;
 	}
 }
