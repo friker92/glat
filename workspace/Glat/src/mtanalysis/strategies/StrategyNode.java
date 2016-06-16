@@ -17,7 +17,9 @@ public class StrategyNode {
 
 	public StrategyNode() {
 		leaf = false;
+		widen = false;
 		_l = new Vector<StrategyNode>();
+		_wp = new ArrayList<StrategyNode>();
 		n = null;
 		_t = new ArrayList<Transition>();
 	}
@@ -27,6 +29,8 @@ public class StrategyNode {
 	}
 
 	public void addStrategyNode(StrategyNode stn) {
+		if (stn.isWiden())
+			_wp.add(stn);
 		_l.add(stn);
 	}
 
@@ -34,14 +38,18 @@ public class StrategyNode {
 	// LEAF
 
 	protected boolean leaf;
+	protected boolean widen;
 	protected List<Transition> _t;
 	protected Node n;
+	private List<StrategyNode> _wp;
 
-	public StrategyNode(Node e) {
+	public StrategyNode(Node e, boolean w) {
 		_l = new Vector<StrategyNode>();
 		n = e;
 		leaf = true;
+		widen = w;
 		_t = new ArrayList<Transition>();
+		_wp = new ArrayList<StrategyNode>();
 	}
 
 	public boolean isLeaf() {
@@ -67,7 +75,15 @@ public class StrategyNode {
 	@Override
 	public String toString() {
 		if (isLeaf())
-			return n + " " + _t.toString();
-		return _l.toString();
+			return "" + n + (isWiden() ? " w" : "");// + " " + _t;
+		return _l + "";
+	}
+
+	public boolean isWiden() {
+		return widen;
+	}
+
+	public List<StrategyNode> getWidenPoints() {
+		return _wp;
 	}
 }

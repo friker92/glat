@@ -16,50 +16,35 @@ public class SimpleStrategy implements IterationStrategy {
 
 	public SimpleStrategy(ControlFlowGraph cfg) {
 		prop = new Properties();
-		buildList2(cfg);
+		buildList(cfg);
 	}
 
 	private void buildList(ControlFlowGraph cfg) {
 		if (cfg.getNodes().size() == 1) {
-			lst = new StrategyNode(cfg.getNodes().get(0));
+			lst = new StrategyNode(cfg.getNodes().get(0), true);
 			lst.setAllTransitions(cfg.getInTransitions(cfg.getNodes().get(0)));
 		} else {
-			StrategyNode tmp;
-			lst = new StrategyNode();
-			for (Node e : cfg.getNodes()) {
-				tmp = new StrategyNode(e);
-				tmp.setAllTransitions(cfg.getInTransitions(e));
-				lst.addStrategyNode(tmp);
-			}
-		}
-	}
-
-	private void buildList2(ControlFlowGraph cfg) {
-		if (cfg.getNodes().size() == 1) {
-			lst = new StrategyNode(cfg.getNodes().get(0));
-			lst.setAllTransitions(cfg.getInTransitions(cfg.getNodes().get(0)));
-		} else {
-			StrategyNode tmp,tmp2;
+			StrategyNode tmp, tmp2;
 			lst = new StrategyNode();
 			KosarajuStrongConnectivityInspector sci = new KosarajuStrongConnectivityInspector(cfg.getGraph());
 			List<DirectedSubgraph> stronglyConnectedSubgraphs = sci.stronglyConnectedSubgraphs();
 			for (DirectedSubgraph dsg : stronglyConnectedSubgraphs) {
 				Set<Node> s = dsg.vertexSet();
-				if(s.size()>0){
+				if (s.size() > 0) {
 					tmp = new StrategyNode();
-					
-					for(Node ee : s){
-						tmp2 = new StrategyNode(ee);
+
+					for (Node ee : s) {
+						tmp2 = new StrategyNode(ee, true);
 						tmp2.setAllTransitions(cfg.getInTransitions(ee));
 						tmp.addStrategyNode(tmp2);
 					}
 					lst.addStrategyNode(tmp);
 				}
-				
+
 			}
 
 			for (Node e : cfg.getNodes()) {
-				tmp = new StrategyNode(e);
+				tmp = new StrategyNode(e, true);
 				tmp.setAllTransitions(cfg.getInTransitions(e));
 				lst.addStrategyNode(tmp);
 			}
