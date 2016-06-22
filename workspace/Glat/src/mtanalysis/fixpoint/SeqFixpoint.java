@@ -15,6 +15,7 @@ import mtanalysis.domains.AbstractDomain;
 import mtanalysis.domains.AbstractState;
 import mtanalysis.stores.Store;
 import mtanalysis.strategies.IterationStrategy;
+import mtanalysis.strategies.StrategyNodeImp;
 import mtanalysis.strategies.StrategyNode;
 
 public class SeqFixpoint implements Fixpoint {
@@ -36,23 +37,23 @@ public class SeqFixpoint implements Fixpoint {
 	}
 
 	private boolean analyze(IterationStrategy strategy) {
-		return analyze(strategy.getProp(), strategy.getStrategy());
+		return analyze(strategy.getProperties(), strategy.getStrategy());
 	}
 
 	private boolean analyze(Properties strategyProp, StrategyNode st) {
 		boolean notStable;
 		boolean changed;
-		int WPcount = 0;
+		int widenPointsCount = 0;
 		do {
 			notStable = false;
-			Iterator<StrategyNode> l = st.getStrategy().iterator();
-			WPcount = st.getWidenPoints().size();
-			while (l.hasNext() && (WPcount > 0 || notStable)) {
+			Iterator<StrategyNode> l = st.getComponents().iterator();
+			widenPointsCount = st.getWidenPoints().size();
+			while (l.hasNext() && (widenPointsCount > 0 || notStable)) {
 				StrategyNode n = l.next();
 				if (n.isLeaf()) {
 					changed = analyze_node(strategyProp, n);
-					if (n.isWiden()) {
-						WPcount--;
+					if (n.isWidenNode()) {
+						widenPointsCount--;
 						notStable = notStable || changed;
 					}
 				} else {
@@ -64,13 +65,13 @@ public class SeqFixpoint implements Fixpoint {
 	}
 
 	private boolean analyze_node(Properties strategyProp, StrategyNode stn) {
-		Node n = stn.getNode();
+		Node n = stn.getCFGNode();
 		AbstractState currState = table.get(n);
 
 		List<AbstractState> lst = new ArrayList<AbstractState>();
 
 		AbstractState st = currState;
-		for (Transition t : stn.getInTransitionOrdered()) {
+		for (Transition t : stn.getInTransitions()) {
 			st = domain.exec(t, table.get(t.getSrcNode()));
 			lst.add(st);
 		}

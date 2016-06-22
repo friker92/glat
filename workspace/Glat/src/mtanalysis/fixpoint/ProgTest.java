@@ -1,11 +1,9 @@
 package mtanalysis.fixpoint;
 
-import java.lang.reflect.Array;
 import java.util.Map;
 import java.util.Properties;
 import glat.parser.Glat;
 import glat.program.GlatProgram;
-import glat.program.instructions.Call;
 import mtanalysis.domains.intervals.IntervalsAbstDomain;
 import mtanalysis.stores.SimpleStore;
 import mtanalysis.stores.Store;
