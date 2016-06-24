@@ -3,7 +3,6 @@ package mtanalysis.domains.product;
 import java.util.ArrayList;
 import java.util.List;
 import glat.program.instructions.expressions.terminals.Variable;
-import mtanalysis.domains.AbstractDomain;
 import mtanalysis.domains.AbstractState;
 
 public class ProductAbstractState implements AbstractState {
