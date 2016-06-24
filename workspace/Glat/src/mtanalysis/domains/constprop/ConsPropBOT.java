@@ -1,15 +1,14 @@
 package mtanalysis.domains.constprop;
 
 import mtanalysis.domains.nonrel.AbstractValue;
-import mtanalysis.domains.nonrel.BottomAbstractValue;
 
 public class ConsPropBOT extends ConsPropAbstValue {
 
 	public static ConsPropBOT instance = null;
-	
+
 	private ConsPropBOT() {
 	}
-	
+
 	@Override
 	public String getDesc() {
 		return "Constrant Prop Abstract Value (Bottom)";
@@ -24,7 +23,7 @@ public class ConsPropBOT extends ConsPropAbstValue {
 	public boolean lte(AbstractValue a) {
 		return true;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "BOT";

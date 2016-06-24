@@ -41,19 +41,19 @@ public interface AbstractDomain {
 	 * @return
 	 */
 	public AbstractState lub(AbstractState a, AbstractState b);
-	
+
 	/**
 	 * 
 	 * @param a
 	 * @param b
 	 * @return
 	 */
-	public default AbstractState lub(List<AbstractState> as){
-		if(as.isEmpty())
+	public default AbstractState lub(List<AbstractState> as) {
+		if (as.isEmpty())
 			return bottom(new ArrayList<Variable>());
 		AbstractState st = as.get(0);
-		for(AbstractState s : as){
-			st = lub(st,s);
+		for (AbstractState s : as) {
+			st = lub(st, s);
 		}
 		return st;
 	}
@@ -97,21 +97,24 @@ public interface AbstractDomain {
 	 * @return
 	 */
 	public AbstractState exec(Instruction instr, AbstractState a);
-	
+
 	/**
 	 * 
 	 * @param trans
 	 * @param a
 	 * @return
 	 */
-	public default AbstractState exec(Transition t, AbstractState currst){
+	public default AbstractState exec(Transition t, AbstractState currst) {
 		AbstractState st = currst;
 		for (Instruction i : t.getInstructions()) {
 			st = exec(i, st);
 		}
 		return st;
 	}
+
 	public AbstractState extend(AbstractState s0, AbstractState st);
+
 	public AbstractState project(AbstractState s0, List<Variable> lv);
+
 	public AbstractState rename(AbstractState s0, List<Variable> actual, List<Variable> formal);
 }

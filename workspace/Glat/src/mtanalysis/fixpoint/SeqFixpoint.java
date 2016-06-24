@@ -3,7 +3,6 @@ package mtanalysis.fixpoint;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 import glat.program.GlatProgram;
 import glat.program.Method;
@@ -15,7 +14,6 @@ import mtanalysis.domains.AbstractDomain;
 import mtanalysis.domains.AbstractState;
 import mtanalysis.stores.Store;
 import mtanalysis.strategies.IterationStrategy;
-import mtanalysis.strategies.StrategyNodeImp;
 import mtanalysis.strategies.StrategyNode;
 
 public class SeqFixpoint implements Fixpoint {

@@ -15,7 +15,6 @@ import mtanalysis.domains.nonrel.NonRelAbstractState;
 
 public class IntervalsAbstDomain extends NonRelAbstractDomain {
 
-
 	@Override
 	public AbstractState bottom(List<Variable> vars) {
 		IntervalsAbstState a = new IntervalsAbstState(vars);
@@ -48,141 +47,172 @@ public class IntervalsAbstDomain extends NonRelAbstractDomain {
 		float f = v.getFloatNumber();
 		return new IntervalsAbstValue(f, f);
 	}
+
 	@Override
-	protected AbstractValue evaluate_arithm_expression(NonRelAbstractState b, TypeArithOperator operator, Terminal t1, Terminal t2) {
+	protected AbstractValue evaluate_arithm_expression(NonRelAbstractState b, TypeArithOperator operator, Terminal t1,
+			Terminal t2) {
 		IntervalsAbstValue op1IntV = (IntervalsAbstValue) evaluate_terminal(b, t1);
 		IntervalsAbstValue op2IntV = (IntervalsAbstValue) evaluate_terminal(b, t2);
 		if (op1IntV.isBottom() || op2IntV.isBottom())
 			return new IntervalsAbstValue(1, -1); // TODO: bottom value or error
-			
+
 		double l, r;
-		
+
 		switch (operator) {
 		case ADD:
 
-			if (op1IntV.getLeftLimit() == -IntervalsAbstValue.inf || op2IntV.getLeftLimit() == -IntervalsAbstValue.inf) {
+			if (op1IntV.getLeftLimit() == -IntervalsAbstValue.inf
+					|| op2IntV.getLeftLimit() == -IntervalsAbstValue.inf) {
 				l = -IntervalsAbstValue.inf;
 			} else {
 				l = op1IntV.getLeftLimit() + op2IntV.getLeftLimit();
 			}
-			if(op1IntV.getLeftLimit() > 0 &&  op2IntV.getLeftLimit() > 0 && (l < 0 || l > IntervalsAbstValue.inf) ){ // overflow
+			if (op1IntV.getLeftLimit() > 0 && op2IntV.getLeftLimit() > 0 && (l < 0 || l > IntervalsAbstValue.inf)) { // overflow
 				l = IntervalsAbstValue.inf;
-			} else if(op1IntV.getLeftLimit() < 0 &&  op2IntV.getLeftLimit() < 0 && (l > 0 || l < -IntervalsAbstValue.inf)){ // "under"flow
+			} else if (op1IntV.getLeftLimit() < 0 && op2IntV.getLeftLimit() < 0
+					&& (l > 0 || l < -IntervalsAbstValue.inf)) { // "under"flow
 				l = -IntervalsAbstValue.inf;
 			}
-			
-			if (op1IntV.getRightLimit() == IntervalsAbstValue.inf || op2IntV.getRightLimit() == IntervalsAbstValue.inf) {
+
+			if (op1IntV.getRightLimit() == IntervalsAbstValue.inf
+					|| op2IntV.getRightLimit() == IntervalsAbstValue.inf) {
 				r = IntervalsAbstValue.inf;
 			} else {
 				r = op1IntV.getRightLimit() + op2IntV.getRightLimit();
 			}
-			
-			if(op1IntV.getRightLimit() > 0 &&  op2IntV.getRightLimit() > 0 && (r < 0 || r > IntervalsAbstValue.inf)){ // overflow
+
+			if (op1IntV.getRightLimit() > 0 && op2IntV.getRightLimit() > 0 && (r < 0 || r > IntervalsAbstValue.inf)) { // overflow
 				r = IntervalsAbstValue.inf;
-			} else if(op1IntV.getRightLimit() < 0 &&  op2IntV.getRightLimit() < 0 && (r > 0 || r < -IntervalsAbstValue.inf)){ // "under"flow
+			} else if (op1IntV.getRightLimit() < 0 && op2IntV.getRightLimit() < 0
+					&& (r > 0 || r < -IntervalsAbstValue.inf)) { // "under"flow
 				r = -IntervalsAbstValue.inf;
 			}
 			return new IntervalsAbstValue(l, r);
 		case SUB:
 
-			if (op1IntV.getLeftLimit() == -IntervalsAbstValue.inf || op2IntV.getRightLimit() == IntervalsAbstValue.inf) {
+			if (op1IntV.getLeftLimit() == -IntervalsAbstValue.inf
+					|| op2IntV.getRightLimit() == IntervalsAbstValue.inf) {
 				l = -IntervalsAbstValue.inf;
 			} else {
 				l = op1IntV.getLeftLimit() - op2IntV.getRightLimit();
 			}
-			if(op1IntV.getLeftLimit() > 0 &&  op2IntV.getRightLimit() < 0 && (l < 0 || l > IntervalsAbstValue.inf) ){ // overflow
+			if (op1IntV.getLeftLimit() > 0 && op2IntV.getRightLimit() < 0 && (l < 0 || l > IntervalsAbstValue.inf)) { // overflow
 				l = IntervalsAbstValue.inf;
-			} else if(op1IntV.getLeftLimit() < 0 &&  op2IntV.getRightLimit() > 0 && (l > 0 || l < -IntervalsAbstValue.inf)){ // "under"flow
+			} else if (op1IntV.getLeftLimit() < 0 && op2IntV.getRightLimit() > 0
+					&& (l > 0 || l < -IntervalsAbstValue.inf)) { // "under"flow
 				l = -IntervalsAbstValue.inf;
 			}
-			
-			if (op1IntV.getRightLimit() == IntervalsAbstValue.inf || op2IntV.getLeftLimit() == -IntervalsAbstValue.inf) {
+
+			if (op1IntV.getRightLimit() == IntervalsAbstValue.inf
+					|| op2IntV.getLeftLimit() == -IntervalsAbstValue.inf) {
 				r = IntervalsAbstValue.inf;
 			} else {
 				r = op1IntV.getRightLimit() - op2IntV.getLeftLimit();
 			}
-			
-			if(op1IntV.getRightLimit() > 0 &&  op2IntV.getLeftLimit() < 0 && (r < 0 || r > IntervalsAbstValue.inf)){ // overflow
+
+			if (op1IntV.getRightLimit() > 0 && op2IntV.getLeftLimit() < 0 && (r < 0 || r > IntervalsAbstValue.inf)) { // overflow
 				r = IntervalsAbstValue.inf;
-			} else if(op1IntV.getRightLimit() < 0 &&  op2IntV.getLeftLimit() > 0 && (r > 0 || r < -IntervalsAbstValue.inf)){ // "under"flow
+			} else if (op1IntV.getRightLimit() < 0 && op2IntV.getLeftLimit() > 0
+					&& (r > 0 || r < -IntervalsAbstValue.inf)) { // "under"flow
 				r = -IntervalsAbstValue.inf;
 			}
 			return new IntervalsAbstValue(l, r);
-			
+
 		case MUL:
-			
-			if (op1IntV.getLeftLimit() == -IntervalsAbstValue.inf || op2IntV.getLeftLimit() == -IntervalsAbstValue.inf) {
+
+			if (op1IntV.getLeftLimit() == -IntervalsAbstValue.inf
+					|| op2IntV.getLeftLimit() == -IntervalsAbstValue.inf) {
 				l = -IntervalsAbstValue.inf;
 			} else {
 				l = op1IntV.getLeftLimit() * op2IntV.getLeftLimit();
 			}
-			if((op1IntV.getLeftLimit() > 0 &&  op2IntV.getLeftLimit() > 0) // + * +
-					|| ( op1IntV.getLeftLimit() < 0 &&  op2IntV.getLeftLimit() < 0 )){ // - * -
+			if ((op1IntV.getLeftLimit() > 0 && op2IntV.getLeftLimit() > 0) // +
+																			// *
+																			// +
+					|| (op1IntV.getLeftLimit() < 0 && op2IntV.getLeftLimit() < 0)) { // -
+																						// *
+																						// -
 				if (l < 0 || l > IntervalsAbstValue.inf) { // overflow
 					l = IntervalsAbstValue.inf;
 				}
-			} else { // + * - || - * + 
-				if(l > 0 || l < -IntervalsAbstValue.inf){  // "under"flow
+			} else { // + * - || - * +
+				if (l > 0 || l < -IntervalsAbstValue.inf) { // "under"flow
 					l = -IntervalsAbstValue.inf;
 				}
 			}
-			
-			if (op1IntV.getRightLimit() == IntervalsAbstValue.inf || op2IntV.getRightLimit() == IntervalsAbstValue.inf) {
+
+			if (op1IntV.getRightLimit() == IntervalsAbstValue.inf
+					|| op2IntV.getRightLimit() == IntervalsAbstValue.inf) {
 				r = IntervalsAbstValue.inf;
 			} else {
 				r = op1IntV.getRightLimit() * op2IntV.getRightLimit();
 			}
-			
-			if((op1IntV.getRightLimit() > 0 &&  op2IntV.getRightLimit() > 0) // + * +
-					|| ( op1IntV.getRightLimit() < 0 &&  op2IntV.getRightLimit() < 0 )){ // - * -
+
+			if ((op1IntV.getRightLimit() > 0 && op2IntV.getRightLimit() > 0) // +
+																				// *
+																				// +
+					|| (op1IntV.getRightLimit() < 0 && op2IntV.getRightLimit() < 0)) { // -
+																						// *
+																						// -
 				if (l < 0 || l > IntervalsAbstValue.inf) { // overflow
 					l = IntervalsAbstValue.inf;
 				}
-			} else {// + * - || - * + 
-				if(l > 0 || l < -IntervalsAbstValue.inf){ // "under"flow
+			} else {// + * - || - * +
+				if (l > 0 || l < -IntervalsAbstValue.inf) { // "under"flow
 					l = -IntervalsAbstValue.inf;
 				}
 			}
 			return new IntervalsAbstValue(l, r);
-			
+
 		case DIV:
-			if(op2IntV.getLeftLimit() < 0 && op2IntV.getRightLimit() > 0)
-				return new IntervalsAbstValue(1, -1); // TODO: bottom value or error
-			
-			if (op1IntV.getLeftLimit() == -IntervalsAbstValue.inf || op2IntV.getRightLimit() == IntervalsAbstValue.inf) {
+			if (op2IntV.getLeftLimit() < 0 && op2IntV.getRightLimit() > 0)
+				return new IntervalsAbstValue(1, -1); // TODO: bottom value or
+														// error
+
+			if (op1IntV.getLeftLimit() == -IntervalsAbstValue.inf
+					|| op2IntV.getRightLimit() == IntervalsAbstValue.inf) {
 				l = -IntervalsAbstValue.inf;
 			} else {
 				l = op1IntV.getLeftLimit() / op2IntV.getRightLimit();
-			}			
-		
-			if((op1IntV.getLeftLimit() > 0 &&  op2IntV.getLeftLimit() > 0) // + / +
-					|| ( op1IntV.getLeftLimit() < 0 &&  op2IntV.getLeftLimit() < 0 )){ // - / -
+			}
+
+			if ((op1IntV.getLeftLimit() > 0 && op2IntV.getLeftLimit() > 0) // +
+																			// /
+																			// +
+					|| (op1IntV.getLeftLimit() < 0 && op2IntV.getLeftLimit() < 0)) { // -
+																						// /
+																						// -
 				if (l < 0 || l > IntervalsAbstValue.inf) { // overflow
 					l = IntervalsAbstValue.inf;
 				}
 			} else { // + / - || - / +
-				if(l > 0 || l < -IntervalsAbstValue.inf){  // "under"flow
+				if (l > 0 || l < -IntervalsAbstValue.inf) { // "under"flow
 					l = -IntervalsAbstValue.inf;
 				}
 			}
-			
-			if (op1IntV.getRightLimit() == IntervalsAbstValue.inf || op2IntV.getLeftLimit() == -IntervalsAbstValue.inf) {
+
+			if (op1IntV.getRightLimit() == IntervalsAbstValue.inf
+					|| op2IntV.getLeftLimit() == -IntervalsAbstValue.inf) {
 				r = IntervalsAbstValue.inf;
 			} else {
 				r = op1IntV.getRightLimit() / op2IntV.getLeftLimit();
 			}
-			
-			if((op1IntV.getRightLimit() > 0 &&  op2IntV.getRightLimit() > 0) // + / +
-					|| ( op1IntV.getRightLimit() < 0 &&  op2IntV.getRightLimit() < 0 )) {// - / -
+
+			if ((op1IntV.getRightLimit() > 0 && op2IntV.getRightLimit() > 0) // +
+																				// /
+																				// +
+					|| (op1IntV.getRightLimit() < 0 && op2IntV.getRightLimit() < 0)) {// -
+																						// /
+																						// -
 				if (l < 0 || l > IntervalsAbstValue.inf) { // overflow
 					l = IntervalsAbstValue.inf;
 				}
-			} else {// + / - || - / + 
-				if(l > 0 || l < -IntervalsAbstValue.inf){ // "under"flow
+			} else {// + / - || - / +
+				if (l > 0 || l < -IntervalsAbstValue.inf) { // "under"flow
 					l = -IntervalsAbstValue.inf;
 				}
 			}
-			
+
 			return new IntervalsAbstValue(l, r);
 		}
 		throw new UnsupportedOperationException("Complete the cases of atrith operations for INTERVALS");
@@ -198,64 +228,64 @@ public class IntervalsAbstDomain extends NonRelAbstractDomain {
 		return true;
 	}
 
-
-
-	
-	protected AbstractValue reduce_state(NonRelAbstractState nonRel_b, TypeBoolOperator operator, Variable t1, Terminal t2) {
+	protected AbstractValue reduce_state(NonRelAbstractState nonRel_b, TypeBoolOperator operator, Variable t1,
+			Terminal t2) {
 		IntervalsAbstValue v1 = (IntervalsAbstValue) evaluate_terminal(nonRel_b, t1);
 		IntervalsAbstValue v2 = (IntervalsAbstValue) evaluate_terminal(nonRel_b, t2);
-		
-		switch(operator){
+
+		switch (operator) {
 		case EQ:
-			if ( v1.getRightLimit() < v2.getRightLimit() )
-				return new IntervalsAbstValue(1,-1);
-			if ( v1.getLeftLimit() > v2.getLeftLimit() )
-				return new IntervalsAbstValue(1,-1);
-			return new IntervalsAbstValue(v2.getLeftLimit(),v2.getRightLimit());
-		case GT: // TODO : problem with = 
-			if ( v1.getRightLimit() <= v2.getRightLimit() )
-				return new IntervalsAbstValue(1,-1);
-			return new IntervalsAbstValue(Math.max(v1.getLeftLimit(),v2.getLeftLimit()),v1.getRightLimit());
+			if (v1.getRightLimit() < v2.getRightLimit())
+				return new IntervalsAbstValue(1, -1);
+			if (v1.getLeftLimit() > v2.getLeftLimit())
+				return new IntervalsAbstValue(1, -1);
+			return new IntervalsAbstValue(v2.getLeftLimit(), v2.getRightLimit());
+		case GT: // TODO : problem with =
+			if (v1.getRightLimit() <= v2.getRightLimit())
+				return new IntervalsAbstValue(1, -1);
+			return new IntervalsAbstValue(Math.max(v1.getLeftLimit(), v2.getLeftLimit()), v1.getRightLimit());
 		case GTE:
-			if ( v1.getRightLimit() < v2.getRightLimit() )
-				return new IntervalsAbstValue(1,-1);
-			return new IntervalsAbstValue(Math.max(v1.getLeftLimit(),v2.getLeftLimit()),v1.getRightLimit());
-		case LT: // TODO : problem with = 
-			if ( v1.getLeftLimit() >= v2.getLeftLimit() )
-				return new IntervalsAbstValue(1,-1);
-			return new IntervalsAbstValue(v1.getLeftLimit(),Math.min(v1.getRightLimit(),v2.getRightLimit()));
+			if (v1.getRightLimit() < v2.getRightLimit())
+				return new IntervalsAbstValue(1, -1);
+			return new IntervalsAbstValue(Math.max(v1.getLeftLimit(), v2.getLeftLimit()), v1.getRightLimit());
+		case LT: // TODO : problem with =
+			if (v1.getLeftLimit() >= v2.getLeftLimit())
+				return new IntervalsAbstValue(1, -1);
+			return new IntervalsAbstValue(v1.getLeftLimit(), Math.min(v1.getRightLimit(), v2.getRightLimit()));
 		case LTE:
-			if ( v1.getLeftLimit() > v2.getLeftLimit() )
-				return new IntervalsAbstValue(1,-1);
-			return new IntervalsAbstValue(v1.getLeftLimit(),Math.min(v1.getRightLimit(),v2.getRightLimit()));
+			if (v1.getLeftLimit() > v2.getLeftLimit())
+				return new IntervalsAbstValue(1, -1);
+			return new IntervalsAbstValue(v1.getLeftLimit(), Math.min(v1.getRightLimit(), v2.getRightLimit()));
 		case NEQ:// TODO : how to create two possible value?
 			// x = [ -3 , 3]
 			// reduce by ( x != 0 )
-			// x  = [-3, 0 ) U (0, 3]
+			// x = [-3, 0 ) U (0, 3]
 			break;
 		default:
 			break;
-		
+
 		}
 
 		return v1;
 	}
+
 	@Override
-	protected AbstractState reduce_state(NonRelAbstractState nonRel_b, TypeBoolOperator operator, Terminal t1, Terminal t2) {
+	protected AbstractState reduce_state(NonRelAbstractState nonRel_b, TypeBoolOperator operator, Terminal t1,
+			Terminal t2) {
 		NonRelAbstractState copy_b = (NonRelAbstractState) nonRel_b.copy();
 		boolean change = false;
 		AbstractValue v;
-		if( t1 instanceof Variable){
-			v = reduce_state(copy_b,operator,(Variable)t1,t2);
-			copy_b.setValue((Variable)t1, v);
+		if (t1 instanceof Variable) {
+			v = reduce_state(copy_b, operator, (Variable) t1, t2);
+			copy_b.setValue((Variable) t1, v);
 			change = true;
 		}
-		if( t2 instanceof Variable){
-			v = reduce_state(copy_b,operator.flip(),(Variable)t2,t1);
-			copy_b.setValue((Variable)t2, v);
+		if (t2 instanceof Variable) {
+			v = reduce_state(copy_b, operator.flip(), (Variable) t2, t1);
+			copy_b.setValue((Variable) t2, v);
 			change = true;
 		}
-		if(change)
+		if (change)
 			return copy_b;
 		else
 			return nonRel_b;
@@ -265,9 +295,5 @@ public class IntervalsAbstDomain extends NonRelAbstractDomain {
 	public AbstractState defaultState(List<Variable> vars) {
 		return new IntervalsAbstState(vars);
 	}
-
-
-
-
 
 }

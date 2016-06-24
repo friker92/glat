@@ -26,10 +26,9 @@ public class SignAbstState extends NonRelAbstractState {
 		super(vars);
 	}
 
-
 	@Override
 	public String getDesc() {
-		return "Sign Abstract State ("+getClass().getName()+")";
+		return "Sign Abstract State (" + getClass().getName() + ")";
 	}
 
 	@Override

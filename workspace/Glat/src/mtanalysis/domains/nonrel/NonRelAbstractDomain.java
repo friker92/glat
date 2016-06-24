@@ -52,7 +52,7 @@ public abstract class NonRelAbstractDomain implements AbstractDomain {
 
 		return c;
 	}
-	
+
 	@Override
 	public boolean lte(AbstractState a, AbstractState b) {
 		NonRelAbstractState nonRel_a = (NonRelAbstractState) a;
@@ -74,14 +74,14 @@ public abstract class NonRelAbstractDomain implements AbstractDomain {
 
 		NonRelAbstractState nonRel_a = (NonRelAbstractState) a;
 		Expression e;
-		
+
 		switch (instr.getType()) {
-		case ASSIGNMENT: 
+		case ASSIGNMENT:
 			Assignment assignInstr = (Assignment) instr;
 			e = assignInstr.getExpr();
 			NonRelAbstractState nonRel_b = (NonRelAbstractState) nonRel_a.copy();
 			AbstractValue res = evaluate_arithm_expression(nonRel_a, e);
-			if ( res instanceof BottomAbstractValue ) { 
+			if (res instanceof BottomAbstractValue) {
 				return BottomState.getInstance();
 			} else {
 				nonRel_b.setValue(assignInstr.getDest(), res);
@@ -94,52 +94,54 @@ public abstract class NonRelAbstractDomain implements AbstractDomain {
 		case ASSERT:
 			return a; // TODO: check this
 		default:
-			throw new UnsupportedOperationException("Invalid instruction: "+instr);
+			throw new UnsupportedOperationException("Invalid instruction: " + instr);
 		}
 	}
-
 
 	protected AbstractValue evaluate_arithm_expression(NonRelAbstractState b, Expression exp) {
 		if (exp instanceof CompoundArithExpr) {
 			CompoundArithExpr compundExp = (CompoundArithExpr) exp;
-			return evaluate_arithm_expression(b, compundExp.getOperator(), compundExp.getOperandLeft(), compundExp.getOperandRight());	
+			return evaluate_arithm_expression(b, compundExp.getOperator(), compundExp.getOperandLeft(),
+					compundExp.getOperandRight());
 		} else {
 			return evaluate_terminal(b, (Terminal) exp);
 		}
 	}
-	
+
 	protected AbstractState reduce_state(NonRelAbstractState b, Expression exp) {
 		if (exp instanceof CompoundBoolExpr) {
 			CompoundBoolExpr compundExp = (CompoundBoolExpr) exp;
-			return reduce_state(b, compundExp.getOperator(), compundExp.getOperandLeft(), compundExp.getOperandRight());	
-		} 
+			return reduce_state(b, compundExp.getOperator(), compundExp.getOperandLeft(), compundExp.getOperandRight());
+		}
 		return BottomState.getInstance();
 	}
-	
+
 	protected AbstractValue evaluate_terminal(NonRelAbstractState a, Terminal t) {
 		if (t instanceof Variable) {
 			return a.getValue((Variable) t);
 		} else if (t instanceof NonDeterministicValue) {
-			return nondet_abstract_value( (NonDeterministicValue) t);
+			return nondet_abstract_value((NonDeterministicValue) t);
 		} else {
-			return abstract_value( (Value) t);
+			return abstract_value((Value) t);
 		}
 	}
 
 	/**
-	 * Returns a non-deterministic value that correspond to t 
+	 * Returns a non-deterministic value that correspond to t
+	 * 
 	 * @param t
 	 * @return
 	 */
 	protected abstract AbstractValue nondet_abstract_value(NonDeterministicValue t);
-	
+
 	/**
 	 * Returns an abstraction of t
+	 * 
 	 * @param t
 	 * @return
 	 */
 	protected abstract AbstractValue abstract_value(Value t);
-	
+
 	/**
 	 * returns a restricted abstract state, depending on the condition
 	 * 
@@ -147,10 +149,12 @@ public abstract class NonRelAbstractDomain implements AbstractDomain {
 	 * @param e
 	 * @return
 	 */
-	protected abstract AbstractState reduce_state(NonRelAbstractState nonRel_b, TypeBoolOperator operator, Terminal t1, Terminal t2);
-	
+	protected abstract AbstractState reduce_state(NonRelAbstractState nonRel_b, TypeBoolOperator operator, Terminal t1,
+			Terminal t2);
+
 	/**
-	 * Returns a new abstract value the corresponds to the evaluation of the expression 
+	 * Returns a new abstract value the corresponds to the evaluation of the
+	 * expression
 	 * 
 	 * @param b
 	 * @param operator
@@ -158,23 +162,26 @@ public abstract class NonRelAbstractDomain implements AbstractDomain {
 	 * @param t2
 	 * @return
 	 */
-	protected abstract AbstractValue evaluate_arithm_expression(NonRelAbstractState b, TypeArithOperator operator, Terminal t1, Terminal t2);
+	protected abstract AbstractValue evaluate_arithm_expression(NonRelAbstractState b, TypeArithOperator operator,
+			Terminal t1, Terminal t2);
 
 	@Override
-	public AbstractState extend(AbstractState s0, AbstractState st){
+	public AbstractState extend(AbstractState s0, AbstractState st) {
 		NonRelAbstractState n0 = (NonRelAbstractState) s0.copy();
-		n0.extend((NonRelAbstractState)st);
+		n0.extend((NonRelAbstractState) st);
 		return n0;
 	}
+
 	@Override
-	public AbstractState project(AbstractState s0, List<Variable> lv){
+	public AbstractState project(AbstractState s0, List<Variable> lv) {
 		NonRelAbstractState nonRel_s = (NonRelAbstractState) s0;
 		NonRelAbstractState s1 = (NonRelAbstractState) defaultState(lv);
 		lv.forEach((var) -> s1.setValue(var, nonRel_s.getValue(var)));
 		return s1;
 	}
+
 	@Override
-	public AbstractState rename(AbstractState s0, List<Variable> actual, List<Variable> formal){
+	public AbstractState rename(AbstractState s0, List<Variable> actual, List<Variable> formal) {
 		NonRelAbstractState nonRel_copy = (NonRelAbstractState) s0.copy();
 
 		Iterator<Variable> it_curr = actual.iterator(), it_new = formal.iterator();
@@ -183,6 +190,5 @@ public abstract class NonRelAbstractDomain implements AbstractDomain {
 		}
 		return nonRel_copy;
 	}
-	
 
 }

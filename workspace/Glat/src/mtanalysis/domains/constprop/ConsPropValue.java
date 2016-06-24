@@ -5,11 +5,11 @@ import mtanalysis.domains.nonrel.AbstractValue;
 public class ConsPropValue extends ConsPropAbstValue {
 
 	private double value;
-	
+
 	ConsPropValue(double value) {
-		this.value = value; 
+		this.value = value;
 	}
-	
+
 	@Override
 	public String getDesc() {
 		return "Constrant Prop Value";
@@ -17,18 +17,17 @@ public class ConsPropValue extends ConsPropAbstValue {
 
 	@Override
 	public AbstractValue lub(AbstractValue a) {
-		
-		if ( a instanceof ConsPropTOP ) {
+
+		if (a instanceof ConsPropTOP) {
 			return a;
-		} else if ( a instanceof ConsPropBOT ) {
-			return this;
-		} 
-		
-		
-		if ( ((ConsPropValue) a).value == this.value ) {
+		} else if (a instanceof ConsPropBOT) {
 			return this;
 		}
-		
+
+		if (((ConsPropValue) a).value == this.value) {
+			return this;
+		}
+
 		return ConsPropTOP.getInstance();
 	}
 
@@ -40,10 +39,10 @@ public class ConsPropValue extends ConsPropAbstValue {
 	public double getValue() {
 		return value;
 	}
-	
+
 	@Override
 	public String toString() {
-		return ""+value;
+		return "" + value;
 	}
 
 	@Override

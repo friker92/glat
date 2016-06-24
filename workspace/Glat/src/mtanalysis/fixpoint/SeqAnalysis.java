@@ -53,15 +53,15 @@ public class SeqAnalysis implements Analysis {
 	private AbstractDomain getDomain() throws Exception {
 		return (AbstractDomain) ((Class) properties.get(NameProp.DOMAIN)).newInstance();
 	}
-	
-	private Store getStore() throws Exception{
+
+	private Store getStore() throws Exception {
 		Class[] cArg = new Class[1];
 		cArg[0] = AbstractDomain.class;
 		return (Store) ((Class) properties.get(NameProp.STORE)).getDeclaredConstructor(cArg).newInstance(domain);
 	}
 
 	@Override
-	public void start(GlatProgram p) throws Exception{
+	public void start(GlatProgram p) throws Exception {
 		/*
 		 * assume: void main(){ start m; trans m -> n { //init variables }
 		 * 

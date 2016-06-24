@@ -56,7 +56,8 @@ public class ConstPropDomain extends NonRelAbstractDomain {
 	}
 
 	@Override
-	protected AbstractState reduce_state(NonRelAbstractState nonRel_b, TypeBoolOperator operator, Terminal t1, Terminal t2) {
+	protected AbstractState reduce_state(NonRelAbstractState nonRel_b, TypeBoolOperator operator, Terminal t1,
+			Terminal t2) {
 		return nonRel_b;
 	}
 
@@ -91,7 +92,7 @@ public class ConstPropDomain extends NonRelAbstractDomain {
 			res = valueV1 - valueV2;
 			break;
 		case DIV:
-			if(valueV2 == 0)
+			if (valueV2 == 0)
 				return ConsPropBOT.getInstance();
 			res = valueV1 / (1.0 * valueV2);
 			break;

@@ -10,7 +10,6 @@ import glat.program.instructions.expressions.terminals.Value;
 import glat.program.instructions.expressions.terminals.Variable;
 import glat.program.instructions.expressions.terminals.values.NonDeterministicValue;
 import mtanalysis.domains.AbstractState;
-import mtanalysis.domains.BottomState;
 import mtanalysis.domains.nonrel.AbstractValue;
 import mtanalysis.domains.nonrel.BottomAbstractValue;
 import mtanalysis.domains.nonrel.NonRelAbstractDomain;
@@ -117,7 +116,8 @@ public class SignAbstDomain extends NonRelAbstractDomain {
 	}
 
 	@Override
-	protected AbstractState reduce_state(NonRelAbstractState nonRel_b, TypeBoolOperator operator, Terminal t1, Terminal t2) {
+	protected AbstractState reduce_state(NonRelAbstractState nonRel_b, TypeBoolOperator operator, Terminal t1,
+			Terminal t2) {
 		// TODO : reduce state by boolean expresion
 		return nonRel_b;
 	}

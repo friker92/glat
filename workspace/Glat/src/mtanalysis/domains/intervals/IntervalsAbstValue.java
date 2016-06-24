@@ -13,11 +13,13 @@ public class IntervalsAbstValue implements AbstractValue {
 		leftLimit = 1.0;
 		rightLimit = -1.0;
 	}
-	public boolean isBottom(){
-		if(leftLimit>rightLimit)
+
+	public boolean isBottom() {
+		if (leftLimit > rightLimit)
 			return true;
 		return false;
 	}
+
 	public IntervalsAbstValue(double leftLimit, double rightLimit) {
 		this.leftLimit = leftLimit;
 		this.rightLimit = rightLimit;
@@ -54,12 +56,12 @@ public class IntervalsAbstValue implements AbstractValue {
 	@Override
 	public String toString() {
 		String str = "[";
-		if(leftLimit <= -inf+1e9)
+		if (leftLimit <= -inf + 1e9)
 			str += "-INF";
 		else
 			str += leftLimit;
 		str += ",";
-		if(rightLimit >= inf-1e9)
+		if (rightLimit >= inf - 1e9)
 			str += "INF";
 		else
 			str += rightLimit;

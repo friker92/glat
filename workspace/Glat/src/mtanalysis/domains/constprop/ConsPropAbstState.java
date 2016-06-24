@@ -10,7 +10,7 @@ public class ConsPropAbstState extends NonRelAbstractState {
 
 	protected ConsPropAbstState() {
 	}
-	
+
 	public ConsPropAbstState(List<Variable> vars) {
 		super(vars);
 	}

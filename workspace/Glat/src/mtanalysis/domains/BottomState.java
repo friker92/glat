@@ -7,7 +7,7 @@ import glat.program.instructions.expressions.terminals.Variable;
 public class BottomState implements AbstractState {
 
 	private static BottomState instance = null;
-	
+
 	private List<Variable> vars;
 
 	protected BottomState(List<Variable> vars) {

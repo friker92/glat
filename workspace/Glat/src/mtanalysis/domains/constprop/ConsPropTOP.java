@@ -5,10 +5,10 @@ import mtanalysis.domains.nonrel.AbstractValue;
 public class ConsPropTOP extends ConsPropAbstValue {
 
 	public static ConsPropTOP instance = null;
-	
+
 	private ConsPropTOP() {
 	}
-	
+
 	@Override
 	public String getDesc() {
 		return "Constrant Prop Abstract Value (TOP)";
@@ -23,7 +23,7 @@ public class ConsPropTOP extends ConsPropAbstValue {
 	public boolean lte(AbstractValue a) {
 		return a instanceof ConsPropTOP;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "TOP";
@@ -38,12 +38,12 @@ public class ConsPropTOP extends ConsPropAbstValue {
 	public AbstractValue widen(AbstractValue a) {
 		return this.lub(a);
 	}
-	
+
 	public static ConsPropTOP getInstance() {
 		if (instance == null) {
 			instance = new ConsPropTOP();
 		}
 		return instance;
 	}
-	
+
 }
