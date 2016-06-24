@@ -4,7 +4,7 @@ import mtanalysis.domains.nonrel.AbstractValue;
 
 public class ConsPropTOP extends ConsPropAbstValue {
 
-	public static ConsPropTOP instance = null;
+	private static ConsPropTOP instance = null;
 
 	private ConsPropTOP() {
 	}
@@ -17,6 +17,12 @@ public class ConsPropTOP extends ConsPropAbstValue {
 	@Override
 	public AbstractValue lub(AbstractValue a) {
 		return this;
+	}
+
+	@Override
+	public AbstractValue glb(AbstractValue a) {
+		// TODO : check!
+		return a;
 	}
 
 	@Override

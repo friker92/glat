@@ -57,6 +57,32 @@ public interface AbstractDomain {
 		}
 		return st;
 	}
+	
+	/**
+	 * 
+	 * @param a
+	 * @param b
+	 * @return
+	 */
+	public AbstractState glb(AbstractState a, AbstractState b);
+
+	/**
+	 * 
+	 * @param a
+	 * @param b
+	 * @return
+	 */
+	public default AbstractState glb(List<AbstractState> as) {
+		if (as.isEmpty())
+			return bottom(new ArrayList<Variable>());
+		AbstractState st = as.get(0);
+		for (AbstractState s : as) {
+			if(st.equals(BottomState.getInstance()))
+				return BottomState.getInstance();
+			st = glb(st, s);
+		}
+		return st;
+	}
 
 	/**
 	 * 

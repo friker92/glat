@@ -18,6 +18,11 @@ public class BottomAbstractValue implements AbstractValue {
 	}
 
 	@Override
+	public AbstractValue glb(AbstractValue a) {
+		return this;
+	}
+
+	@Override
 	public AbstractValue widen(AbstractValue a) {
 		return a;
 	}

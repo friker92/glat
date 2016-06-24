@@ -38,6 +38,23 @@ public abstract class NonRelAbstractDomain implements AbstractDomain {
 	}
 
 	@Override
+	public AbstractState glb(AbstractState a, AbstractState b) {
+		System.err.println("PLEASE see: NonRelAbstractDomain.gbl");
+		NonRelAbstractState nonRel_a = (NonRelAbstractState) a;
+		NonRelAbstractState nonRel_b = (NonRelAbstractState) b;
+
+		List<Variable> vars = a.getVars();
+
+		NonRelAbstractState c = (NonRelAbstractState) defaultState(vars);
+
+		for (Variable v : vars) {
+			c.setValue(v, nonRel_a.getValue(v).glb(nonRel_b.getValue(v)));
+		}
+
+		return c;
+	}
+
+	@Override
 	public AbstractState widen(AbstractState a, AbstractState b) {
 		NonRelAbstractState nonRel_a = (NonRelAbstractState) a;
 		NonRelAbstractState nonRel_b = (NonRelAbstractState) b;

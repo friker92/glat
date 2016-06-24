@@ -1,6 +1,7 @@
 package mtanalysis.domains.sign;
 
 import mtanalysis.domains.nonrel.AbstractValue;
+import mtanalysis.domains.nonrel.BottomAbstractValue;
 
 public enum SignAbstValue implements AbstractValue {
 	TOP("T"), POS("P"), NEG("N"), ZERO("Z");
@@ -38,6 +39,22 @@ public enum SignAbstValue implements AbstractValue {
 
 		if (this.equals(SignAbstValue.TOP) || b.equals(SignAbstValue.TOP)) {
 			return SignAbstValue.TOP;
+		}
+
+		if (this.equals(b)) {
+			return this;
+		}
+
+		return SignAbstValue.TOP;
+	}
+
+	@Override
+	public AbstractValue glb(AbstractValue a) {
+		// TODO : check! I know it is wrong
+		SignAbstValue b = (SignAbstValue) a;
+
+		if (this.equals(BottomAbstractValue.getInstance()) || b.equals(BottomAbstractValue.getInstance())) {
+			return BottomAbstractValue.getInstance();
 		}
 
 		if (this.equals(b)) {

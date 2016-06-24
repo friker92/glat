@@ -45,6 +45,23 @@ public class IntervalsAbstValue implements AbstractValue {
 					Math.max(this.getRightLimit(), b.getRightLimit()));
 	}
 
+	@Override
+	public IntervalsAbstValue glb(AbstractValue a) {
+		// TODO : check!
+		IntervalsAbstValue b = (IntervalsAbstValue) a;
+
+		if (this.leftLimit > this.rightLimit)
+			return this;
+		else if (b.leftLimit > b.rightLimit)
+			return b;
+		else {
+			double l = Math.max(this.getLeftLimit(), b.getLeftLimit());
+			double r = Math.min(this.getRightLimit(), b.getRightLimit());
+			return new IntervalsAbstValue(l, r);
+		}
+
+	}
+
 	public double getLeftLimit() {
 		return leftLimit;
 	}

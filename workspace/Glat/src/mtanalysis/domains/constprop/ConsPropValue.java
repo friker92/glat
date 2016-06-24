@@ -32,6 +32,22 @@ public class ConsPropValue extends ConsPropAbstValue {
 	}
 
 	@Override
+	public AbstractValue glb(AbstractValue a) {
+		// TODO : check!
+		if (a instanceof ConsPropTOP) {
+			return this;
+		} else if (a instanceof ConsPropBOT) {
+			return a;
+		}
+
+		if (((ConsPropValue) a).value == this.value) {
+			return this;
+		}
+
+		return ConsPropBOT.getInstance();
+	}
+
+	@Override
 	public boolean lte(AbstractValue a) {
 		return (a instanceof ConsPropTOP) || (!(a instanceof ConsPropBOT) && ((ConsPropValue) a).value == this.value);
 	}
