@@ -6,13 +6,15 @@ import glat.program.instructions.expressions.terminals.Variable;
 
 public class BottomState implements AbstractState {
 
+	private static BottomState instance = null;
+	
 	private List<Variable> vars;
 
-	public BottomState(List<Variable> vars) {
+	protected BottomState(List<Variable> vars) {
 		this.vars = vars;
 	}
 
-	public BottomState() {
+	protected BottomState() {
 	}
 
 	@Override
@@ -33,6 +35,13 @@ public class BottomState implements AbstractState {
 	@Override
 	public String getDesc() {
 		return null;
+	}
+
+	public static BottomState getInstance() {
+		if (instance == null) {
+			instance = new BottomState();
+		}
+		return instance;
 	}
 
 }

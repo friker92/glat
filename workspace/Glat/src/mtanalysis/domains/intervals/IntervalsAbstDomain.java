@@ -18,7 +18,13 @@ public class IntervalsAbstDomain extends NonRelAbstractDomain {
 
 	@Override
 	public AbstractState bottom(List<Variable> vars) {
-		return new IntervalsAbstState(vars);
+		IntervalsAbstState a = new IntervalsAbstState(vars);
+		AbstractValue topValue = new IntervalsAbstValue(1, -1);
+
+		for (Variable v : vars) {
+			a.setValue(v, topValue);
+		}
+		return a;
 	}
 
 	@Override

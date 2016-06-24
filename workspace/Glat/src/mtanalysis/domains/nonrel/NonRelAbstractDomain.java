@@ -82,7 +82,7 @@ public abstract class NonRelAbstractDomain implements AbstractDomain {
 			NonRelAbstractState nonRel_b = (NonRelAbstractState) nonRel_a.copy();
 			AbstractValue res = evaluate_arithm_expression(nonRel_a, e);
 			if ( res instanceof BottomAbstractValue ) { 
-				return new BottomState();
+				return BottomState.getInstance();
 			} else {
 				nonRel_b.setValue(assignInstr.getDest(), res);
 				return nonRel_b;
@@ -113,7 +113,7 @@ public abstract class NonRelAbstractDomain implements AbstractDomain {
 			CompoundBoolExpr compundExp = (CompoundBoolExpr) exp;
 			return reduce_state(b, compundExp.getOperator(), compundExp.getOperandLeft(), compundExp.getOperandRight());	
 		} 
-		return new BottomState();
+		return BottomState.getInstance();
 	}
 	
 	protected AbstractValue evaluate_terminal(NonRelAbstractState a, Terminal t) {

@@ -29,7 +29,7 @@ public class ConsPropValue extends ConsPropAbstValue {
 			return this;
 		}
 		
-		return new ConsPropTOP();
+		return ConsPropTOP.getInstance();
 	}
 
 	@Override

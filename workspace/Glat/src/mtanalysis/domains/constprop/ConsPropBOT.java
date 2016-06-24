@@ -1,11 +1,13 @@
 package mtanalysis.domains.constprop;
 
 import mtanalysis.domains.nonrel.AbstractValue;
+import mtanalysis.domains.nonrel.BottomAbstractValue;
 
 public class ConsPropBOT extends ConsPropAbstValue {
 
+	public static ConsPropBOT instance = null;
 	
-	ConsPropBOT() {
+	private ConsPropBOT() {
 	}
 	
 	@Override
@@ -36,6 +38,13 @@ public class ConsPropBOT extends ConsPropAbstValue {
 	@Override
 	public AbstractValue widen(AbstractValue a) {
 		return this.lub(a);
+	}
+
+	public static ConsPropBOT getInstance() {
+		if (instance == null) {
+			instance = new ConsPropBOT();
+		}
+		return instance;
 	}
 
 }

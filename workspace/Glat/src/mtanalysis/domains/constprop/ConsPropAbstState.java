@@ -27,7 +27,7 @@ public class ConsPropAbstState extends NonRelAbstractState {
 
 	@Override
 	protected AbstractValue defaultValue(Variable v) {
-		return new ConsPropBOT();
+		return ConsPropBOT.getInstance();
 	}
 
 }

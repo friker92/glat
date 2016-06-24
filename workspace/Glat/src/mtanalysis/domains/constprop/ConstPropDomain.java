@@ -18,7 +18,7 @@ public class ConstPropDomain extends NonRelAbstractDomain {
 	@Override
 	public AbstractState top(List<Variable> vars) {
 		ConsPropAbstState a = new ConsPropAbstState(vars);
-		ConsPropTOP top = new ConsPropTOP();
+		ConsPropTOP top = ConsPropTOP.getInstance();
 		for (Variable v : vars) {
 			a.setValue(v, top);
 		}
@@ -32,7 +32,7 @@ public class ConstPropDomain extends NonRelAbstractDomain {
 
 	@Override
 	protected AbstractValue nondet_abstract_value(NonDeterministicValue t) {
-		return new ConsPropTOP();
+		return ConsPropTOP.getInstance();
 	}
 
 	@Override
@@ -72,11 +72,11 @@ public class ConstPropDomain extends NonRelAbstractDomain {
 		ConsPropAbstValue v1 = (ConsPropAbstValue) evaluate_terminal(b, t1);
 		ConsPropAbstValue v2 = (ConsPropAbstValue) evaluate_terminal(b, t2);
 
-		if (v1.equals(new ConsPropTOP()) || v2.equals(new ConsPropTOP())) {
-			return new ConsPropTOP();
+		if (v1.equals(ConsPropTOP.getInstance()) || v2.equals(ConsPropTOP.getInstance())) {
+			return ConsPropTOP.getInstance();
 		}
-		if (v1.equals(new ConsPropBOT()) || v2.equals(new ConsPropBOT())) {
-			return new ConsPropBOT();
+		if (v1.equals(ConsPropBOT.getInstance()) || v2.equals(ConsPropBOT.getInstance())) {
+			return ConsPropBOT.getInstance();
 		}
 
 		double res = 0.0;
@@ -92,7 +92,7 @@ public class ConstPropDomain extends NonRelAbstractDomain {
 			break;
 		case DIV:
 			if(valueV2 == 0)
-				return new ConsPropBOT();
+				return ConsPropBOT.getInstance();
 			res = valueV1 / (1.0 * valueV2);
 			break;
 		case MUL:

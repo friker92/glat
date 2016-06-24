@@ -20,7 +20,11 @@ public class SignAbstDomain extends NonRelAbstractDomain {
 
 	@Override
 	public AbstractState bottom(List<Variable> vars) {
-		return new BottomState(vars);
+		SignAbstState a = new SignAbstState(vars);
+		for (Variable v : vars) {
+			a.setValue(v, BottomAbstractValue.getInstance());
+		}
+		return a;
 	}
 
 	@Override
@@ -89,7 +93,7 @@ public class SignAbstDomain extends NonRelAbstractDomain {
 				return SignAbstValue.TOP;
 		case DIV:
 			if (v2.equals(SignAbstValue.ZERO))
-				return new BottomAbstractValue();
+				return BottomAbstractValue.getInstance();
 			else if (v1.equals(SignAbstValue.ZERO))
 				return SignAbstValue.ZERO;
 			else if (v1.equals(SignAbstValue.TOP) || v2.equals(SignAbstValue.TOP))
