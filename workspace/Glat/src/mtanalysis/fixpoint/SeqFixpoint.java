@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+import java.util.Vector;
+
 import glat.program.GlatProgram;
+import glat.program.GlatTransition;
 import glat.program.Method;
 import glat.program.Node;
 import glat.program.Transition;
@@ -12,6 +15,8 @@ import glat.program.instructions.Call;
 import glat.program.instructions.expressions.terminals.Variable;
 import mtanalysis.domains.AbstractDomain;
 import mtanalysis.domains.AbstractState;
+import mtanalysis.interferences.FlowInsensitiveInterference;
+import mtanalysis.interferences.Interference;
 import mtanalysis.stores.Store;
 import mtanalysis.strategies.IterationStrategy;
 import mtanalysis.strategies.StrategyNode;
@@ -22,16 +27,18 @@ public class SeqFixpoint implements Fixpoint {
 	private Store table;
 	private GlatProgram program;
 	private Call call;
-	private AbstractState default_state;
 	private IterationStrategy itStrategy;
+	private Vector<Interference> interferences;
+	private Vector<Interference> return_interferences;
 
-	public SeqFixpoint(GlatProgram p, Call c, Store s, AbstractState def_st, AbstractDomain d, IterationStrategy its) {
+	public SeqFixpoint(GlatProgram p, Call c, Store s, AbstractDomain d, IterationStrategy its, Vector<Interference> interf, Vector<Interference> ret_interf) {
 		program = p;
 		call = c;
 		table = s;
-		default_state = def_st;
 		domain = d;
 		itStrategy = its;
+		interferences = interf;
+		return_interferences = ret_interf;
 	}
 
 	private boolean analyze(IterationStrategy strategy) {
@@ -59,6 +66,7 @@ public class SeqFixpoint implements Fixpoint {
 				}
 			}
 		} while (notStable);
+		System.err.println(return_interferences);
 		return false;
 	}
 
@@ -69,13 +77,17 @@ public class SeqFixpoint implements Fixpoint {
 		List<AbstractState> lst = new ArrayList<AbstractState>();
 
 		AbstractState st = currState;
+		AbstractState st_prime;
 		for (Transition t : stn.getInTransitions()) {
-			st = domain.exec(t, table.get(t.getSrcNode()));
+			st_prime = table.get(t.getSrcNode());
+			st = domain.exec(t, st_prime);
+				return_interferences.add(new FlowInsensitiveInterference(domain, st_prime, st));
 			lst.add(st);
 		}
 		lst.add(currState);
 
 		st = domain.lub(lst);
+		
 		if (table.modify(n, st)) {
 			return true;
 		} else {
@@ -83,28 +95,13 @@ public class SeqFixpoint implements Fixpoint {
 		}
 	}
 
+	private boolean isWriteGlobal(Transition t) {
+		return (boolean) t.getPropValue("isWriteGlobal");
+	}
+
 	@Override
 	public void start() {
-		Method m;
-
-		m = call.getMethodRef();
-
-		List<Variable> vs = new ArrayList<Variable>(m.getVariables());
-		vs.addAll(m.getParameters());
-		vs.addAll(program.getGlobalVariables());
-		AbstractState bt = domain.bottom(vs);
-		vs = new ArrayList<Variable>(call.getArgs());
-		vs.addAll(program.getGlobalVariables());
-		AbstractState def = domain.project(default_state, vs);// call.getArgs());
-		def = domain.rename(def, call.getArgs(), m.getParameters());
-		def = domain.extend(bt, def);
-
-		for (Node n : m.getControlFlowGraph().getNodes()) {
-			if (m.getInitNode().equals(n))
-				table.set(n, def);
-			else
-				table.set(n, bt);
-		}
+		
 		analyze(itStrategy);
 	}
 

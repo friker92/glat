@@ -1,6 +1,9 @@
 package glat.program.instructions.expressions;
 
+import glat.program.GlatProgram;
+import glat.program.Program;
 import glat.program.instructions.Expression;
+import glat.program.instructions.expressions.terminals.Variable;
 
 public class CompoundArithExpr implements Expression {
 
@@ -33,5 +36,7 @@ public class CompoundArithExpr implements Expression {
 
 	private Terminal op1,op2;
 	private TypeArithOperator operator;
+	
+	
 
 }

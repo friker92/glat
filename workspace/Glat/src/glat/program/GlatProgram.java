@@ -32,7 +32,6 @@ import glat.program.instructions.expressions.terminals.Variable;
  */
 public class GlatProgram extends GlatClass implements Program{
 
-	
 	public GlatProgram(){
 		primitive = new HashSet<TypeValue>();
 		for(TypeValue t : TypeValue.values())
@@ -60,6 +59,14 @@ public class GlatProgram extends GlatClass implements Program{
 	
 	public MainMethod getEntryMethod(){
 		return mainmethod;
+	}
+	
+	public boolean isGlobalVariable(String v){
+		return null != getGlobalVariable(v);
+	}
+	
+	public boolean isGlobalVariable(Variable v){
+		return globDecl.contains(v);
 	}
 	
 	@Override
@@ -91,33 +98,16 @@ public class GlatProgram extends GlatClass implements Program{
 	public void addMethod(GlatMethod m){
 		if(methods.containsKey(m.getName()))
 			throw new Error("Error: "+m.getName()+" method already exits");
-		/*addPrimitive(m.getReturnType());
-		Variable v;
-		Iterator<Variable> it = m.getParameters().iterator();
-		while (it.hasNext()){
-			v = it.next();
-			addPrimitive(v.getType());
-		}
-		it = m.getVariables().iterator();
-		while (it.hasNext()){
-			v = it.next();
-			addPrimitive(v.getType());
-		}*/
 		methods.put(m.getName(), m);
 	}
 	
 	public void addVar(Variable v){
-		//addPrimitive(v.getType());
 		globDecl.add(v);
 	}
 	public void addInitInstr(GlatInstruction i){
 		initInstr.add(i);
 	}
 	
-	/*private void addPrimitive(String s){
-		if(!(s.equals("thread")||s.equals("lock")||s.equals("void")))
-			primitive.add(s);
-	}*/
 	
 	public void checkProgram(){
 		//checkThreads();

@@ -21,5 +21,9 @@ public class FlowInsensitiveInterference implements Interference {
 			return null;
 		return domain.lub(target, st);
 	}
+	@Override
+	public String toString() {
+		return source + " -> "+target;
+	}
 
 }

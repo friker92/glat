@@ -1,4 +1,5 @@
 global {
+var int f;
 }
 
 init {
@@ -11,6 +12,7 @@ void main() {
   trans n0 -> n1 {
   y := 3;
   y2 := 5;
+  f := 2;
   }
   trans n1 -> n2 {
   	sync m(y);
@@ -25,7 +27,7 @@ void m(var int j){
    start n0;
 
    trans n0 -> n1 {
-     x := j;
+     x := j+f;
    }
 
    trans n1 -> n2 {

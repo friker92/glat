@@ -38,5 +38,13 @@ public abstract class GlatClass implements BasicInterface {
 		if(prop==null) prop = new Properties();
 		return new ArrayList<Object>(prop.keySet());
 	}
+	
+	@Override
+	public boolean hasProp(Object name){
+		if(prop==null) prop = new Properties();
+		return prop.containsKey(name);
+	}
+	
+	
 
 }

@@ -2,10 +2,11 @@ package glat.program;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.Vector;
 
 public class GlatTransition extends GlatClass implements Transition {
-// TODO: verify If I dont need to extend DirectEdge
+// TODO: verify that I dont need to extend DirectEdge
 	public GlatTransition(GlatMethod m, int p, GlatNode s, GlatNode d){
 		source = s;
 		dest = d;
@@ -70,9 +71,19 @@ public class GlatTransition extends GlatClass implements Transition {
 	public void addInstruction(GlatInstruction i){
 		i.setMethod(method);
 		i.setTransition(this);
+		if(null != i.getPropValue("isWriteGlobal"))
+			setPropValue("isWriteGlobal", i.getPropValue("isWriteGlobal"));
+		else
+			setPropValue("isWriteGlobal", false);
+		
+		if(null != i.getPropValue("isReadGlobal"))
+			setPropValue("isReadGlobal", i.getPropValue("isReadGlobal"));
+		else
+			setPropValue("isReadGlobal", false);
 		if(Tcode.size()>0)
 			Tcode.get(Tcode.size()-1).setNextInst(i);
-		Tcode.add( i);
+		Tcode.add(i);
+		
 	}
 
 	/*##############################
