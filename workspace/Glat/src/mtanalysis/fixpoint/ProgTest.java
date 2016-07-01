@@ -48,11 +48,11 @@ public class ProgTest {
 	}
 	
 	public static String prettyprint(Vector v){
-		String str = "{";
+		String str = "[";
 		for (Object n : v) {
 			str += "\n\t" + n;
 		}
-		str += "\n}\n";
+		str += "\n]";
 		return str;
 	}
 }
