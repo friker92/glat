@@ -2,14 +2,17 @@ package mtanalysis.fixpoint;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Vector;
 
 import glat.program.ControlFlowGraph;
 import glat.program.GlatProgram;
 import glat.program.Instruction;
 import glat.program.Method;
+import glat.program.Node;
 import glat.program.Transition;
 import glat.program.instructions.Call;
 import glat.program.instructions.expressions.terminals.Variable;
@@ -84,6 +87,13 @@ public class SeqAnalysis implements Analysis {
 		Transition launch = main_cfg.getOutTransitions(init.getTargetNode()).get(0);
 		Fixpoint fx;
 		Method m;
+		
+		Vector<Store> vstore = new Vector<Store>();
+		for (Instruction i : launch.getInstructions()) {
+			vstore.addElement(prepareStore(p,(Call)i,def_st,getStore()));
+		}
+		Iterator<Store> istore = vstore.iterator();
+		Store sto;
 
 		for (Instruction i : launch.getInstructions()) {
 			switch (i.getType()) {
@@ -91,7 +101,8 @@ public class SeqAnalysis implements Analysis {
 			case SYNCCALL:
 				m = ((Call) i).getMethodRef();
 				System.out.println("launch: " + m.getLabel());
-				fx = new SeqFixpoint(p, (Call) i, getStore(), def_st, domain, getStrategy(m.getControlFlowGraph()));
+				sto = istore.next();
+				fx = new SeqFixpoint(p, (Call) i, sto, domain, getStrategy(m.getControlFlowGraph()));
 				fx.start();
 				result.put(i, fx.getResult());
 				break;
@@ -101,6 +112,30 @@ public class SeqAnalysis implements Analysis {
 		}
 	}
 
+	private Store prepareStore(GlatProgram program, Call call, AbstractState default_state, Store table){
+		Method m;
+
+		m = call.getMethodRef();
+
+		List<Variable> vs = new ArrayList<Variable>(m.getVariables());
+		vs.addAll(m.getParameters());
+		vs.addAll(program.getGlobalVariables());
+		AbstractState bt = domain.bottom(vs);
+		vs = new ArrayList<Variable>(call.getArgs());
+		vs.addAll(program.getGlobalVariables());
+		AbstractState def = domain.project(default_state, vs);// call.getArgs());
+		def = domain.rename(def, call.getArgs(), m.getParameters());
+		def = domain.extend(bt, def);
+
+		for (Node n : m.getControlFlowGraph().getNodes()) {
+			if (m.getInitNode().equals(n))
+				table.set(n, def);
+			else
+				table.set(n, bt);
+		}
+		return table;
+	}
+	
 	private Method getMain(GlatProgram p) {
 		for (Method m : p.getMethods()) {
 			if (m.getName().equals("main") && m.getParameters().size() == 0) {

@@ -22,14 +22,12 @@ public class SeqFixpoint implements Fixpoint {
 	private Store table;
 	private GlatProgram program;
 	private Call call;
-	private AbstractState default_state;
 	private IterationStrategy itStrategy;
 
-	public SeqFixpoint(GlatProgram p, Call c, Store s, AbstractState def_st, AbstractDomain d, IterationStrategy its) {
+	public SeqFixpoint(GlatProgram p, Call c, Store s, AbstractDomain d, IterationStrategy its) {
 		program = p;
 		call = c;
 		table = s;
-		default_state = def_st;
 		domain = d;
 		itStrategy = its;
 	}
@@ -85,26 +83,6 @@ public class SeqFixpoint implements Fixpoint {
 
 	@Override
 	public void start() {
-		Method m;
-
-		m = call.getMethodRef();
-
-		List<Variable> vs = new ArrayList<Variable>(m.getVariables());
-		vs.addAll(m.getParameters());
-		vs.addAll(program.getGlobalVariables());
-		AbstractState bt = domain.bottom(vs);
-		vs = new ArrayList<Variable>(call.getArgs());
-		vs.addAll(program.getGlobalVariables());
-		AbstractState def = domain.project(default_state, vs);// call.getArgs());
-		def = domain.rename(def, call.getArgs(), m.getParameters());
-		def = domain.extend(bt, def);
-
-		for (Node n : m.getControlFlowGraph().getNodes()) {
-			if (m.getInitNode().equals(n))
-				table.set(n, def);
-			else
-				table.set(n, bt);
-		}
 		analyze(itStrategy);
 	}
 

@@ -12,15 +12,21 @@ public class StrategyNodeImp implements StrategyNode {
 	protected Vector<StrategyNode> _l;
 	protected boolean leaf;
 	protected boolean widen;
+	protected boolean writeGlobal;
 	protected List<Transition> _t;
 	protected Node n;
 	private List<StrategyNode> _wp;
+	private List<StrategyNode> _wgp;
+	private List<StrategyNode> _ip;
 
 	public StrategyNodeImp() {
 		leaf = false;
 		widen = false;
+		writeGlobal = false;
 		_l = new Vector<StrategyNode>();
 		_wp = new ArrayList<StrategyNode>();
+		_wgp = new ArrayList<StrategyNode>();
+		_ip = null;
 		n = null;
 		_t = new ArrayList<Transition>();
 	}
@@ -30,8 +36,11 @@ public class StrategyNodeImp implements StrategyNode {
 		n = e;
 		leaf = true;
 		widen = isWidenNode;
+		writeGlobal = false;
 		_t = new ArrayList<Transition>();
 		_wp = new ArrayList<StrategyNode>();
+		_wgp = new ArrayList<StrategyNode>();
+		_ip = null;
 	}
 
 	@Override
@@ -76,13 +85,48 @@ public class StrategyNodeImp implements StrategyNode {
 
 	public void setAllTransitions(List<Transition> inTransitions) {
 		_t = inTransitions;
+		for(Transition t : _t){
+			if((boolean)t.getPropValue("isWriteGlobal")){
+				writeGlobal = true;
+				break;
+			}
+		}
 	}
 
 	@Override
 	public String toString() {
 		if (isLeaf())
-			return "" + n + (isWidenNode() ? " w" : "");// + " " + _t;
+			return "" + n + (isWidenNode() ? " w" : "") +(isWriteGlobalNode() ? " wg" : "");// + " " + _t;
 		return _l + "";
 	}
 
+	@Override
+	public List<StrategyNode> getWriteGlobalPoints() {
+		return _wgp;
+	}
+
+	@Override
+	public List<StrategyNode> getImportantPoints() {
+		if(_ip == null) calculateImportantPoints();
+		return _ip;
+	}
+
+	private void calculateImportantPoints() {
+		_ip = new ArrayList<StrategyNode>(_wp);
+		for(StrategyNode stNode : _wgp){
+			if(!_ip.contains(stNode))
+				_ip.add(stNode);
+		}
+	}
+
+	@Override
+	public boolean isWriteGlobalNode() {
+		return writeGlobal;
+	}
+
+	@Override
+	public boolean isImportantNode() {
+		return isWidenNode() || isWriteGlobalNode();
+	}
+	
 }

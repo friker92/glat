@@ -94,9 +94,10 @@ public class ThSimpleAnalysis implements Analysis {
 		Method m;
 		Map<Object, Object> old_result;
 		boolean thchange = false;
-		Vector<Store> vstore = new Vector<Store>();
+
 		interferences = new Vector<Interference>();
 		Vector<Interference> newinterferences; 
+		Vector<Store> vstore = new Vector<Store>();
 		for (Instruction i : launch.getInstructions()) {
 			vstore.addElement(prepareStore(p,(Call)i,def_st,getStore()));
 		}
