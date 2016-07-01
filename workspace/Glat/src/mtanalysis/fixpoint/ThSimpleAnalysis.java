@@ -22,7 +22,7 @@ import mtanalysis.domains.AbstractState;
 import mtanalysis.domains.intervals.IntervalsAbstDomain;
 import mtanalysis.exceptions.NoMainException;
 import mtanalysis.interferences.Interference;
-import mtanalysis.stores.SimpleStore;
+import mtanalysis.stores.NodeAbstStateStore;
 import mtanalysis.stores.Store;
 import mtanalysis.strategies.IterationStrategy;
 import mtanalysis.strategies.SimpleStrategy;
@@ -50,7 +50,7 @@ public class ThSimpleAnalysis implements Analysis {
 
 	public static Properties defaultProperties() {
 		Properties prop = new Properties();
-		prop.put(NameProp.STORE, SimpleStore.class);
+		prop.put(NameProp.STORE, NodeAbstStateStore.class);
 		prop.put(NameProp.STRATEGY, SimpleStrategy.class);
 		prop.put(NameProp.DOMAIN, IntervalsAbstDomain.class);
 		return prop;
@@ -150,9 +150,9 @@ public class ThSimpleAnalysis implements Analysis {
 
 		for (Node n : m.getControlFlowGraph().getNodes()) {
 			if (m.getInitNode().equals(n))
-				table.set(n, def);
+				table.setValue(n, def);
 			else
-				table.set(n, bt);
+				table.setValue(n, bt);
 		}
 		return table;
 	}

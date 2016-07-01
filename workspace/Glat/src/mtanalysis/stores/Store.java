@@ -1,13 +1,13 @@
 package mtanalysis.stores;
 
-import glat.program.Node;
-import mtanalysis.domains.AbstractState;
+import java.util.Set;
 
-public interface Store {
+public interface Store<Key,Value> {
 
-	public void set(Node key, AbstractState value);
+	public int setValue(Key key, Value value);
+	public Value getValue(Key key);
+	public int getCount(Key key);
+	public int setCount(Key key, int count);
+	public Set<Key> getKeys();
 
-	public boolean modify(Node key, AbstractState value);
-
-	public AbstractState get(Node key);
 }

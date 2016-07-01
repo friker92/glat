@@ -5,11 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import glat.program.GlatProgram;
-import glat.program.Method;
 import glat.program.Node;
 import glat.program.Transition;
-import glat.program.instructions.Call;
-import glat.program.instructions.expressions.terminals.Variable;
 import mtanalysis.domains.AbstractDomain;
 import mtanalysis.domains.AbstractState;
 import mtanalysis.stores.Store;
@@ -19,24 +16,20 @@ import mtanalysis.strategies.StrategyNode;
 public class SeqFixpoint implements Fixpoint {
 
 	private AbstractDomain domain;
-	private Store table;
+	private Store<Node, AbstractState> store;
 	private GlatProgram program;
-	private Call call;
-	private IterationStrategy itStrategy;
+	private IterationStrategy iterStrategy;
+	private int widenDelay = 3;
 
-	public SeqFixpoint(GlatProgram p, Call c, Store s, AbstractDomain d, IterationStrategy its) {
-		program = p;
-		call = c;
-		table = s;
+	public SeqFixpoint(GlatProgram program, Store<Node, AbstractState> store, AbstractDomain d,
+			IterationStrategy iterStrategy) {
+		this.program = program;
+		this.store = store;
 		domain = d;
-		itStrategy = its;
+		this.iterStrategy = iterStrategy;
 	}
 
-	private boolean analyze(IterationStrategy strategy) {
-		return analyze(strategy.getProperties(), strategy.getStrategy());
-	}
-
-	private boolean analyze(Properties strategyProp, StrategyNode st) {
+	private boolean start_fixpoint(StrategyNode st) {
 		boolean notStable;
 		boolean changed;
 		int widenPointsCount = 0;
@@ -47,48 +40,56 @@ public class SeqFixpoint implements Fixpoint {
 			while (l.hasNext() && (widenPointsCount > 0 || notStable)) {
 				StrategyNode n = l.next();
 				if (n.isLeaf()) {
-					changed = analyze_node(strategyProp, n);
+					changed = analyze_node(n);
 					if (n.isWidenNode()) {
 						widenPointsCount--;
 						notStable = notStable || changed;
 					}
 				} else {
-					analyze(strategyProp, n);
+					start_fixpoint(n);
 				}
 			}
 		} while (notStable);
 		return false;
 	}
 
-	private boolean analyze_node(Properties strategyProp, StrategyNode stn) {
+	private boolean analyze_node(StrategyNode stn) {
 		Node n = stn.getCFGNode();
-		AbstractState currState = table.get(n);
+		AbstractState currState = store.getValue(n);
 
 		List<AbstractState> lst = new ArrayList<AbstractState>();
 
 		AbstractState st = currState;
 		for (Transition t : stn.getInTransitions()) {
-			st = domain.exec(t, table.get(t.getSrcNode()));
+			st = domain.exec(t, store.getValue(t.getSrcNode()));
 			lst.add(st);
 		}
+
 		lst.add(currState);
 
 		st = domain.lub(lst);
-		if (table.modify(n, st)) {
-			return true;
-		} else {
-			return false;
+		boolean changed = false;
+		
+		if (!domain.lte(st, currState)) {
+			if (store.getCount(n) > widenDelay ) {
+				store.setValue(n, domain.widen(currState, st));
+				store.setCount(n, 0);
+			} else {
+				store.setValue(n, st);
+			}
+			changed= true;
 		}
+		return changed;
 	}
 
 	@Override
 	public void start() {
-		analyze(itStrategy);
+		start_fixpoint(iterStrategy.getStrategy());
 	}
 
 	@Override
-	public Store getResult() {
-		return table;
+	public Store<Node, AbstractState> getResult() {
+		return store;
 	}
 
 }

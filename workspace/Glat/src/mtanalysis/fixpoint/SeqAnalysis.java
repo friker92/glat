@@ -2,15 +2,11 @@ package mtanalysis.fixpoint;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Vector;
-
 import glat.program.ControlFlowGraph;
 import glat.program.GlatProgram;
-import glat.program.Instruction;
 import glat.program.Method;
 import glat.program.Node;
 import glat.program.Transition;
@@ -20,7 +16,7 @@ import mtanalysis.domains.AbstractDomain;
 import mtanalysis.domains.AbstractState;
 import mtanalysis.domains.intervals.IntervalsAbstDomain;
 import mtanalysis.exceptions.NoMainException;
-import mtanalysis.stores.SimpleStore;
+import mtanalysis.stores.NodeAbstStateStore;
 import mtanalysis.stores.Store;
 import mtanalysis.strategies.IterationStrategy;
 import mtanalysis.strategies.SimpleStrategy;
@@ -47,7 +43,6 @@ public class SeqAnalysis implements Analysis {
 
 	public static Properties defaultProperties() {
 		Properties prop = new Properties();
-		prop.put(NameProp.STORE, SimpleStore.class);
 		prop.put(NameProp.STRATEGY, SimpleStrategy.class);
 		prop.put(NameProp.DOMAIN, IntervalsAbstDomain.class);
 		return prop;
@@ -57,10 +52,8 @@ public class SeqAnalysis implements Analysis {
 		return (AbstractDomain) ((Class) properties.get(NameProp.DOMAIN)).newInstance();
 	}
 
-	private Store getStore() throws Exception {
-		Class[] cArg = new Class[1];
-		cArg[0] = AbstractDomain.class;
-		return (Store) ((Class) properties.get(NameProp.STORE)).getDeclaredConstructor(cArg).newInstance(domain);
+	private Store<Node, AbstractState> getStore() {
+		return new NodeAbstStateStore();
 	}
 
 	@Override
@@ -83,60 +76,52 @@ public class SeqAnalysis implements Analysis {
 		Transition init = main_cfg.getOutTransitions(main.getInitNode()).get(0);
 		AbstractState def_st = domain.exec(init, a);
 		System.out.println("init: " + def_st);
+
 		// launch "threads"
 		Transition launch = main_cfg.getOutTransitions(init.getTargetNode()).get(0);
-		Fixpoint fx;
-		Method m;
-		
-		Vector<Store> vstore = new Vector<Store>();
-		for (Instruction i : launch.getInstructions()) {
-			vstore.addElement(prepareStore(p,(Call)i,def_st,getStore()));
-		}
-		Iterator<Store> istore = vstore.iterator();
-		Store sto;
+		Call i = (Call) launch.getInstruction(0);
 
-		for (Instruction i : launch.getInstructions()) {
-			switch (i.getType()) {
-			case ASYNCCALL:
-			case SYNCCALL:
-				m = ((Call) i).getMethodRef();
-				System.out.println("launch: " + m.getLabel());
-				sto = istore.next();
-				fx = new SeqFixpoint(p, (Call) i, sto, domain, getStrategy(m.getControlFlowGraph()));
-				fx.start();
-				result.put(i, fx.getResult());
-				break;
-			default:
-				break;
-			}
-		}
+		Method m = i.getMethodRef();
+
+		Store<Node, AbstractState> store = prepareStore(p, i, def_st);
+
+		Fixpoint fx = new SeqFixpoint(p, store, domain, getStrategy(m.getControlFlowGraph()));
+		fx.start();
+		result.put(i, fx.getResult());
 	}
 
-	private Store prepareStore(GlatProgram program, Call call, AbstractState default_state, Store table){
-		Method m;
+	private Store<Node, AbstractState> prepareStore(GlatProgram program, Call call, AbstractState stateAtCall) {
 
-		m = call.getMethodRef();
+		Store<Node, AbstractState> store = getStore();
+		Method m = call.getMethodRef();
 
 		List<Variable> vs = new ArrayList<Variable>(m.getVariables());
 		vs.addAll(m.getParameters());
 		vs.addAll(program.getGlobalVariables());
+
 		AbstractState bt = domain.bottom(vs);
 		vs = new ArrayList<Variable>(call.getArgs());
 		vs.addAll(program.getGlobalVariables());
-		AbstractState def = domain.project(default_state, vs);// call.getArgs());
+		AbstractState def = domain.project(stateAtCall, vs);// call.getArgs());
 		def = domain.rename(def, call.getArgs(), m.getParameters());
+
+		// TODO extend should receive and abstract state and a list of variable,
+		// and should extend the state with the new variables set to top
+
 		def = domain.extend(bt, def);
 
 		for (Node n : m.getControlFlowGraph().getNodes()) {
 			if (m.getInitNode().equals(n))
-				table.set(n, def);
+				store.setValue(n, def);
 			else
-				table.set(n, bt);
+				store.setValue(n, bt);
 		}
-		return table;
+		return store;
 	}
-	
+
 	private Method getMain(GlatProgram p) {
+		// TODO check that 'main' follow the required syntax.
+
 		for (Method m : p.getMethods()) {
 			if (m.getName().equals("main") && m.getParameters().size() == 0) {
 				return m;

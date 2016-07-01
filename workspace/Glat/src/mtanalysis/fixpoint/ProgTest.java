@@ -8,7 +8,7 @@ import glat.parser.Glat;
 import glat.program.GlatProgram;
 import glat.program.Node;
 import mtanalysis.domains.intervals.IntervalsAbstDomain;
-import mtanalysis.stores.SimpleStore;
+import mtanalysis.stores.NodeAbstStateStore;
 import mtanalysis.stores.Store;
 import mtanalysis.strategies.SimpleStrategy;
 
@@ -20,7 +20,7 @@ public class ProgTest {
 		Glat g = new Glat();
 		GlatProgram p = g.parse(new String[] { basePath + "/examples/example3" });
 		Properties prop = new Properties();
-		prop.put(SeqAnalysis.NameProp.STORE, SimpleStore.class);
+		prop.put(SeqAnalysis.NameProp.STORE, NodeAbstStateStore.class);
 		prop.put(SeqAnalysis.NameProp.STRATEGY, SimpleStrategy.class);
 		prop.put(SeqAnalysis.NameProp.DOMAIN, IntervalsAbstDomain.class);
 		// prop.put(SeqFixpoint.NameProp.DOMAIN, SignAbstDomain.class);
