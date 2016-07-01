@@ -1,0 +1,49 @@
+global {
+var int f;
+var int g;
+}
+
+init {
+}
+
+void main() {
+	var int y;
+	var int y2;
+  start n0;
+  trans n0 -> n1 {
+  y := 3;
+  y2 := 5;
+  f := 1;
+  }
+  trans n1 -> n2 {
+  	sync m(y);
+  	sync m(y2);
+  }
+}
+
+void m(var int j){
+   var int x;
+   //var int y;
+
+   start n0;
+
+   trans n0 -> n1 {
+     f := j;
+   }
+
+   trans n1 -> n2 {
+     assume(x<=7);
+   }
+
+   trans n2 -> n1 {
+     f := f+1;
+   }
+   
+   trans n1 -> n3 {
+     assume(x>7);
+   }
+   trans n3 -> n4 {
+     f := f+8;
+   }
+   
+}

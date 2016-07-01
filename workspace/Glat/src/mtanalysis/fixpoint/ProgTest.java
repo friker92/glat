@@ -2,8 +2,11 @@ package mtanalysis.fixpoint;
 
 import java.util.Map;
 import java.util.Properties;
+import java.util.Vector;
+
 import glat.parser.Glat;
 import glat.program.GlatProgram;
+import glat.program.Node;
 import mtanalysis.domains.intervals.IntervalsAbstDomain;
 import mtanalysis.stores.SimpleStore;
 import mtanalysis.stores.Store;
@@ -31,7 +34,7 @@ public class ProgTest {
 
 	}
 
-	private static String prettyprint(Map<Object, Object> result) {
+	public static String prettyprint(Map<Object, Object> result) {
 		String str = "";
 		for (Object k : result.keySet()) {
 			str += k + " \n" + prettyprint((Store) result.get(k));
@@ -40,7 +43,16 @@ public class ProgTest {
 		return str;
 	}
 
-	private static String prettyprint(Store v) {
+	public static String prettyprint(Store v) {
 		return v.toString();
+	}
+	
+	public static String prettyprint(Vector v){
+		String str = "{";
+		for (Object n : v) {
+			str += "\n\t" + n;
+		}
+		str += "\n}\n";
+		return str;
 	}
 }

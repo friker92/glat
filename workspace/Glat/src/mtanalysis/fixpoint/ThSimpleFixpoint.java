@@ -66,7 +66,6 @@ public class ThSimpleFixpoint implements Fixpoint {
 				}
 			}
 		} while (notStable);
-		System.err.println(return_interferences);
 		return false;
 	}
 
@@ -78,10 +77,27 @@ public class ThSimpleFixpoint implements Fixpoint {
 
 		AbstractState st = currState;
 		AbstractState st_prime;
+		boolean readG = false;
 		for (Transition t : stn.getInTransitions()) {
 			st_prime = table.get(t.getSrcNode());
+			if(isReadGlobal(t)){
+				readG = true;
+				st_prime = applyInterference(t,st_prime);
+			}
 			st = domain.exec(t, st_prime);
-				return_interferences.add(new FlowInsensitiveInterference(domain, st_prime, st));
+
+			if(isWriteGlobal(t)){
+				Interference itf = new FlowInsensitiveInterference(domain, st_prime, st);
+				boolean add = true;
+				for(Interference i: return_interferences){
+					if(i.equals(itf)){
+						add = false;
+						break;
+					}
+				}
+				if(add)
+					return_interferences.add(itf);
+			}
 			lst.add(st);
 		}
 		lst.add(currState);
@@ -95,8 +111,20 @@ public class ThSimpleFixpoint implements Fixpoint {
 		}
 	}
 
+	private AbstractState applyInterference(Transition t, AbstractState st_prime) {
+		AbstractState st = st_prime.copy();
+		for(Interference i : interferences){
+			st = domain.lub(st,i.incorporate(st_prime));
+		}
+		return st;
+	}
+
 	private boolean isWriteGlobal(Transition t) {
 		return (boolean) t.getPropValue("isWriteGlobal");
+	}
+	
+	private boolean isReadGlobal(Transition t) {
+		return (boolean) t.getPropValue("isReadGlobal");
 	}
 
 	@Override

@@ -25,5 +25,14 @@ public class FlowInsensitiveInterference implements Interference {
 	public String toString() {
 		return source + " -> "+target;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof FlowInsensitiveInterference){
+			FlowInsensitiveInterference fobj = (FlowInsensitiveInterference)obj;
+			return this.source.equals(fobj.source) && this.target.equals(fobj.target) && this.domain.equals(fobj.domain);
+		}
+		return super.equals(obj);
+	}
 
 }

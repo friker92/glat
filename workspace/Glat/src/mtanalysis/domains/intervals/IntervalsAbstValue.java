@@ -99,4 +99,13 @@ public class IntervalsAbstValue implements AbstractValue {
 
 		return new IntervalsAbstValue(l, r);
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof IntervalsAbstValue){
+			IntervalsAbstValue iobj = (IntervalsAbstValue)obj;
+			return this.leftLimit == iobj.leftLimit && this.rightLimit == iobj.rightLimit;
+		}
+		return super.equals(obj);
+	}
 }

@@ -104,6 +104,9 @@ public class ThSimpleAnalysis implements Analysis {
 		Store sto;
 		int is = 0;
 		do{
+			is++;
+			System.err.println("lap: "+is);
+			System.err.println("interferences: "+ProgTest.prettyprint(interferences));
 			old_result = result;
 			result = new HashMap<Object, Object>();
 			

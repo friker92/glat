@@ -85,4 +85,19 @@ public abstract class NonRelAbstractState implements AbstractState {
 		st.remove(s1);
 		vars.remove(s1);
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof NonRelAbstractState){
+			NonRelAbstractState nrobj = (NonRelAbstractState) obj;
+			if(this.vars.size() != nrobj.vars.size())
+				return false;
+			for(Variable v: nrobj.vars){
+				if(!this.st.get(v).equals(nrobj.st.get(v)))
+					return false;
+			}
+			return true;
+		}
+		return super.equals(obj);
+	}
 }
