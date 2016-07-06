@@ -130,7 +130,9 @@ public class ThSimpleFixpoint implements Fixpoint {
 
 			exec_st = domain.exec(t, src_st);
 			if(isWriteGlobal(t)){
-				th.addInterference(new FlowInsensitiveInterference(domain, src_st, exec_st));
+				AbstractState global_src = domain.project(src_st, program.getGlobalVariables());
+				AbstractState global_exec = domain.project(exec_st, program.getGlobalVariables());
+				th.addInterference(new FlowInsensitiveInterference(domain, global_src, global_exec));
 			}
 			lst.add(exec_st);
 		}

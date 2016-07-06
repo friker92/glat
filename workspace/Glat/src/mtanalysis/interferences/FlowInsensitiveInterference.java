@@ -17,9 +17,11 @@ public class FlowInsensitiveInterference implements Interference {
 	}
 	@Override
 	public AbstractState incorporate(AbstractState st) {
-		if(domain.glb(source,st).equals(BottomState.getInstance()))
+		AbstractState global_st = domain.project(st, source.getVars());
+		if(domain.glb(source,global_st).equals(BottomState.getInstance()))
 			return null;
-		return domain.lub(target, st);
+		AbstractState ret = domain.lub(target, global_st);
+		return domain.extend(st,ret);
 	}
 	@Override
 	public String toString() {
