@@ -33,7 +33,7 @@ public class ThSimpleAnalysis implements Analysis {
 	private Properties properties;
 	private AbstractDomain domain;
 	private Object result;
-
+	private Fixpoint fx;
 
 	public enum NameProp {
 		STRATEGY, DOMAIN
@@ -41,7 +41,7 @@ public class ThSimpleAnalysis implements Analysis {
 
 	// Prog, Domain, STrategy
 	public ThSimpleAnalysis(Properties prop) throws Exception {
-		properties = new Properties(defaultProperties());
+		properties = defaultProperties();
 		for (Object k : prop.keySet()) {
 			properties.put(k, prop.get(k));
 		}
@@ -101,22 +101,20 @@ public class ThSimpleAnalysis implements Analysis {
 		// launch "threads"
 		Transition launch = main_cfg.getOutTransitions(init.getTargetNode()).get(0);
 		
-		Vector<Store<Node, AbstractState>> vstore = new Vector<Store<Node, AbstractState>>();
-		Vector<ControlFlowGraph> vcfg = new Vector<ControlFlowGraph>();
 		Vector<ThreadInfo> vth = new Vector<ThreadInfo>();
 		int count = 0;
+		
 		for (Instruction i : launch.getInstructions()) {
 			Call c = (Call)i;
-			Method m = c.getMethodRef();
 			Store<Node, AbstractState> st = prepareStore(p,c,def_st);
-			ThreadInfo th = new ThreadInfo("th"+count,st,m.getControlFlowGraph());
+			ThreadInfo th = new ThreadInfo("th"+count,st,c);
 			vth.add(th);
 			count++;
 		}
 
-		Fixpoint fx = new ThSimpleFixpoint(p, vth, domain, getStrategy());
+		fx = new ThSimpleFixpoint(p, vth, domain, getStrategy());
 		fx.start();
-		result = fx.getResult();
+		//result = fx.getResult();
 	}
 	
 	private Store<Node, AbstractState> prepareStore(GlatProgram program, Call call, AbstractState stateAtCall) {
@@ -152,7 +150,9 @@ public class ThSimpleAnalysis implements Analysis {
 
 	@Override
 	public Map<Object, Object> getResult() {
-		System.out.println("Result: "+result);
+		System.out.println("Result: ");
+		fx.getResult();
+		
 		return null;
 	}
 }

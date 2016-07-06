@@ -78,6 +78,15 @@ public class GlatCFG extends GlatClass implements ControlFlowGraph {
 		gh.addVertex(src);
 		gh.addVertex(trg);
 		gh.addEdge(src,trg , tr);
+		
+		
+		Boolean previous = (Boolean) src.getPropValue("isReadGlobal");
+		if(null != tr.getPropValue("isReadGlobal"))
+			src.setPropValue("isReadGlobal", (previous==null)?tr.getPropValue("isReadGlobal"):(previous|| (boolean)tr.getPropValue("isReadGlobal")));
+		else
+			src.setPropValue("isReadGlobal", (previous==null)?false:previous);
+		
+		
 	}
 
 	/*##############################

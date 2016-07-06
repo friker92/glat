@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Properties;
 
 public abstract class GlatClass implements BasicInterface {
-	private Properties prop;
+	protected Properties prop;
 		
 	/*###################################
 	 *        PropTable Methods

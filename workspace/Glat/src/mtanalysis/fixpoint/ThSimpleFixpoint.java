@@ -1,8 +1,10 @@
 package mtanalysis.fixpoint;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Vector;
 
@@ -43,24 +45,45 @@ public class ThSimpleFixpoint implements Fixpoint {
 
 	@Override
 	public void start() {
+		Map<ThreadInfo,StrategyNode> vStrategyNode = new HashMap<ThreadInfo,StrategyNode>();
+		
+		for(ThreadInfo th: this.vth){
+			Call c = th.getCall();
+			Method m = c.getMethodRef();
+			vStrategyNode.put(th,iterStrategy.getStrategy(m.getControlFlowGraph()));
+		}
+		
 		boolean change = true;
+		int count = 0;
 		while(change){
 			change = false;
 			InterferenceSet interferences  = new InterferenceSet();
 			for(ThreadInfo th : this.vth){
-				interferences.addSet(interferences);
+				interferences.addSet(th.getInterferences());
 			}
+			System.out.println("Vuelta "+count+": \n**itfs: "+interferences+"\n**store: ");
+			this.getResult();
 			for(ThreadInfo th : this.vth){
-				boolean chng = start_fixpoint(th,iterStrategy.getStrategy(th.getCFG()),interferences);
+				boolean chng = start_fixpoint(th,vStrategyNode.get(th),interferences);
 				change = change || chng;
 			}	
-		
+
+			count++;
 		}
+		InterferenceSet interferences  = new InterferenceSet();
+		for(ThreadInfo th : this.vth){
+			interferences.addSet(th.getInterferences());
+		}
+		System.out.println("Vuelta "+count+": \n**itfs: "+interferences+"\n**store: ");
+		this.getResult();
 	}
 
 	@Override
 	public Store<Node, AbstractState> getResult() {
-		return vth.get(0).getStore();
+		for(ThreadInfo th : vth){
+			System.out.println(""+th.getId()+" : "+th.getStore());
+		}
+		return null;
 	}
 	
 	private void setIterationProperties(){
@@ -75,18 +98,19 @@ public class ThSimpleFixpoint implements Fixpoint {
 		do {
 			notStable = false;
 			Iterator<StrategyNode> l = st.getComponents().iterator();
-			widenPointsCount = st.getWidenPoints().size();
+			widenPointsCount = st.getImportantPoints().size();
 			while (l.hasNext() && (widenPointsCount > 0 || notStable)) {
 				StrategyNode n = l.next();
 				if (n.isLeaf()) {
 					changed = analyze_node(th,n,interferences);
-					if (n.isWidenNode()) {
+					if (n.isImportantNode()) {
 						widenPointsCount--;
 						notStable = notStable || changed;
 						global_change = global_change || changed;
 					}
 				} else {
-					start_fixpoint(th,n,interferences);
+					changed = start_fixpoint(th,n,interferences);
+					global_change = global_change || changed;
 				}
 			}
 		} while (notStable);
@@ -96,33 +120,30 @@ public class ThSimpleFixpoint implements Fixpoint {
 	private boolean analyze_node(ThreadInfo th,StrategyNode stn,InterferenceSet interferences) {
 		Store<Node, AbstractState> store = th.getStore();
 		Node n = stn.getCFGNode();
-		AbstractState currState = store.getValue(n);
-
 		List<AbstractState> lst = new ArrayList<AbstractState>();
-
+		
+		AbstractState dest_curr_st = store.getValue(n);
+		AbstractState tmp_st, exec_st, src_st, st;
+		
 		for (Transition t : stn.getInTransitions()) {
-			AbstractState localState;
-			AbstractState st = store.getValue(t.getSrcNode());
-			if(isReadGlobal(t)){
-				localState = applyInterference(interferences, t, st);
-			}else{
-				localState = st;
-			}
-			st = domain.exec(t, localState);
+			src_st = store.getValue(t.getSrcNode());
+
+			exec_st = domain.exec(t, src_st);
 			if(isWriteGlobal(t)){
-				th.addInterference(new FlowInsensitiveInterference(domain, localState, st));
+				th.addInterference(new FlowInsensitiveInterference(domain, src_st, exec_st));
 			}
-			lst.add(st);
+			lst.add(exec_st);
 		}
+		lst.add(dest_curr_st);
 
-		lst.add(currState);
-
-		AbstractState st = domain.lub(lst);
+		tmp_st = domain.lub(lst);
 		boolean changed = false;
 		
-		if (!domain.lte(st, currState)) {
+		st = applyInterference(interferences, n, tmp_st);
+		
+		if (!domain.lte(st, dest_curr_st)) {
 			if (store.getCount(n) > widenDelay ) {
-				store.setValue(n, domain.widen(currState, st));
+				store.setValue(n, domain.widen(dest_curr_st, st));
 				store.setCount(n, 0);
 			} else {
 				store.setValue(n, st);
@@ -134,9 +155,9 @@ public class ThSimpleFixpoint implements Fixpoint {
 
 
 
-	private AbstractState applyInterference(InterferenceSet interferences,Transition t, AbstractState st_prime) {
+	private AbstractState applyInterference(InterferenceSet interferences,Node n, AbstractState st_prime) {
 		AbstractState st = st_prime.copy();
-		if(isWriteGlobal(t)){
+		if(isReadGlobal(n)){
 			st = interferences.applyInterferences(this.domain, st_prime);			
 		}
 		return st;
@@ -147,11 +168,10 @@ public class ThSimpleFixpoint implements Fixpoint {
 		return (boolean) t.getPropValue("isWriteGlobal");
 	}
 	
-	private boolean isReadGlobal(Transition t) {
-		if(!t.hasProp("isReadGlobal"))return false;
-		return (boolean) t.getPropValue("isReadGlobal");
+	private boolean isReadGlobal(Node n) {
+		if(!n.hasProp("isReadGlobal"))return false;
+		return (boolean) n.getPropValue("isReadGlobal");
 	}
-
 
 
 }

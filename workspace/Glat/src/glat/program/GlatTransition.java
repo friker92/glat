@@ -71,19 +71,21 @@ public class GlatTransition extends GlatClass implements Transition {
 	public void addInstruction(GlatInstruction i){
 		i.setMethod(method);
 		i.setTransition(this);
+		Boolean previous = (Boolean) getPropValue("isWriteGlobal");
 		if(null != i.getPropValue("isWriteGlobal"))
-			setPropValue("isWriteGlobal", i.getPropValue("isWriteGlobal"));
+			setPropValue("isWriteGlobal", (previous==null)?i.getPropValue("isWriteGlobal"):(previous|| (boolean)i.getPropValue("isWriteGlobal")));
 		else
-			setPropValue("isWriteGlobal", false);
+			setPropValue("isWriteGlobal", (previous==null)?false:previous);
 		
+		
+		previous = (Boolean) getPropValue("isReadGlobal");
 		if(null != i.getPropValue("isReadGlobal"))
-			setPropValue("isReadGlobal", i.getPropValue("isReadGlobal"));
+			setPropValue("isReadGlobal", (previous==null)?i.getPropValue("isReadGlobal"):(previous|| (boolean)i.getPropValue("isReadGlobal")));
 		else
-			setPropValue("isReadGlobal", false);
+			setPropValue("isReadGlobal", (previous==null)?false:previous);
 		if(Tcode.size()>0)
 			Tcode.get(Tcode.size()-1).setNextInst(i);
 		Tcode.add(i);
-		
 	}
 
 	/*##############################

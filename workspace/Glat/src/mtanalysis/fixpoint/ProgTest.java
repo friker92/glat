@@ -18,20 +18,37 @@ public class ProgTest {
 
 	public static void main(String[] args) throws Exception {
 		Glat g = new Glat();
-		GlatProgram p = g.parse(new String[] { basePath + "/examples/example3" });
+		GlatProgram p = g.parse(new String[] { basePath + "/examples/example5" });
 		Properties prop = new Properties();
 		prop.put(SeqAnalysis.NameProp.DOMAIN, IntervalsAbstDomain.class);
 		// prop.put(SeqFixpoint.NameProp.DOMAIN, SignAbstDomain.class);
 		// prop.put(SeqFixpoint.NameProp.DOMAIN, ConstPropDomain.class);
-
-		SeqAnalysis sq = new SeqAnalysis(prop);
-		// sq.analyze(p, new SignAbstDomain());
-		// sq.analyze(p, new ConstPropDomain());
-		sq.start(p);// , new IntervalsAbstDomain());
-		System.out.println("Analysis Result: \n" + prettyprint(sq.getResult()));
-
+		//launchSeqAnalysis(prop,p);
+		launchThAnalysis(prop,p);
+	}
+	
+	public static void launchSeqAnalysis(Properties prop, GlatProgram p){
+		SeqAnalysis sq;
+		try {
+			sq = new SeqAnalysis(prop);	
+			sq.start(p);
+			System.out.println("Analysis Result: \n" + prettyprint(sq.getResult()));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
+	public static void launchThAnalysis(Properties prop, GlatProgram p){
+		ThSimpleAnalysis ths;
+		try {
+			ths = new ThSimpleAnalysis(prop);	
+			ths.start(p);
+			ths.getResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public static String prettyprint(Map<Object, Object> result) {
 		String str = "";
 		for (Object k : result.keySet()) {
