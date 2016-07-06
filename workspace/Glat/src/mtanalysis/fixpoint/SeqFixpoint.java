@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+
+import glat.program.ControlFlowGraph;
 import glat.program.GlatProgram;
 import glat.program.Node;
 import glat.program.Transition;
@@ -20,13 +22,15 @@ public class SeqFixpoint implements Fixpoint {
 	private GlatProgram program;
 	private IterationStrategy iterStrategy;
 	private int widenDelay = 3;
+	private ControlFlowGraph cfg;
 
-	public SeqFixpoint(GlatProgram program, Store<Node, AbstractState> store, AbstractDomain d,
+	public SeqFixpoint(GlatProgram program, ControlFlowGraph cfg, Store<Node, AbstractState> store, AbstractDomain d,
 			IterationStrategy iterStrategy) {
 		this.program = program;
 		this.store = store;
 		domain = d;
 		this.iterStrategy = iterStrategy;
+		this.cfg = cfg;
 	}
 
 	private boolean start_fixpoint(StrategyNode st) {
@@ -84,12 +88,12 @@ public class SeqFixpoint implements Fixpoint {
 
 	@Override
 	public void start() {
-		start_fixpoint(iterStrategy.getStrategy());
+		start_fixpoint(this.iterStrategy.getStrategy(this.cfg));
 	}
 
 	@Override
 	public Store<Node, AbstractState> getResult() {
-		return store;
+		return this.store;
 	}
 
 }

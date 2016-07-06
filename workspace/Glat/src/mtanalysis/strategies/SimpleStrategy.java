@@ -11,15 +11,16 @@ import glat.program.ControlFlowGraph;
 import glat.program.Node;
 
 public class SimpleStrategy implements IterationStrategy {
+	protected IterationStrategy generator;
 	protected Properties prop;
-	protected StrategyNodeImp lst;
-
-	public SimpleStrategy(ControlFlowGraph cfg) {
+	
+	public SimpleStrategy(){
 		prop = new Properties();
-		buildList(cfg);
 	}
-
-	private void buildList(ControlFlowGraph cfg) {
+	
+	@Override
+	public StrategyNode getStrategy(ControlFlowGraph cfg) {
+		StrategyNodeImp lst;
 		if (cfg.getNodes().size() == 1) {
 			lst = new StrategyNodeImp(cfg.getNodes().get(0), true);
 			lst.setAllTransitions(cfg.getInTransitions(cfg.getNodes().get(0)));
@@ -49,6 +50,7 @@ public class SimpleStrategy implements IterationStrategy {
 				lst.addStrategyNode(tmp);
 			}
 		}
+		return lst;
 	}
 
 	@Override
@@ -56,13 +58,4 @@ public class SimpleStrategy implements IterationStrategy {
 		return prop;
 	}
 
-	@Override
-	public StrategyNode getStrategy() {
-		return lst;
-	}
-
-	@Override
-	public String toString() {
-		return lst.toString();
-	}
 }

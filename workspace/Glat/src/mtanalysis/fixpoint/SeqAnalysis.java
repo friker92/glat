@@ -28,7 +28,7 @@ public class SeqAnalysis implements Analysis {
 	Map<Object, Object> result;
 
 	public enum NameProp {
-		STORE, STRATEGY, DOMAIN
+		STRATEGY, DOMAIN
 	}
 
 	// Prog, Domain, STrategy
@@ -43,7 +43,6 @@ public class SeqAnalysis implements Analysis {
 
 	public static Properties defaultProperties() {
 		Properties prop = new Properties();
-		prop.put(NameProp.STRATEGY, SimpleStrategy.class);
 		prop.put(NameProp.DOMAIN, IntervalsAbstDomain.class);
 		return prop;
 	}
@@ -75,7 +74,6 @@ public class SeqAnalysis implements Analysis {
 		// exec init transition
 		Transition init = main_cfg.getOutTransitions(main.getInitNode()).get(0);
 		AbstractState def_st = domain.exec(init, a);
-		System.out.println("init: " + def_st);
 
 		// launch "threads"
 		Transition launch = main_cfg.getOutTransitions(init.getTargetNode()).get(0);
@@ -85,7 +83,7 @@ public class SeqAnalysis implements Analysis {
 
 		Store<Node, AbstractState> store = prepareStore(p, i, def_st);
 
-		Fixpoint fx = new SeqFixpoint(p, store, domain, getStrategy(m.getControlFlowGraph()));
+		Fixpoint fx = new SeqFixpoint(p, m.getControlFlowGraph(), store, domain, getStrategy());
 		fx.start();
 		result.put(i, fx.getResult());
 	}
@@ -130,18 +128,8 @@ public class SeqAnalysis implements Analysis {
 		throw new NoMainException("No MAIN");
 	}
 
-	private IterationStrategy getStrategy(ControlFlowGraph cfg) {
-		Class[] cArg = new Class[1];
-		cArg[0] = ControlFlowGraph.class;
-		IterationStrategy strategy = null;
-		try {
-			strategy = (IterationStrategy) ((Class) properties.get(NameProp.STRATEGY)).getDeclaredConstructor(cArg)
-					.newInstance(cfg);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		System.out.println("strategy: " + strategy);
-		return strategy;
+	private IterationStrategy getStrategy() {
+		return new SimpleStrategy();
 	}
 
 	@Override

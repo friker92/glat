@@ -2,11 +2,12 @@ package mtanalysis.strategies;
 
 import java.util.Properties;
 
+import glat.program.ControlFlowGraph;
+
 public interface IterationStrategy {
-	// public abstract IterationStrategy(ControlFlowGraph cfg);
 
 	public Properties getProperties();
 
-	public StrategyNode getStrategy();
+	public StrategyNode getStrategy(ControlFlowGraph cfg);
 
 }

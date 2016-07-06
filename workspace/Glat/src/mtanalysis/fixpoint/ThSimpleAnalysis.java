@@ -22,6 +22,7 @@ import mtanalysis.domains.AbstractState;
 import mtanalysis.domains.intervals.IntervalsAbstDomain;
 import mtanalysis.exceptions.NoMainException;
 import mtanalysis.interferences.Interference;
+import mtanalysis.interferences.InterferenceSet;
 import mtanalysis.stores.NodeAbstStateStore;
 import mtanalysis.stores.Store;
 import mtanalysis.strategies.IterationStrategy;
@@ -31,11 +32,11 @@ public class ThSimpleAnalysis implements Analysis {
 
 	private Properties properties;
 	private AbstractDomain domain;
-	Map<Object, Object> result;
-	Vector<Interference> interferences;
+	private Object result;
+
 
 	public enum NameProp {
-		STORE, STRATEGY, DOMAIN
+		STRATEGY, DOMAIN
 	}
 
 	// Prog, Domain, STrategy
@@ -45,13 +46,11 @@ public class ThSimpleAnalysis implements Analysis {
 			properties.put(k, prop.get(k));
 		}
 		domain = getDomain();
-		result = new HashMap<Object, Object>();
+		
 	}
 
 	public static Properties defaultProperties() {
 		Properties prop = new Properties();
-		prop.put(NameProp.STORE, NodeAbstStateStore.class);
-		prop.put(NameProp.STRATEGY, SimpleStrategy.class);
 		prop.put(NameProp.DOMAIN, IntervalsAbstDomain.class);
 		return prop;
 	}
@@ -60,14 +59,25 @@ public class ThSimpleAnalysis implements Analysis {
 		return (AbstractDomain) ((Class) properties.get(NameProp.DOMAIN)).newInstance();
 	}
 
-	private Store getStore() throws Exception {
-		Class[] cArg = new Class[1];
-		cArg[0] = AbstractDomain.class;
-		return (Store) ((Class) properties.get(NameProp.STORE)).getDeclaredConstructor(cArg).newInstance(domain);
+	private Store<Node, AbstractState> getStore() {
+		return new NodeAbstStateStore();
 	}
-	private boolean isWriteGlobal(Transition t) {
-		return (boolean) t.getPropValue("isWriteGlobal");
+	
+	
+	private Method getMain(GlatProgram p) {
+		for (Method m : p.getMethods()) {
+			if (m.getName().equals("main") && m.getParameters().size() == 0) {
+				return m;
+			}
+		}
+		throw new NoMainException("No MAIN");
 	}
+
+	private IterationStrategy getStrategy() {
+		return new SimpleStrategy();
+	}
+	
+	
 	@Override
 	public void start(GlatProgram p) throws Exception {
 		/*
@@ -87,102 +97,62 @@ public class ThSimpleAnalysis implements Analysis {
 		// exec init transition
 		Transition init = main_cfg.getOutTransitions(main.getInitNode()).get(0);
 		AbstractState def_st = domain.exec(init, a);
-		//System.out.println("init: " + def_st);
+
 		// launch "threads"
 		Transition launch = main_cfg.getOutTransitions(init.getTargetNode()).get(0);
-		Fixpoint fx;
-		Method m;
-		Map<Object, Object> old_result;
-		boolean thchange = false;
-
-		interferences = new Vector<Interference>();
-		Vector<Interference> newinterferences; 
-		Vector<Store> vstore = new Vector<Store>();
+		
+		Vector<Store<Node, AbstractState>> vstore = new Vector<Store<Node, AbstractState>>();
+		Vector<ControlFlowGraph> vcfg = new Vector<ControlFlowGraph>();
+		Vector<ThreadInfo> vth = new Vector<ThreadInfo>();
+		int count = 0;
 		for (Instruction i : launch.getInstructions()) {
-			vstore.addElement(prepareStore(p,(Call)i,def_st,getStore()));
+			Call c = (Call)i;
+			Method m = c.getMethodRef();
+			Store<Node, AbstractState> st = prepareStore(p,c,def_st);
+			ThreadInfo th = new ThreadInfo("th"+count,st,m.getControlFlowGraph());
+			vth.add(th);
+			count++;
 		}
-		Iterator<Store> istore = vstore.iterator();
-		Store sto;
-		int is = 0;
-		do{
-			is++;
-			System.err.println("lap: "+is);
-			System.err.println("interferences: "+ProgTest.prettyprint(interferences));
-			old_result = result;
-			result = new HashMap<Object, Object>();
-			
-			newinterferences = new Vector<Interference>();
-			for (Instruction i : launch.getInstructions()) {
-				
-				switch (i.getType()) {
-				case ASYNCCALL:
-				case SYNCCALL:
-					m = ((Call) i).getMethodRef();
-					sto = istore.next();
-					//System.out.println("launch: " + m.getLabel() + " \n\t-store: "+sto+ " \n\t-interferences: "+interferences);	
-					fx = new ThSimpleFixpoint(p, (Call) i, sto, domain, getStrategy(m.getControlFlowGraph()),interferences,newinterferences);
-					fx.start();
-					result.put(i, fx.getResult());
-					break;
-				default:
-					break;
-				}
-			}
-			istore = vstore.iterator();
-			interferences = newinterferences;
-		}while(!old_result.equals(result));
+
+		Fixpoint fx = new ThSimpleFixpoint(p, vth, domain, getStrategy());
+		fx.start();
+		result = fx.getResult();
 	}
 	
-	private Store prepareStore(GlatProgram program, Call call, AbstractState default_state, Store table){
-		Method m;
+	private Store<Node, AbstractState> prepareStore(GlatProgram program, Call call, AbstractState stateAtCall) {
 
-		m = call.getMethodRef();
+		Store<Node, AbstractState> store = getStore();
+		Method m = call.getMethodRef();
 
 		List<Variable> vs = new ArrayList<Variable>(m.getVariables());
 		vs.addAll(m.getParameters());
 		vs.addAll(program.getGlobalVariables());
+
 		AbstractState bt = domain.bottom(vs);
 		vs = new ArrayList<Variable>(call.getArgs());
 		vs.addAll(program.getGlobalVariables());
-		AbstractState def = domain.project(default_state, vs);// call.getArgs());
+		AbstractState def = domain.project(stateAtCall, vs);// call.getArgs());
 		def = domain.rename(def, call.getArgs(), m.getParameters());
+
+		// TODO extend should receive and abstract state and a list of variable,
+		// and should extend the state with the new variables set to top
+
 		def = domain.extend(bt, def);
 
 		for (Node n : m.getControlFlowGraph().getNodes()) {
 			if (m.getInitNode().equals(n))
-				table.setValue(n, def);
+				store.setValue(n, def);
 			else
-				table.setValue(n, bt);
+				store.setValue(n, bt);
 		}
-		return table;
+		return store;
 	}
 
-	private Method getMain(GlatProgram p) {
-		for (Method m : p.getMethods()) {
-			if (m.getName().equals("main") && m.getParameters().size() == 0) {
-				return m;
-			}
-		}
-		throw new NoMainException("No MAIN");
-	}
 
-	private IterationStrategy getStrategy(ControlFlowGraph cfg) {
-		Class[] cArg = new Class[1];
-		cArg[0] = ControlFlowGraph.class;
-		IterationStrategy strategy = null;
-		try {
-			strategy = (IterationStrategy) ((Class) properties.get(NameProp.STRATEGY)).getDeclaredConstructor(cArg)
-					.newInstance(cfg);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		//System.out.println("strategy: " + strategy);
-		return strategy;
-	}
 
 	@Override
 	public Map<Object, Object> getResult() {
-		System.out.println("Last interference: "+interferences);
-		return result;
+		System.out.println("Result: "+result);
+		return null;
 	}
 }
