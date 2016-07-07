@@ -139,6 +139,8 @@ public interface AbstractDomain {
 	}
 
 	public AbstractState extend(AbstractState s0, AbstractState st);
+	
+	public AbstractState extend(AbstractState s0, List<Variable> lv);
 
 	public AbstractState project(AbstractState s0, List<Variable> lv);
 

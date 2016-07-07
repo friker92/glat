@@ -28,11 +28,8 @@ import mtanalysis.stores.Store;
 import mtanalysis.strategies.IterationStrategy;
 import mtanalysis.strategies.SimpleStrategy;
 
-public class ThSimpleAnalysis implements Analysis {
+public class ThSimpleAnalysis extends SimpleAnalysis {
 
-	private Properties properties;
-	private AbstractDomain domain;
-	private Object result;
 	private Fixpoint fx;
 
 	public enum NameProp {
@@ -41,50 +38,11 @@ public class ThSimpleAnalysis implements Analysis {
 
 	// Prog, Domain, STrategy
 	public ThSimpleAnalysis(Properties prop) throws Exception {
-		properties = defaultProperties();
-		for (Object k : prop.keySet()) {
-			properties.put(k, prop.get(k));
-		}
-		domain = getDomain();
-		
+		super(prop);
 	}
-
-	public static Properties defaultProperties() {
-		Properties prop = new Properties();
-		prop.put(NameProp.DOMAIN, IntervalsAbstDomain.class);
-		return prop;
-	}
-
-	private AbstractDomain getDomain() throws Exception {
-		return (AbstractDomain) ((Class) properties.get(NameProp.DOMAIN)).newInstance();
-	}
-
-	private Store<Node, AbstractState> getStore() {
-		return new NodeAbstStateStore();
-	}
-	
-	
-	private Method getMain(GlatProgram p) {
-		for (Method m : p.getMethods()) {
-			if (m.getName().equals("main") && m.getParameters().size() == 0) {
-				return m;
-			}
-		}
-		throw new NoMainException("No MAIN");
-	}
-
-	private IterationStrategy getStrategy() {
-		return new SimpleStrategy();
-	}
-	
 	
 	@Override
 	public void start(GlatProgram p) throws Exception {
-		/*
-		 * assume: void main(){ start m; trans m -> n { //init variables }
-		 * 
-		 * trans n -> o { // call threads }
-		 */
 
 		Method main = getMain(p);
 
@@ -117,37 +75,6 @@ public class ThSimpleAnalysis implements Analysis {
 		//result = fx.getResult();
 	}
 	
-	private Store<Node, AbstractState> prepareStore(GlatProgram program, Call call, AbstractState stateAtCall) {
-
-		Store<Node, AbstractState> store = getStore();
-		Method m = call.getMethodRef();
-
-		List<Variable> vs = new ArrayList<Variable>(m.getVariables());
-		vs.addAll(m.getParameters());
-		vs.addAll(program.getGlobalVariables());
-
-		AbstractState bt = domain.bottom(vs);
-		vs = new ArrayList<Variable>(call.getArgs());
-		vs.addAll(program.getGlobalVariables());
-		AbstractState def = domain.project(stateAtCall, vs);// call.getArgs());
-		def = domain.rename(def, call.getArgs(), m.getParameters());
-
-		// TODO extend should receive and abstract state and a list of variable,
-		// and should extend the state with the new variables set to top
-
-		def = domain.extend(bt, def);
-
-		for (Node n : m.getControlFlowGraph().getNodes()) {
-			if (m.getInitNode().equals(n))
-				store.setValue(n, def);
-			else
-				store.setValue(n, bt);
-		}
-		return store;
-	}
-
-
-
 	@Override
 	public Map<Object, Object> getResult() {
 		System.out.println("Result: ");

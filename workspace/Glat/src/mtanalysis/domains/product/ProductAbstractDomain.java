@@ -137,6 +137,17 @@ public class ProductAbstractDomain implements AbstractDomain {
 	}
 
 	@Override
+	public AbstractState extend(AbstractState s0, List<Variable> lv) {
+		ProductAbstractState p_a = (ProductAbstractState) s0;
+		List<AbstractState> sts = new ArrayList<AbstractState>();
+		for (int i = 0; i < domains.size(); i++) {
+			sts.add(domains.get(i).extend(p_a.getAbstractState(i), lv));
+		}
+		ProductAbstractState p = new ProductAbstractState(sts);
+		return p;
+	}
+	
+	@Override
 	public AbstractState project(AbstractState s0, List<Variable> lv) {
 		ProductAbstractState p_a = (ProductAbstractState) s0;
 		List<AbstractState> sts = new ArrayList<AbstractState>();

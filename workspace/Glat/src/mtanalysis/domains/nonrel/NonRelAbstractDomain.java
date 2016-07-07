@@ -188,6 +188,14 @@ public abstract class NonRelAbstractDomain implements AbstractDomain {
 		n0.extend((NonRelAbstractState) st);
 		return n0;
 	}
+	
+	@Override
+	public AbstractState extend(AbstractState s0, List<Variable> lv) {
+		NonRelAbstractState nonRel_s = (NonRelAbstractState) s0;
+		NonRelAbstractState s1 = (NonRelAbstractState) s0.copy();
+		lv.forEach((var) -> s1.setValue(var, BottomAbstractValue.getInstance()));
+		return s1;
+	}
 
 	@Override
 	public AbstractState project(AbstractState s0, List<Variable> lv) {
